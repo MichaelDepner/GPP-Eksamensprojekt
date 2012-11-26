@@ -10,6 +10,7 @@ public class Main {
 		
 		System.out.println("No it doesn't");
 
+		System.out.println("Yes it does; it really works!");
 	}
 
 }
