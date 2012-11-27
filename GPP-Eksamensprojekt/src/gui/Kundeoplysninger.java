@@ -8,5 +8,5 @@ public class Kundeoplysninger {
 	//Kontaktperson: Titel, fornavn, efternavn, adresse, e-mail. tlf, fødselsdato.
 	//Øvrige passagerer: Titel, fornavn, efternavn, fødselsdato
 	
-	//fortsæt-knap til gennemse
+	//fortsæt-knap til betaling
 }
