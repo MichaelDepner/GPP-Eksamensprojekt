@@ -25,29 +25,36 @@ public class Forside {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
-		
+		//Sæt layout i contentPane til et borderlayout, og tilføj et gridlayout til centerPanel
 		Container contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
 		centerPanel.setLayout(new GridLayout(3, 1));
 		
+		//Indlæs Logo.png, og gem det i en JLabel
 		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/Logo.png"));
 		logoLabel = new JLabel(imageLogo);
 		
+		//Tilføj vores 2 panels til contentPanen, på CENTER og NORTH pladserne
 		contentPane.add(centerPanel, BorderLayout.CENTER);
 		contentPane.add(logoLabel, BorderLayout.NORTH);
 		
+		//Initialisér de 3 knapper
 		rejse = new JButton("Søg rejser");
 		booking = new JButton("Søg booking");
 		afgang = new JButton("Søg afgang");
 		
+		//Tilføjer actionListenere til knapperne
 		rejse.addActionListener(new rejseActionListener());
 		booking.addActionListener(new bookingActionListener());
 		afgang.addActionListener(new afgangActionListener());
 		
+		//Tilføjet knapperne til centerPanel
 		centerPanel.add(rejse);
 		centerPanel.add(afgang);
 		centerPanel.add(booking);
 		
+		
+		//Sæt vindue-størrelsen, gør så det ikke kan resizes, og gør det hele synligt.
 		frame.setPreferredSize(new Dimension(640, 460));
 		frame.setResizable(false);
 		frame.pack();
