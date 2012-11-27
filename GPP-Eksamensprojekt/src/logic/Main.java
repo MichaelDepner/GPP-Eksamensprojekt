@@ -13,6 +13,8 @@ public class Main {
 		System.out.println("Yes it does; it really works!");
 		
 		System.out.println("Never mind...");
+		
+		System.out.println("Konflikt!");
 	}
 	
 	//konflikt
