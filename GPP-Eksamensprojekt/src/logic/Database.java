@@ -62,5 +62,46 @@ public class Database {
 		return rs;
 	}
 	
+	public ResultSet queryGetReservedSeats(int departureId) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"Booking.seats " +
+				"FROM " +
+				"Booking " +
+				"WHERE " +
+				"Booking.departure_id = " + departureId;
+		ResultSet rs = this.execute(query);
+		System.out.println(query);
+		//while (rs.next()) {
+		//	System.out.println(rs.getString("seats"));
+		//}
+		return rs;
+				
+	}
+	
+	public ResultSet queryGetRows(int departureId) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"Airplane.rows " +
+				"FROM " +
+				"Airplane " +
+				"WHERE " +
+				"Airplane.id = " + departureId;
+		ResultSet rs = this.execute(query);
+		return rs;
+	}
+	
+	public ResultSet queryGetCols(int departureId) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"Airplane.columns " +
+				"FROM " +
+				"Airplane " +
+				"WHERE " +
+				"Airplane.id = " + departureId;
+		ResultSet rs = this.execute(query);
+		return rs;
+	}
+	
 	
 }
