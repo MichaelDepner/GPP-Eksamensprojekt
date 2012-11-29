@@ -67,24 +67,25 @@ public class Afgangsliste extends JFrame {
 		setWidth(3, 120);
 		setWidth(4, 120);
 		
-        //Opretter panel
+		//Opretter panels
         jp1Udrejse = new JPanel();
-        //Indhold af panel
-        jp1Udrejse.add(labelUdrejse);
-		jp1Udrejse.add(table.getTableHeader());
-        jp1Udrejse.add(table);
-        
-        //Tilføjer panel jp1Udrejse til jtp
-        jtp.addTab("28/11", jp1Udrejse);
-        
-        //Opretter panel
         jp1Hjemrejse = new JPanel();
-        //Indhold af panel
-        jp1Hjemrejse.add(labelHjemrejse);
-		jp1Hjemrejse.add(table.getTableHeader());
-        jp1Hjemrejse.add(table);
+        //Kalder table()
         
-        //Tilføjer panel jp1Hjemrejse til jtp
+        labelUdrejse = new JLabel();
+        labelUdrejse.setText("Onsdag d. 28. november 2012" + "Udrejse - Lufthavn");
+        jp1Udrejse.add(labelUdrejse);
+        
+		table(jp1Udrejse);
+		//Tilføjer panel jp1Udrejse til jtp
+        jtp.addTab("28/11", jp1Udrejse);
+		
+        labelHjemrejse = new JLabel();
+        labelHjemrejse.setText("Onsdag d. 28. november 2012" + "Hjemrejse - Lufthavn");
+		jp1Hjemrejse.add(labelHjemrejse);
+		
+		table(jp1Hjemrejse);
+		//Tilføjer panel jp1Hjemrejse til jtp
         jtp2.addTab("28/11", jp1Hjemrejse);
         
         //Laver en next-knap
@@ -127,13 +128,7 @@ public class Afgangsliste extends JFrame {
     }
     
     private void table(){
-    	//Her er overskriften, som vil blive vist under de forskellige faner
-        labelUdrejse = new JLabel();
-        labelUdrejse.setText("Onsdag d. 28. november 2012" + "Udrejse - Lufthavn");
-        labelHjemrejse = new JLabel();
-        labelHjemrejse.setText("Onsdag d. 28. november 2012" + "Hjemrejse - Lufthavn");
-        
-        //Laver skemaerne
+    	//Laver skemaerne
         String columns[] = {"Pris","Afrejse - ankomst","Rejsetid", "Lufthavne", "Ledige pladser"};
 		Object data[][] = {
 				{"500-800 kr.", "16.00-18.00", "02.00", "CPH-LON", "215"},
@@ -149,9 +144,14 @@ public class Afgangsliste extends JFrame {
         weekNumber = new JLabel("uge");
         
         panel.add(lastWeek);
-        panelNorthJtp.add(weekNumber);
-        panelCenterJtp2.add(weekNumber);
-        panelNorthJtp.add(nextWeek);
-        panelCenterJtp2.add(nextWeek);
+        panel.add(weekNumber);
+        panel.add(nextWeek);
+    }
+    
+    private void table(JPanel panel){
+    	table();
+        //Indhold af panel
+        panel.add(table.getTableHeader());
+        panel.add(table);
     }
 }
