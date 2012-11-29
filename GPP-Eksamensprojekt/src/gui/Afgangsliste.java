@@ -15,6 +15,7 @@ public class Afgangsliste extends JFrame {
 	        JPanel jp3 = new JPanel();
 	        JPanel jp4 = new JPanel();
 	        
+	        //
 	        JLabel label1 = new JLabel();
 	        label1.setText("Onsdag d. 28. november 2012");
 	        JLabel label2 = new JLabel();
@@ -29,6 +30,7 @@ public class Afgangsliste extends JFrame {
 	        jp3.add(label3);
 	        jp4.add(label4);
 	        
+	       // Her tilføjes titlerne til fanerne
 	        jtp.addTab("28/11", jp1);
 	        jtp.addTab("29/11", jp2);
 	        jtp.addTab("30/11", jp3);
