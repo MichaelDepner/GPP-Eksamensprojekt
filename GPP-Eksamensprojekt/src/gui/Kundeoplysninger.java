@@ -84,7 +84,7 @@ public class Kundeoplysninger {
         panel3.add(panel4, BorderLayout.CENTER);
         panel4.setLayout(new GridLayout(5,1));
         
-        //Sætter panel5 til EST i panel3, og giver det GridLayout
+        //Sætter panel5 til EAST i panel3, og giver det GridLayout
         panel5 = new JPanel();
         panel3.add(panel5, BorderLayout.EAST);
         panel5.setLayout(new GridLayout(5,1));
