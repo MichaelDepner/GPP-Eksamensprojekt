@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.TableColumn;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Afgangsliste extends JFrame {
 	
@@ -12,7 +14,7 @@ public class Afgangsliste extends JFrame {
 	private JLabel label1, label2, label3, label4;
 	private JLabel weekNumber;
 	private JLabel labelHjemrejse, labelUdrejse;
-	private JButton lastWeek, nextWeek;
+	private JButton lastWeek, nextWeek, next;
 	private TableColumn column;
 	private JTable table;
 	private JTabbedPane jtp, jtp2;
@@ -56,6 +58,7 @@ public class Afgangsliste extends JFrame {
         
         //Sætter knapper og uge-label ind i FlowLayouts
         buttonsAndLabel(panelNorthJtp);
+        
         buttonsAndLabel(panelCenterJtp2);
         
         table();
@@ -70,7 +73,6 @@ public class Afgangsliste extends JFrame {
 		//Opretter panels
         jp1Udrejse = new JPanel();
         jp1Hjemrejse = new JPanel();
-        //Kalder table()
         
         labelUdrejse = new JLabel();
         labelUdrejse.setText("Onsdag d. 28. november 2012" + "Udrejse - Lufthavn");
@@ -89,8 +91,9 @@ public class Afgangsliste extends JFrame {
         jtp2.addTab("28/11", jp1Hjemrejse);
         
         //Laver en next-knap
-        JButton next = new JButton("Næste");
+        next = new JButton("Næste");
         panelSouth.add(next);
+        next.addActionListener(new Listener());
         
         /**
         jp2 = new JPanel();
@@ -140,7 +143,13 @@ public class Afgangsliste extends JFrame {
     
     private void buttonsAndLabel(JPanel panel){
     	lastWeek = new JButton("Forrige uge");
+        //lastWeek.addActionListener(new Listener());
+    	//men skal have en actionlistener for hver, lige nu bliver den første overskrevet
+        
         nextWeek = new JButton("Næste uge");
+        //nextWeek.addActionListener(new Listener());
+    	//men skal have en actionlistener for hver, lige nu bliver den første overskrevet
+        
         weekNumber = new JLabel("uge");
         
         panel.add(lastWeek);
@@ -153,5 +162,17 @@ public class Afgangsliste extends JFrame {
         //Indhold af panel
         panel.add(table.getTableHeader());
         panel.add(table);
+    }
+    
+    private class Listener implements ActionListener {
+        public void actionPerformed(ActionEvent event){
+            if(event.getSource() == nextWeek) {
+            	System.out.println("Næste uge");
+            } else if(event.getSource() == lastWeek) {
+            	System.out.println("Forrige uge");
+            } else if(event.getSource() == next) {
+            	System.out.println("Næste");
+            }
+        }
     }
 }
