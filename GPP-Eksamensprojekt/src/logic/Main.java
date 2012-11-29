@@ -1,8 +1,12 @@
 package logic;
 
+import gui.Kundeoplysninger;
 import gui.Pladsbooking;
+import gui.Afgangsliste;
 
 import java.sql.SQLException;
+
+import javax.swing.JFrame;
 
 public class Main {
 
@@ -24,5 +28,11 @@ public class Main {
 		PladsArray pa = new PladsArray(1);
 		
 		Pladsbooking pb = new Pladsbooking(pa);
+		
+		
+		Kundeoplysninger ko = new Kundeoplysninger();
+		
+		Afgangsliste tp = new Afgangsliste();
+		tp.setVisible(true);
 		}
 	}
