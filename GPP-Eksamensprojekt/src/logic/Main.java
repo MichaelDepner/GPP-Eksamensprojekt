@@ -25,9 +25,9 @@ public class Main {
 //		db.queryGetCols(1);
 //		db.close();
 		
-//		PladsArray pa = new PladsArray(1);
+		PladsArray pa = new PladsArray(1);
 		
-//		Pladsbooking pb = new Pladsbooking(pa);
+		Pladsbooking pb = new Pladsbooking(pa);
 		
 		
 //		Kundeoplysninger ko = new Kundeoplysninger();
