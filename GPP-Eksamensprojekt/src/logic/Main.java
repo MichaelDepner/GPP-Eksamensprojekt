@@ -18,19 +18,19 @@ public class Main {
 		
 		new gui.Forside();
 		
-		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-		db.queryGetAirports();
-		db.queryGetReservedSeats(1);
-		db.queryGetRows(1);
-		db.queryGetCols(1);
-		db.close();
+//		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+//		db.queryGetAirports();
+//		db.queryGetReservedSeats(1);
+//		db.queryGetRows(1);
+//		db.queryGetCols(1);
+//		db.close();
 		
-		PladsArray pa = new PladsArray(1);
+//		PladsArray pa = new PladsArray(1);
 		
-		Pladsbooking pb = new Pladsbooking(pa);
+//		Pladsbooking pb = new Pladsbooking(pa);
 		
 		
-		Kundeoplysninger ko = new Kundeoplysninger();
+//		Kundeoplysninger ko = new Kundeoplysninger();
 		
 		Afgangsliste tp = new Afgangsliste();
 		tp.setVisible(true);

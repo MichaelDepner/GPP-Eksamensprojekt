@@ -25,7 +25,6 @@ public class PladsArray {
 	
 	public ArrayList<Integer> findReservations() throws SQLException {
 		ArrayList<Integer> reservationList = new ArrayList<>();
-		int counter = 0;
 		
 		db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		
@@ -36,7 +35,6 @@ public class PladsArray {
 			String[] strArray = s.split(" ");
 			for(int i=0; i<strArray.length; i++) {
 				reservationList.add(Integer.parseInt(strArray[i]));
-				counter++;
 			}
 		}
 		

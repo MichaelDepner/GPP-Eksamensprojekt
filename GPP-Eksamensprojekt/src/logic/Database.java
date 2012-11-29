@@ -50,8 +50,8 @@ public class Database {
 				"Airports, Departures " +
 				"WHERE " +
 				"Departures.departure_airport_id = Airports.id OR Departures.arrival_airport_id = Airports.id " +
-				"GROUP BY " +
-				"Airports.id " +
+				//"GROUP BY " +
+				//"Airports.id " +
 				"ORDER BY " +
 				"Airports.name ASC";
 		ResultSet rs = this.execute(query);
@@ -115,5 +115,32 @@ public class Database {
 		return rs;
 	}
 	
+	public ResultSet queryGetAirportId(String airport) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"Airports.id " +
+				"FROM " +
+				"Airports " +
+				"WHERE " +
+				"Airports.name = \"" + airport+"\"";
+		System.out.println(query);
+		ResultSet rs = this.execute(query);
+		return rs;
+	}
 	
+	public ResultSet queryGetDepartures(String date, int departureAirport, int arrivalAirport) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"* " +
+				"FROM " +
+				"Departures " +
+				"WHERE " +
+				"Departures.Departure_date = " + date + " " +
+				"AND " +
+				"Departures.departure_airport_id = " + departureAirport + " " +
+				"AND " +
+				"Departures.arrival_airport_id = " + arrivalAirport;
+		ResultSet rs = this.execute(query);
+		return rs;
+	}
 }

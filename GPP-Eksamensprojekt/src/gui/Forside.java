@@ -4,7 +4,12 @@ import java.awt.*;
 
 import javax.swing.*;
 
+import org.jdesktop.swingx.JXDatePicker;
+
 import java.awt.event.*;
+import java.sql.SQLException;
+
+import logic.AfgangSøgning;
 
 public class Forside {
 	private JFrame frame;
@@ -12,6 +17,8 @@ public class Forside {
 	private JPanel centerPanel = new JPanel();
 	private JPanel northPanel = new JPanel();
 	private JButton rejse, booking, afgang;
+	private JXDatePicker rejsesøgning;
+	private JTextField departureAirport, arrivalAirport;
 	
 	private JLabel logoLabel;
 	
@@ -28,7 +35,7 @@ public class Forside {
 		//Sæt layout i contentPane til et borderlayout, og tilføj et gridlayout til centerPanel
 		Container contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
-		centerPanel.setLayout(new GridLayout(3, 1));
+		centerPanel.setLayout(new GridLayout(3, 2));
 		
 		//Indlæs Logo.png, og gem det i en JLabel
 		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/Logo.png"));
@@ -43,7 +50,12 @@ public class Forside {
 		booking = new JButton("Søg booking");
 		afgang = new JButton("Søg afgang");
 		
+		//Initialisér inputfelt til rejsesøgning
+		rejsesøgning = new JXDatePicker();
+		rejsesøgning.getDate();
 		
+		departureAirport = new JTextField("Copenhagen"); //departure
+		arrivalAirport = new JTextField("Rønne"); //arrival
 		
 		//Tilføjer actionListenere til knapperne
 		rejse.addActionListener(new rejseActionListener());
@@ -52,6 +64,9 @@ public class Forside {
 		
 		//Tilføjet knapperne til centerPanel
 		centerPanel.add(rejse);
+		centerPanel.add(rejsesøgning);
+		centerPanel.add(departureAirport);
+		centerPanel.add(arrivalAirport);
 		centerPanel.add(afgang);
 		centerPanel.add(booking);
 		
@@ -67,6 +82,12 @@ public class Forside {
 	private class rejseActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Søger rejser!");
+			try {
+				AfgangSøgning afgange = new AfgangSøgning(rejsesøgning.getDate(), departureAirport.getText(), arrivalAirport.getText());
+			} catch (SQLException e1) {
+				 //TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 	}
 	
