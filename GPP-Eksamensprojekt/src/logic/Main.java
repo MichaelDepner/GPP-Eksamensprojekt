@@ -1,5 +1,6 @@
 package logic;
 
+import gui.Kundeoplysninger;
 import gui.Pladsbooking;
 
 import java.sql.SQLException;
@@ -24,5 +25,8 @@ public class Main {
 		PladsArray pa = new PladsArray(1);
 		
 		Pladsbooking pb = new Pladsbooking(pa);
+		
+		
+		Kundeoplysninger ko = new Kundeoplysninger();
 		}
 	}
