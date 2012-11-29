@@ -144,22 +144,19 @@ public class Kundeoplysninger {
         labelAddress = new JLabel("Adresse");
     }
     
-    //Skal ændres til actionListener kun på knapperne, ikke textFields
+    //Tilføjer actionListeners til de to knapper
     private void addActionListeners(){
-        //ActionListeners
-        Listener listener = new Listener();
-        //alle de elementer der skal lytte        
-        firstname.addActionListener(listener);
-        surname.addActionListener(listener);
-        email.addActionListener(listener);
-        phoneNumber.addActionListener(listener);
-        address.addActionListener(listener);
+    	back.addActionListener(new Listener());
+    	next.addActionListener(new Listener());
     }
     
+    //Lytter til knapperne
     private class Listener implements ActionListener {
         public void actionPerformed(ActionEvent event){
-            if(event.getSource() == firstname) {
-                System.out.println(firstname.getText());
+            if(event.getSource() == back) {
+                System.out.println("Going back");
+            } else if(event.getSource() == next) {
+            	System.out.println("Going to the next step");
             }
         }
     }
