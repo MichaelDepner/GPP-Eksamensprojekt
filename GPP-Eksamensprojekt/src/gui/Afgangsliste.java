@@ -15,7 +15,7 @@ public class Afgangsliste extends JFrame {
 	        JPanel jp3 = new JPanel();
 	        JPanel jp4 = new JPanel();
 	        
-	        //
+	        //Her er overskriften, som vil blive vist under de forskellige faner
 	        JLabel label1 = new JLabel();
 	        label1.setText("Onsdag d. 28. november 2012");
 	        JLabel label2 = new JLabel();
