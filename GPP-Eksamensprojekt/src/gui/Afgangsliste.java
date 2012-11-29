@@ -21,7 +21,6 @@ public class Afgangsliste extends JFrame {
 	
     public Afgangsliste() {
         setTitle("Afgange");
-        //jtp.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         
         //Laver vores fane-vinduer
         jtp = new JTabbedPane();
@@ -119,6 +118,7 @@ public class Afgangsliste extends JFrame {
         jtp.addTab("01/12", jp4); */
 
         setPreferredSize(new Dimension(640, 460));
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pack();
     }
     
