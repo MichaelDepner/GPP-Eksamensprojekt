@@ -14,12 +14,14 @@ public class Pladsbooking {
 	private PladsArray pladsArray;
 	private int rows;
 	private int cols;
+	ArrayList<Integer> emptyColumns = new ArrayList<>();
 	private ArrayList<JPanel> panelList = new ArrayList<>();
 	
 	public Pladsbooking(PladsArray pa) throws SQLException {
 		pladsArray = pa;
 		rows = pa.getRows();
 		cols = pa.getCols();
+		emptyColumns = pa.getEmptyCols();
 		makeWindow();
 		reservations();
 	}

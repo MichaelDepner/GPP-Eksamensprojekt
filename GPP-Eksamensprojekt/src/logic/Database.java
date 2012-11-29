@@ -103,5 +103,17 @@ public class Database {
 		return rs;
 	}
 	
+	public ResultSet queryGetEmptyCols(int departureId) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"Airplane.empty_columns " +
+				"FROM " +
+				"Airplane " +
+				"WHERE " +
+				"Airplane.id = " + departureId;
+		ResultSet rs = this.execute(query);
+		return rs;
+	}
+	
 	
 }

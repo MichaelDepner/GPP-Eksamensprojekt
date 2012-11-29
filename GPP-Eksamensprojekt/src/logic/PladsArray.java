@@ -64,5 +64,21 @@ public class PladsArray {
 		rs.next();
 		return rs.getInt("columns");
 	}
+	
+	public ArrayList<Integer> getEmptyCols() throws SQLException {
+		ArrayList<Integer> emptyColumns = new ArrayList();
+		db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		ResultSet rs = db.queryGetEmptyCols(departureId);
+		
+		while (rs.next()) {
+			String s = rs.getString("empty_columns");
+			String[] strArray = s.split(" ");
+			for(int i=0; i<strArray.length; i++) {
+				emptyColumns.add(Integer.parseInt(strArray[i]));
+			}
+		}
+		Collections.sort(emptyColumns);
+		return emptyColumns;
+	}
 
 }

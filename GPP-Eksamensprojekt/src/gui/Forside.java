@@ -43,6 +43,8 @@ public class Forside {
 		booking = new JButton("Søg booking");
 		afgang = new JButton("Søg afgang");
 		
+		
+		
 		//Tilføjer actionListenere til knapperne
 		rejse.addActionListener(new rejseActionListener());
 		booking.addActionListener(new bookingActionListener());
