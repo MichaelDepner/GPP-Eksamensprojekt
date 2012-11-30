@@ -30,7 +30,7 @@ public class Main {
 		Pladsbooking pb = new Pladsbooking(pa);
 		
 		
-//		Kundeoplysninger ko = new Kundeoplysninger();
+		Kundeoplysninger ko = new Kundeoplysninger();
 		
 		Afgangsliste tp = new Afgangsliste();
 		tp.setVisible(true);

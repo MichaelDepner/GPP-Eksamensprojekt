@@ -1,5 +1,7 @@
 package logic;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,19 +12,26 @@ public class PladsArray {
 	private int departureId;
 	private int columns;
 	private int rows;
-	private int premiumRows;
 	private Plads[] pladser;
+	private ArrayList<Integer> premiumRows = new ArrayList<>();
+	private ArrayList<Integer> aisles = new ArrayList<>();
+	private int[][] overblikArray;
+	
+	
 	
 	
 	public PladsArray(int departureId) throws SQLException {
 		this.departureId = departureId;
 		ArrayList<Integer> reservations = findReservations();
 		
+		overblikArray = new int[getCols()][getRows()];
+		
 		
 	}
 	
 	
 	
+	//returnerer en ArayList med numrene på de sæder, der allerede er reserveret
 	public ArrayList<Integer> findReservations() throws SQLException {
 		ArrayList<Integer> reservationList = new ArrayList<>();
 		
@@ -41,13 +50,10 @@ public class PladsArray {
 		//sortér arraylisten
 		Collections.sort(reservationList);	
 		
-		//for (int i = 0; i<reservationList.size(); i++) {
-		//	System.out.println(reservationList.get(i));
-		//}
-		
 		db.close();
 		return reservationList;
 		}
+	
 	
 	public int getRows() throws SQLException {
 		db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
@@ -62,6 +68,7 @@ public class PladsArray {
 		rs.next();
 		return rs.getInt("columns");
 	}
+	
 	
 	public ArrayList<Integer> getEmptyCols() throws SQLException {
 		ArrayList<Integer> emptyColumns = new ArrayList();
@@ -78,5 +85,7 @@ public class PladsArray {
 		Collections.sort(emptyColumns);
 		return emptyColumns;
 	}
+	
+	
 
 }

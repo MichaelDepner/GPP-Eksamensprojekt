@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
+import logic.Plads;
 import logic.PladsArray;
 
 public class Pladsbooking {
@@ -15,7 +16,8 @@ public class Pladsbooking {
 	private int rows;
 	private int cols;
 	ArrayList<Integer> emptyColumns = new ArrayList<>();
-	private ArrayList<JPanel> panelList = new ArrayList<>();
+	private ArrayList<Plads> panelList = new ArrayList<>();
+	private ArrayList<Plads> newReservations = new ArrayList<>();
 	
 	public Pladsbooking(PladsArray pa) throws SQLException {
 		pladsArray = pa;
@@ -31,8 +33,17 @@ public class Pladsbooking {
 		
 		for (int i=0; i<reservations.size(); i++) {
 			int r = reservations.get(i);
-			panelList.get(r).setBackground(Color.RED);
-			
+			panelList.get(r).changeReservation();
+		}
+		
+		int counter = 0;
+		for(int i=0; i<rows; i++) {
+			for(int j=0; j<cols; j++) {
+				if (emptyColumns.contains(j+1)) {
+					panelList.get(counter).makeAisle();
+				}
+				counter++;
+			}
 		}
 	}
 	
@@ -42,26 +53,28 @@ public class Pladsbooking {
 		
 		Container contentPane = frame.getContentPane();
 		//contentPane.setLayout(new GridLayout(pladsArray.getRows(), pladsArray.getCols()));
-		contentPane.setLayout(new GridLayout(rows, cols, 5, 5));
+		contentPane.setLayout(new GridLayout(rows, cols, 2, 2));
 		
 		//fylder arrayet med ureserverede pladser
 		System.out.println("Rows: "+rows+", cols: "+cols);
+		
+		int counting=0;
 		for(int i = 0; i<rows; i++) {
 			for(int j = 0; j<cols; j++) {
-				JPanel jp = new JPanel();
-				jp.setBackground(Color.GREEN);
-				jp.setName(i+","+j);
-				contentPane.add(jp);
-				panelList.add(jp);
-				
-				JLabel jl = new JLabel(i+","+j);
-				contentPane.add(jl);
+				counting++;
+				Plads p = new Plads(counting, false, false, this);
+				contentPane.add(p);
+				panelList.add(p);
 			}
 		}
 		
-		frame.setPreferredSize(new Dimension(640, 460));
+		frame.setPreferredSize(new Dimension(cols*30, rows*30));
 		frame.setResizable(false);
 		frame.pack();
 		frame.setVisible(true);
+	}
+	
+	public void addReservation(Plads p) {
+		newReservations.add(p);
 	}
 }

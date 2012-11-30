@@ -35,7 +35,7 @@ public class AfgangSøgning {
 	    }
 		
 		//Søger først efter afgange på valgte dato, og ligger dem i en arraylist
-		System.out.println("Søger afgange "+ date+" fra "+departureAirport+" til "+arrivalAirport);
+		System.out.println("Søger afgange "+ formattedDate+" fra "+departureAirport+" til "+arrivalAirport);
 		afgangeOnDate = getDepartures(formattedDate);
 		
 		
@@ -55,7 +55,7 @@ public class AfgangSøgning {
 			int airplaneId;
 			Time departureTime, arrivalTime;
 			
-			airplaneId = rs.getInt("airplane-id");
+			airplaneId = rs.getInt("airplane_id");
 			departureTime = rs.getTime("departure_time");
 			arrivalTime = rs.getTime("arrival_time");
 			

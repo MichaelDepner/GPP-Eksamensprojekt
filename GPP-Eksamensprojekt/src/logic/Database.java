@@ -79,38 +79,59 @@ public class Database {
 				
 	}
 	
+	public ResultSet queryGetAirplane(int departureId) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"airplane_id " +
+				"FROM " +
+				"Departures " +
+				"WHERE " +
+				"Departures.id = " + departureId;
+		ResultSet rs = this.execute(query);
+		return rs;
+	}
+	
 	public ResultSet queryGetRows(int departureId) throws SQLException {
+		ResultSet airId = queryGetAirplane(departureId);
+		airId.next();
+		int airplaneId = airId.getInt("airplane_id"); 
 		String query;
 		query = "SELECT " +
 				"Airplane.rows " +
 				"FROM " +
 				"Airplane " +
 				"WHERE " +
-				"Airplane.id = " + departureId;
+				"Airplane.id = " + airplaneId;
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
 	
 	public ResultSet queryGetCols(int departureId) throws SQLException {
+		ResultSet airId = queryGetAirplane(departureId);
+		airId.next();
+		int airplaneId = airId.getInt("airplane_id");
 		String query;
 		query = "SELECT " +
 				"Airplane.columns " +
 				"FROM " +
 				"Airplane " +
 				"WHERE " +
-				"Airplane.id = " + departureId;
+				"Airplane.id = " + airplaneId;
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
 	
 	public ResultSet queryGetEmptyCols(int departureId) throws SQLException {
+		ResultSet airId = queryGetAirplane(departureId);
+		airId.next();
+		int airplaneId = airId.getInt("airplane_id");
 		String query;
 		query = "SELECT " +
 				"Airplane.empty_columns " +
 				"FROM " +
 				"Airplane " +
 				"WHERE " +
-				"Airplane.id = " + departureId;
+				"Airplane.id = " + airplaneId;
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
