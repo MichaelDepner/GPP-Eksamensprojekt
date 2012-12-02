@@ -64,6 +64,7 @@ public class Database {
 	
 	public ResultSet queryGetReservedSeats(int departureId) throws SQLException {
 		String query;
+										System.out.println("finding reserved seats from departureId "+departureId);
 		query = "SELECT " +
 				"Booking.seats " +
 				"FROM " +

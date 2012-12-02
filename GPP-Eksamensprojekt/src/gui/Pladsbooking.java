@@ -19,11 +19,11 @@ public class Pladsbooking {
 	private ArrayList<Plads> panelList = new ArrayList<>();
 	private ArrayList<Plads> newReservations = new ArrayList<>();
 	
-	public Pladsbooking(PladsArray pa) throws SQLException {
-		pladsArray = pa;
-		rows = pa.getRows();
-		cols = pa.getCols();
-		emptyColumns = pa.getEmptyCols();
+	public Pladsbooking(int departureId) throws SQLException {
+		pladsArray = new PladsArray(departureId);
+		rows = pladsArray.getRows();
+		cols = pladsArray.getCols();
+		emptyColumns = pladsArray.getEmptyCols();
 		makeWindow();
 		reservations();
 	}

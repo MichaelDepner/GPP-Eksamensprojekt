@@ -72,11 +72,12 @@ public class AfgangSøgning {
 			int airplaneId;
 			Time departureTime, arrivalTime;
 			
+			int id = rs.getInt("id");
 			airplaneId = rs.getInt("airplane_id");
 			departureTime = rs.getTime("departure_time");
 			arrivalTime = rs.getTime("arrival_time");
 			
-			Afgang afgang = new Afgang(airplaneId, departureId, arrivalId, departureAirport, arrivalAirport, departureTime, arrivalTime);
+			Afgang afgang = new Afgang(id, airplaneId, departureId, arrivalId, departureAirport, arrivalAirport, departureTime, arrivalTime);
 			System.out.println("Opretter afgang: airplaneId: "+airplaneId+", departureId: "+departureId+"" +
 					", arrivalId: "+arrivalId+", departureTime: "+departureTime+", arrivalTime: "+arrivalTime);
 			

@@ -8,6 +8,8 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -161,7 +163,7 @@ public class Afgangsliste extends JFrame {
 //		table = new JTable(data,columns);
 //    }
     
-    private void departureTable(ArrayList<Afgang> departures) {
+    private void departureTable(final ArrayList<Afgang> departures) {
     	DefaultTableModel model = new DefaultTableModel(); 
     	table = new JTable(model); 
 
@@ -193,6 +195,23 @@ public class Afgangsliste extends JFrame {
     	setWidth(table, 3, 120);
     	setWidth(table, 4, 120);
     	
+    	//tilføjer actionlistener som åbner rækkens afgang som pladssøgning
+    	table.addMouseListener(new MouseAdapter() {
+    		public void mouseClicked(MouseEvent e) {
+    			int row = table.getSelectedRow();
+    			System.out.println("You've clicked on row "+row);
+    			
+    			int id = departures.get(row).getId()+1;
+    			System.out.println("Du har trykket på en afgang med id: "+id);
+    			try {
+					Pladsbooking pb = new Pladsbooking(id-1);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Something sql went wrong.");
+					e1.printStackTrace();
+				}
+    		}
+    	});
     }
     
     	

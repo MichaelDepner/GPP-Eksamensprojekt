@@ -10,21 +10,21 @@ import java.util.Collections;
 public class PladsArray {
 	private Database db;
 	private int departureId;
-	private int columns;
-	private int rows;
-	private Plads[] pladser;
-	private ArrayList<Integer> premiumRows = new ArrayList<>();
-	private ArrayList<Integer> aisles = new ArrayList<>();
-	private int[][] overblikArray;
+	//private int columns;
+	//private int rows;
+	//private Plads[] pladser;
+	//private ArrayList<Integer> premiumRows = new ArrayList<>();
+	//private ArrayList<Integer> aisles = new ArrayList<>();
+	//private int[][] overblikArray;
 	
 	
 	
 	
 	public PladsArray(int departureId) throws SQLException {
 		this.departureId = departureId;
-		ArrayList<Integer> reservations = findReservations();
+		//ArrayList<Integer> reservations = findReservations();
 		
-		overblikArray = new int[getCols()][getRows()];
+		//overblikArray = new int[getCols()][getRows()];
 		
 		
 	}

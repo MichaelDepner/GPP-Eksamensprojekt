@@ -8,11 +8,12 @@ import javax.swing.text.DateFormatter;
 
 public class Afgang {
 	
-	private int airplaneId, departureAirportId, arrivalAirportId;
+	private int id, airplaneId, departureAirportId, arrivalAirportId;
 	private Time arrivalTime, departureTime;
 	private String departureAirportName, arrivalAirportName;
 	
-	public Afgang(int airplaneId, int departureAirportId, int arrivalAirportId, String departureAirportName, String arrivalAirportName, Time departureTime, Time arrivalTime) {
+	public Afgang(int id, int airplaneId, int departureAirportId, int arrivalAirportId, String departureAirportName, String arrivalAirportName, Time departureTime, Time arrivalTime) {
+		this.id = id;
 		this.airplaneId = airplaneId;
 		this.departureAirportId = departureAirportId;
 		this.arrivalAirportId = arrivalAirportId;
@@ -47,6 +48,11 @@ public class Afgang {
 	//TODO antal sæder skal trækkes fra databasen
 	public String getSeats() {
 		return "100";
+	}
+	
+	public int getId() {
+		System.out.println("Jeg er en afgang med id "+id+". Min departureTime er "+departureTime);
+		return id;
 	}
 
 }
