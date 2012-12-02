@@ -1,11 +1,18 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+
+import logic.*;
 
 public class Afgangsliste extends JFrame {
 	
@@ -19,7 +26,15 @@ public class Afgangsliste extends JFrame {
 	private JTable table;
 	private JTabbedPane jtp, jtp2;
 	
-    public Afgangsliste() {
+	private AfgangSøgning as;
+	ArrayList<Afgang> departures;
+	
+    public Afgangsliste(Date date, String departureAirport, String arrivalAirport) throws SQLException {
+    	
+    	//Opretter AfgangSøgning
+    	as = new AfgangSøgning(date, departureAirport, arrivalAirport);
+    	departures = as.getDepartures();
+    	
         setTitle("Afgange");
         
         //Laver vores fane-vinduer
@@ -60,14 +75,15 @@ public class Afgangsliste extends JFrame {
         
         buttonsAndLabel(panelCenterJtp2);
         
-        table();
+        										//opreter et table - jeg har ændret meget i hvordan det laves.
+        departureTable(departures);
 		
 		//Sætter bredden af columns
-		setWidth(0, 120);
-		setWidth(1, 120);
-		setWidth(2, 120);
-		setWidth(3, 120);
-		setWidth(4, 120);
+		//setWidth(0, 120);
+		//setWidth(1, 120);
+		//setWidth(2, 120);
+		//setWidth(3, 120);
+		//setWidth(4, 120);
 		
 		//Opretter panels
         jp1Udrejse = new JPanel();
@@ -120,9 +136,12 @@ public class Afgangsliste extends JFrame {
         setPreferredSize(new Dimension(640, 460));
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         pack();
+        setVisible(true);
     }
     
-    private void setWidth(int i, int j) {
+    
+    							
+    private void setWidth(JTable table, int i, int j) {
     	column = table.getColumnModel().getColumn(i);
     	
     	column.setMinWidth(j);
@@ -130,16 +149,53 @@ public class Afgangsliste extends JFrame {
 		column.setPreferredWidth(j);
     }
     
-    private void table(){
-    	//Laver skemaerne
-        String columns[] = {"Pris","Afrejse - ankomst","Rejsetid", "Lufthavne", "Ledige pladser"};
-		Object data[][] = {
-				{"500-800 kr.", "16.00-18.00", "02.00", "CPH-LON", "215"},
-				{"600-800 kr.", "21.00-23.00", "02.00", "CPH-LON", "100"}
-				//{"Tom",new Integer(20),"Male"},
-		};
-		table = new JTable(data,columns);
+    															//her er den gamle table kode. Nedenunder er én der laver et table baseret på et array af afgange
+//    private void table(){
+//    	//Laver skemaerne
+//        String columns[] = {"Pris","Afrejse - ankomst","Rejsetid", "Lufthavne", "Ledige pladser"};
+//		Object data[][] = {
+//				{"500-800 kr.", "16.00-18.00", "02.00", "CPH-LON", "215"},
+//				{"600-800 kr.", "21.00-23.00", "02.00", "CPH-LON", "100"}
+//				//{"Tom",new Integer(20),"Male"},
+//		};
+//		table = new JTable(data,columns);
+//    }
+    
+    private void departureTable(ArrayList<Afgang> departures) {
+    	DefaultTableModel model = new DefaultTableModel(); 
+    	table = new JTable(model); 
+
+    	//Laver columns
+    	model.addColumn("Pris"); 
+    	model.addColumn("Afrejse - Ankomst"); 
+    	model.addColumn("Rejsetid");
+    	model.addColumn("Lufthavne");
+    	model.addColumn("Ledige pladser");
+
+    	//Tilføjer rejser
+    	for(int i=0; i<departures.size(); i++) {
+    		Afgang a = departures.get(i);
+    		//TODO mangler at tilføje priser i databasen
+    		String price = "1234-1235 kr.";
+    		String time = a.getDepartureTime()+" - "+a.getArrivalTime();
+    		//TODO tilføj udregning af rejsetid
+    		String travelTime = "20 years";
+    		String fromTo = a.getDepartureAirport()+" - "+a.getArrivalAirport();
+    		String seats = a.getSeats();
+    		
+    		model.addRow(new Object[]{price, time, "02.00", fromTo, seats});
+    	}
+    	
+    	//sætter bredden af kolonner
+    	setWidth(table, 0, 120);
+    	setWidth(table, 1, 120);
+    	setWidth(table, 2, 120);
+    	setWidth(table, 3, 120);
+    	setWidth(table, 4, 120);
+    	
     }
+    
+    	
     
     private void buttonsAndLabel(JPanel panel){
     	lastWeek = new JButton("Forrige uge");
@@ -158,7 +214,8 @@ public class Afgangsliste extends JFrame {
     }
     
     private void table(JPanel panel){
-    	table();
+    										//lige nu laves begge table med samme departure array - det skal selvfølgelig ændres
+    	departureTable(departures);
         //Indhold af panel
         panel.add(table.getTableHeader());
         panel.add(table);

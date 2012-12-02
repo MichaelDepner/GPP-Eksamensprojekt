@@ -9,7 +9,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import java.awt.event.*;
 import java.sql.SQLException;
 
-import logic.AfgangSøgning;
+import logic.*;
 
 public class Forside {
 	private JFrame frame;
@@ -83,7 +83,8 @@ public class Forside {
 		public void actionPerformed(ActionEvent e) {
 			System.out.println("Søger rejser!");
 			try {
-				AfgangSøgning afgange = new AfgangSøgning(rejsesøgning.getDate(), departureAirport.getText(), arrivalAirport.getText());
+				//AfgangSøgning afgange = new AfgangSøgning(rejsesøgning.getDate(), departureAirport.getText(), arrivalAirport.getText());
+				Afgangsliste afgange = new Afgangsliste(rejsesøgning.getDate(), departureAirport.getText(), arrivalAirport.getText());
 			} catch (SQLException e1) {
 				 //TODO Auto-generated catch block
 				e1.printStackTrace();
