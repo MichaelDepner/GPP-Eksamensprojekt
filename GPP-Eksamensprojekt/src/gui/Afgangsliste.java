@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,17 +27,24 @@ public class Afgangsliste extends JFrame {
 	private JLabel labelHjemrejse, labelUdrejse;
 	private JButton lastWeek, nextWeek, next;
 	private TableColumn column;
-	private JTable table;
+	//private JTable table;
 	private JTabbedPane jtp, jtp2;
+	private Pladsbooking pb;
 	
-	private AfgangSøgning as;
-	ArrayList<Afgang> departures;
+	//holder styr på popup vinduet
+	private int popupId;
 	
-    public Afgangsliste(Date date, String departureAirport, String arrivalAirport) throws SQLException {
+	private AfgangSøgning as, as2;
+	ArrayList<Afgang> departures, departures2;
+	
+    public Afgangsliste(Date departureDate, Date arrivalDate, String departureAirport, String arrivalAirport) throws SQLException {
     	
     	//Opretter AfgangSøgning
-    	as = new AfgangSøgning(date, departureAirport, arrivalAirport);
+    	as = new AfgangSøgning(departureDate, departureAirport, arrivalAirport);
     	departures = as.getDepartures();
+    	
+    	as2 = new AfgangSøgning(arrivalDate, departureAirport, arrivalAirport);
+    	departures2 = as2.getDepartures();
     	
         setTitle("Afgange");
         
@@ -52,15 +61,22 @@ public class Afgangsliste extends JFrame {
         //CENTER
         JPanel panelCenter = new JPanel();
         getContentPane().add(panelCenter, BorderLayout.CENTER);
-        panelCenter.setLayout(new BorderLayout());
+        
+        													//jeg prøver lige noget
+        //panelCenter.setLayout(new BorderLayout());
+        panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.PAGE_AXIS));
+        
         //SOUTH
         JPanel panelSouth = new JPanel();
         getContentPane().add(panelSouth, BorderLayout.SOUTH);
         panelSouth.setLayout(new FlowLayout());
         
         //Sætter fane-vinduerne ind i layouts'ene
-        panelNorth.add(jtp, BorderLayout.CENTER);
-        panelCenter.add(jtp2, BorderLayout.CENTER);
+        //panelNorth.add(jtp, BorderLayout.CENTER);
+        panelCenter.add(jtp);
+        
+        				//prøver lige noget
+        panelCenter.add(jtp2);
         
         //Laver layout til panelNorth NORTH
         JPanel panelNorthJtp = new JPanel();
@@ -73,12 +89,12 @@ public class Afgangsliste extends JFrame {
         panelCenterJtp2.setLayout(new FlowLayout());
         
         //Sætter knapper og uge-label ind i FlowLayouts
-        buttonsAndLabel(panelNorthJtp);
+        													//jeg prøver lige noget
+        //buttonsAndLabel(panelNorthJtp);
         
-        buttonsAndLabel(panelCenterJtp2);
+        //buttonsAndLabel(panelCenterJtp2);
         
-        										//opreter et table - jeg har ændret meget i hvordan det laves.
-        departureTable(departures);
+        										
 		
 		//Sætter bredden af columns
 		//setWidth(0, 120);
@@ -95,7 +111,7 @@ public class Afgangsliste extends JFrame {
         labelUdrejse.setText("Onsdag d. 28. november 2012" + "Udrejse - Lufthavn");
         jp1Udrejse.add(labelUdrejse);
         
-		table(jp1Udrejse);
+		JTable departureTable = table(jp1Udrejse, departures);
 		//Tilføjer panel jp1Udrejse til jtp
         jtp.addTab("28/11", jp1Udrejse);
 		
@@ -103,7 +119,7 @@ public class Afgangsliste extends JFrame {
         labelHjemrejse.setText("Onsdag d. 28. november 2012" + "Hjemrejse - Lufthavn");
 		jp1Hjemrejse.add(labelHjemrejse);
 		
-		table(jp1Hjemrejse);
+		table(jp1Hjemrejse, departures2);
 		//Tilføjer panel jp1Hjemrejse til jtp
         jtp2.addTab("28/11", jp1Hjemrejse);
         
@@ -163,9 +179,16 @@ public class Afgangsliste extends JFrame {
 //		table = new JTable(data,columns);
 //    }
     
-    private void departureTable(final ArrayList<Afgang> departures) {
+    private JTable departureTable(ArrayList<Afgang> departures) {
+    	final ArrayList<Afgang> dp = departures;
     	DefaultTableModel model = new DefaultTableModel(); 
-    	table = new JTable(model); 
+    	final JTable table = new JTable(model); 
+    	
+    	//overskriver metoden moveColumn, så man ikke længere kan rykke rundt på dem.
+    	table.setColumnModel(new DefaultTableColumnModel() {  
+    		public void moveColumn(int columnIndex, int newIndex) { 
+    		}  
+    		});  
 
     	//Laver columns
     	model.addColumn("Pris"); 
@@ -176,7 +199,7 @@ public class Afgangsliste extends JFrame {
 
     	//Tilføjer rejser
     	for(int i=0; i<departures.size(); i++) {
-    		Afgang a = departures.get(i);
+    		Afgang a = dp.get(i);
     		//TODO mangler at tilføje priser i databasen
     		String price = "1234-1235 kr.";
     		String time = a.getDepartureTime()+" - "+a.getArrivalTime();
@@ -195,23 +218,81 @@ public class Afgangsliste extends JFrame {
     	setWidth(table, 3, 120);
     	setWidth(table, 4, 120);
     	
+    	
+    	
     	//tilføjer actionlistener som åbner rækkens afgang som pladssøgning
-    	table.addMouseListener(new MouseAdapter() {
-    		public void mouseClicked(MouseEvent e) {
-    			int row = table.getSelectedRow();
-    			System.out.println("You've clicked on row "+row);
-    			
-    			int id = departures.get(row).getId()+1;
-    			System.out.println("Du har trykket på en afgang med id: "+id);
+    	table.addMouseMotionListener(new MouseMotionAdapter() {
+//    		public void mouseClicked(MouseEvent e) {
+//    			int row = table.getSelectedRow();
+//    			System.out.println("You've clicked on row "+row);
+//    			
+//    			int id = dp.get(row).getId()+1;
+//    			System.out.println("Du har trykket på en afgang med id: "+id);
+//    			try {
+//					Pladsbooking pb = new Pladsbooking(id-1);
+//				} catch (SQLException e1) {
+//					// TODO Auto-generated catch block
+//					System.out.println("Something sql went wrong.");
+//					e1.printStackTrace();
+//				}
+//    		}
+    		
+    		public void mouseEntered(MouseEvent e) {
+    			int row = table.rowAtPoint(e.getPoint());
+    			int id = dp.get(row).getId()+1;
     			try {
-					Pladsbooking pb = new Pladsbooking(id-1);
+					pb = new Pladsbooking(id-1);
+					popupId = id-1;
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					System.out.println("Something sql went wrong.");
 					e1.printStackTrace();
 				}
     		}
+    		
+    		public void mouseMoved(MouseEvent e)
+            {
+                JTable aTable =  (JTable)e.getSource();
+                int itsRow = aTable.rowAtPoint(e.getPoint());
+                int id = dp.get(itsRow).getId();
+                if(id == popupId) {
+                	
+                } else if(pb == null) {
+                	mouseEntered(e);
+                } else {
+                	popupId = id;
+                	mouseExited(e);
+                	mouseEntered(e);
+                }
+            }
+    		
+    		public void mouseExited(MouseEvent e) {
+    			pb.close();
+    		}
     	});
+    	
+    	//tiføjer mouselistener
+    	table.addMouseListener(new MouseAdapter() {
+    		
+    		public void mouseEntered(MouseEvent e) {
+    			int row = table.rowAtPoint(e.getPoint());
+    			int id = dp.get(row).getId()+1;
+    			try {
+					pb = new Pladsbooking(id-1);
+					popupId = id-1;
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Something sql went wrong.");
+					e1.printStackTrace();
+				}
+    		}
+    		
+    		public void mouseExited(MouseEvent e) {
+    			pb.close();
+    		}
+    	});
+    	
+    	return table;
     }
     
     	
@@ -232,12 +313,12 @@ public class Afgangsliste extends JFrame {
         panel.add(nextWeek);
     }
     
-    private void table(JPanel panel){
-    										//lige nu laves begge table med samme departure array - det skal selvfølgelig ændres
-    	departureTable(departures);
+    private JTable table(JPanel panel, ArrayList<Afgang> departures){
+    	JTable table = departureTable(departures);
         //Indhold af panel
         panel.add(table.getTableHeader());
         panel.add(table);
+        return table;
     }
     
     private class Listener implements ActionListener {

@@ -17,7 +17,7 @@ public class Forside {
 	private JPanel centerPanel = new JPanel();
 	private JPanel northPanel = new JPanel();
 	private JButton rejse, booking, afgang;
-	private JXDatePicker rejsesøgning;
+	private JXDatePicker rejsesøgning, rejsesøgning2;
 	private JTextField departureAirport, arrivalAirport;
 	
 	private JLabel logoLabel;
@@ -30,12 +30,12 @@ public class Forside {
 	
 	private void makeWindow() {
 		frame = new JFrame();
-		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
 		//Sæt layout i contentPane til et borderlayout, og tilføj et gridlayout til centerPanel
 		Container contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
-		centerPanel.setLayout(new GridLayout(3, 2));
+		centerPanel.setLayout(new GridLayout(6, 3));
 		
 		//Indlæs Logo.png, og gem det i en JLabel
 		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/Logo.png"));
@@ -52,7 +52,8 @@ public class Forside {
 		
 		//Initialisér inputfelt til rejsesøgning
 		rejsesøgning = new JXDatePicker();
-		rejsesøgning.getDate();
+		//rejsesøgning.getDate();
+		rejsesøgning2 = new JXDatePicker();
 		
 		departureAirport = new JTextField("Copenhagen"); //departure
 		arrivalAirport = new JTextField("Rønne"); //arrival
@@ -65,6 +66,7 @@ public class Forside {
 		//Tilføjet knapperne til centerPanel
 		centerPanel.add(rejse);
 		centerPanel.add(rejsesøgning);
+		centerPanel.add(rejsesøgning2);
 		centerPanel.add(departureAirport);
 		centerPanel.add(arrivalAirport);
 		centerPanel.add(afgang);
@@ -84,7 +86,7 @@ public class Forside {
 			System.out.println("Søger rejser!");
 			try {
 				//AfgangSøgning afgange = new AfgangSøgning(rejsesøgning.getDate(), departureAirport.getText(), arrivalAirport.getText());
-				Afgangsliste afgange = new Afgangsliste(rejsesøgning.getDate(), departureAirport.getText(), arrivalAirport.getText());
+				Afgangsliste afgange = new Afgangsliste(rejsesøgning.getDate(),rejsesøgning2.getDate(), departureAirport.getText(), arrivalAirport.getText());
 			} catch (SQLException e1) {
 				 //TODO Auto-generated catch block
 				e1.printStackTrace();

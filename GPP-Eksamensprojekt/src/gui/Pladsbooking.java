@@ -15,11 +15,13 @@ public class Pladsbooking {
 	private PladsArray pladsArray;
 	private int rows;
 	private int cols;
+	private int departureId;
 	ArrayList<Integer> emptyColumns = new ArrayList<>();
 	private ArrayList<Plads> panelList = new ArrayList<>();
 	private ArrayList<Plads> newReservations = new ArrayList<>();
 	
 	public Pladsbooking(int departureId) throws SQLException {
+		this.departureId = departureId;
 		pladsArray = new PladsArray(departureId);
 		rows = pladsArray.getRows();
 		cols = pladsArray.getCols();
@@ -76,5 +78,13 @@ public class Pladsbooking {
 	
 	public void addReservation(Plads p) {
 		newReservations.add(p);
+	}
+	
+	public void close() {
+		frame.dispose();
+	}
+	
+	public int getId() {
+		return departureId;
 	}
 }

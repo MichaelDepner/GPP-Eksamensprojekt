@@ -51,7 +51,6 @@ public class Afgang {
 	}
 	
 	public int getId() {
-		System.out.println("Jeg er en afgang med id "+id+". Min departureTime er "+departureTime);
 		return id;
 	}
 
