@@ -38,7 +38,7 @@ public class Forside {
 		centerPanel.setLayout(new GridLayout(6, 3));
 		
 		//Indlæs Logo.png, og gem det i en JLabel
-		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/Logo.png"));
+		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan.jpg"));
 		logoLabel = new JLabel(imageLogo);
 		
 		//Tilføj vores 2 panels til contentPanen, på CENTER og NORTH pladserne
@@ -74,7 +74,7 @@ public class Forside {
 		
 		
 		//Sæt vindue-størrelsen, gør så det ikke kan resizes, og gør det hele synligt.
-		frame.setPreferredSize(new Dimension(640, 460));
+		frame.setPreferredSize(new Dimension(750, 460));
 		frame.setResizable(false);
 		frame.pack();
 		frame.setVisible(true);
