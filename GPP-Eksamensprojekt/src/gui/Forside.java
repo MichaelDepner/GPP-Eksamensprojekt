@@ -35,7 +35,7 @@ public class Forside {
 		//Sæt layout i contentPane til et borderlayout, og tilføj et gridlayout til centerPanel
 		Container contentPane = frame.getContentPane();
 		contentPane.setLayout(new BorderLayout());
-		centerPanel.setLayout(new GridLayout(6, 3));
+		centerPanel.setLayout(new GridLayout(4, 3));
 		
 		//Indlæs Logo.png, og gem det i en JLabel
 		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan.jpg"));

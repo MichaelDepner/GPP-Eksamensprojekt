@@ -329,6 +329,8 @@ public class Afgangsliste extends JFrame {
             	System.out.println("Forrige uge");
             } else if(event.getSource() == next) {
             	System.out.println("Næste");
+            	
+            	
             }
         }
     }
