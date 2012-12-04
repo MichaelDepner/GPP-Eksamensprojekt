@@ -63,9 +63,7 @@ public class Bookinginfo {
         //Laver en JLabel og JBUtton, og indsætter i NORTH
         JLabel labelUp = new JLabel("Kundens kontaktoplysninger");
         labelUp.setFont(new Font("String", Font.BOLD, 14));
-        importerKunde = new JButton("Importer kunde");
         panelNorth.add(labelUp, BorderLayout.NORTH);
-        panelNorth.add(importerKunde, BorderLayout.NORTH);
         
         //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
         //og giver dem et GridLayout
@@ -145,12 +143,12 @@ public class Bookinginfo {
         panel6.setLayout(new FlowLayout());
         
         //Opretter knapperne, og lægger dem i panel6
-        back = new JButton("Tilbage til oversigten");
-        next = new JButton("Gem");
+        back = new JButton("Annuler");
+        next = new JButton("Gem ændringer");
         delete = new JButton("Slet reservation");
-        panel6.add(back);
-        panel6.add(next);
         panel6.add(delete);
+        panel6.add(next);
+        panel6.add(back);
         
         /**
         //For hvert antal passagerer, laver vi en passager-liste
@@ -193,7 +191,8 @@ public class Bookinginfo {
     private void addActionListeners(){
     	back.addActionListener(new Listener());
     	next.addActionListener(new Listener());
-    	importerKunde.addActionListener(new Listener());
+    	delete.addActionListener(new Listener());
+
     }
     
     //Lytter til knapperne

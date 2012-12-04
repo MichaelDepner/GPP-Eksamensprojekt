@@ -41,7 +41,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		panelBooking = new JPanel();
 		
 		//Tilføjer faner med tilhørende paneler
-		searchPane.addTab("Søg rejser", panelRejser);
+		searchPane.addTab("Bestil rejse", panelRejser);
 		searchPane.addTab("Søg afgange", panelAfgange);
 		searchPane.addTab("Søg bookinger", panelBooking);
 				
