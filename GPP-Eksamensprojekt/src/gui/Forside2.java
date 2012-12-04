@@ -21,7 +21,6 @@ public class Forside2  extends JFrame implements ActionListener{
 	
 	public Forside2(){
 		setTitle("Forside");
-		setSize(760, 600);
 		//setBackground(Color.WHITE);
 			
 		//Opretter et BorderLayout i contentPane
@@ -31,7 +30,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		
 		//Indlæs swan.jpg, gemmer det i en JLabel, og lægger den øverst i vinduet
 		//Billedet skal gøres mindre!
-		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan.jpg"));
+		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan5.jpg"));
 		logoLabel = new JLabel(imageLogo);
 		panel.add(logoLabel, BorderLayout.NORTH);
 		
@@ -53,7 +52,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		searchRejser();
 		addHjemrejse();
 		
-		panel.setPreferredSize(new Dimension(760, 550));
+		panel.setPreferredSize(new Dimension(700, 550));
 		//setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
