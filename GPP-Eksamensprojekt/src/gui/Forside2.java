@@ -2,6 +2,8 @@ package gui;
 
 import javax.swing.*;
 
+import org.jdesktop.swingx.JXDatePicker;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +17,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	private JLabel udrejse, hjemrejse;
 	private JTextField fraTextField, tilTextField;
 	private JRadioButton enkelt, turRetur;
+	private JXDatePicker udrejseDate, hjemrejseDate;
 	
 	public Forside2(){
 		setTitle("Forside");
@@ -72,9 +75,14 @@ public class Forside2  extends JFrame implements ActionListener{
 	private void addHjemrejse() {
 		panelRight = new JPanel();
 	    panelCenter.add(panelRight);
+	    
 	    //indhold til panelRight
 	    hjemrejse = new JLabel("Hjemrejse");
 	    panelRight.add(hjemrejse);
+	    
+	    //tilføjer datepicker
+	    hjemrejseDate = new JXDatePicker();
+	    panelRight.add(hjemrejseDate);
 
 	    panelRight.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 	    
@@ -157,8 +165,10 @@ public class Forside2  extends JFrame implements ActionListener{
 	    //Laver indhold til panelLeft
 	    udrejse = new JLabel("Udrejse");
 	    panelLeft.add(udrejse);
-	    //Skal tilføje  kalender
 	    
+	    //Tilføjer  kalender
+	    udrejseDate = new JXDatePicker();
+	    panelLeft.add(udrejseDate);
 	    
 	    
 	    
