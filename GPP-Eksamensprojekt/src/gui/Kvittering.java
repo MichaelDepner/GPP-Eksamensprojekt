@@ -5,5 +5,7 @@ public class Kvittering {
 	
 	//Print- og send-til-mail-knap
 	
+	//Logo
+	
 	
 }

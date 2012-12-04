@@ -54,16 +54,9 @@ public class Afgangsliste extends JFrame {
         
         //Sætter BorderLayout i contentPane, og laver panels indeni
         getContentPane().setLayout(new BorderLayout());
-        //NORTH - bruges ikke til noget!
-        JPanel panelNorth = new JPanel();
-        getContentPane().add(panelNorth, BorderLayout.NORTH);
-        panelNorth.setLayout(new BorderLayout());
         //CENTER
         JPanel panelCenter = new JPanel();
         getContentPane().add(panelCenter, BorderLayout.CENTER);
-        
-        													//jeg prøver lige noget
-        //panelCenter.setLayout(new BorderLayout());
         panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.PAGE_AXIS));
         
         //SOUTH
@@ -72,36 +65,8 @@ public class Afgangsliste extends JFrame {
         panelSouth.setLayout(new FlowLayout());
         
         //Sætter fane-vinduerne ind i layouts'ene
-        //panelNorth.add(jtp, BorderLayout.CENTER);
         panelCenter.add(jtp);
-        
-        				//prøver lige noget
         panelCenter.add(jtp2);
-        
-        //Laver layout til panelNorth NORTH
-        JPanel panelNorthJtp = new JPanel();
-        panelNorth.add(panelNorthJtp, BorderLayout.NORTH);
-        panelNorthJtp.setLayout(new FlowLayout());
-        
-        //Laver layout til panelCenter NORTH
-        JPanel panelCenterJtp2 = new JPanel();
-        panelCenter.add(panelCenterJtp2, BorderLayout.NORTH);
-        panelCenterJtp2.setLayout(new FlowLayout());
-        
-        //Sætter knapper og uge-label ind i FlowLayouts
-        													//jeg prøver lige noget
-        //buttonsAndLabel(panelNorthJtp);
-        
-        //buttonsAndLabel(panelCenterJtp2);
-        
-        										
-		
-		//Sætter bredden af columns
-		//setWidth(0, 120);
-		//setWidth(1, 120);
-		//setWidth(2, 120);
-		//setWidth(3, 120);
-		//setWidth(4, 120);
 		
 		//Opretter panels
         jp1Udrejse = new JPanel();
@@ -169,18 +134,6 @@ public class Afgangsliste extends JFrame {
 		column.setPreferredWidth(j);
     }
     
-    															//her er den gamle table kode. Nedenunder er én der laver et table baseret på et array af afgange
-//    private void table(){
-//    	//Laver skemaerne
-//        String columns[] = {"Pris","Afrejse - ankomst","Rejsetid", "Lufthavne", "Ledige pladser"};
-//		Object data[][] = {
-//				{"500-800 kr.", "16.00-18.00", "02.00", "CPH-LON", "215"},
-//				{"600-800 kr.", "21.00-23.00", "02.00", "CPH-LON", "100"}
-//				//{"Tom",new Integer(20),"Male"},
-//		};
-//		table = new JTable(data,columns);
-//    }
-    
     private JTable departureTable(ArrayList<Afgang> departures) {
     	final ArrayList<Afgang> dp = departures;
     	DefaultTableModel model = new DefaultTableModel(); 
@@ -223,8 +176,6 @@ public class Afgangsliste extends JFrame {
     	setWidth(table, 2, 120);
     	setWidth(table, 3, 120);
     	setWidth(table, 4, 120);
-    	
-    	
     	
     	//tilføjer actionlistener som åbner rækkens afgang som pladssøgning
     	table.addMouseMotionListener(new MouseMotionAdapter() {
@@ -303,43 +254,12 @@ public class Afgangsliste extends JFrame {
     	//tiføjer mouselistener
     	table.addMouseListener(new MouseAdapter() {
     		
-//    		public void mouseEntered(MouseEvent e) {
-//    			int row = table.rowAtPoint(e.getPoint());
-//    			int id = dp.get(row).getId()+1;
-//    			try {
-//					pb = new Pladsbooking(id-1);
-//					popupId = id-1;
-//				} catch (SQLException e1) {
-//					// TODO Auto-generated catch block
-//					System.out.println("Something sql went wrong.");
-//					e1.printStackTrace();
-//				}
-//    		}
-    		
     		public void mouseExited(MouseEvent e) {
     			pb.close();
     		}
     	});
     	
     	return table;
-    }
-    
-    	
-    
-    private void buttonsAndLabel(JPanel panel){
-    	lastWeek = new JButton("Forrige uge");
-        //lastWeek.addActionListener(new Listener());
-    	//men skal have en actionlistener for hver, lige nu bliver den første overskrevet
-        
-        nextWeek = new JButton("Næste uge");
-        //nextWeek.addActionListener(new Listener());
-    	//men skal have en actionlistener for hver, lige nu bliver den første overskrevet
-        
-        weekNumber = new JLabel("uge");
-        
-        panel.add(lastWeek);
-        panel.add(weekNumber);
-        panel.add(nextWeek);
     }
     
     private JTable table(JPanel panel, ArrayList<Afgang> departures){

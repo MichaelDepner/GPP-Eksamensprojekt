@@ -19,20 +19,15 @@ public class Kundeoplysninger {
 	//Skal have en importer-kunde-knap (øverst)
 	
 	private JFrame frame;
-    private JTextField firstname, surname, email, phoneNumber, address;
+    private JTextField firstname, surname, email, phoneNumber, address, city;
+    private JTextField postal, country, birthday;
     private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress;
+	private JLabel labelCity, labelPostal, labelCountry, labelBirthday;
     private JButton back, next, importerKunde;
     private Container contentPane;
-    private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth, panelNorth2;
+    private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth;
+    private JPanel panel, panelNorth2;
     private int antalPassagerer;
-	private JTextField city;
-	private JLabel labelCity;
-	private JTextField postal;
-	private JLabel labelPostal;
-	private JLabel labelCountry;
-	private JTextField country;
-	private JLabel labelBirthday;
-	private JTextField birthday;
 	
     public Kundeoplysninger() {
         makeFrame();
@@ -46,14 +41,20 @@ public class Kundeoplysninger {
         frame.setResizable(false);
         
         contentPane = frame.getContentPane();
-        contentPane.setLayout(new BorderLayout());
         //contentPane.setBackground(Color.WHITE);
-        //ImageIcon NORTH
+        
+        panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        contentPane.add(panel);
+        
+        //Scrollbar
+        JScrollPane scroll = new JScrollPane(panel);
+        frame.getContentPane().add(scroll);
         
         //Laver et BoxLayout i contentPane NORTH
         panelNorth = new JPanel();
         panelNorth.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
-        contentPane.add(panelNorth, BorderLayout.NORTH);
+        panel.add(panelNorth, BorderLayout.NORTH);
         
         //Laver en JLabel og JBUtton, og indsætter i NORTH
         JLabel labelUp = new JLabel("Indtast dine kontaktoplysninger her");
@@ -65,13 +66,13 @@ public class Kundeoplysninger {
         //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
         //og giver dem et GridLayout
         panel1 = new JPanel();
-        contentPane.add(panel1, BorderLayout.CENTER);
+        panel.add(panel1, BorderLayout.CENTER);
 	    panel1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel1.setLayout(new GridLayout(8,1,10,10));
         
         panel2 = new JPanel();
-        contentPane.add(panel2, BorderLayout.EAST);
-	    panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel.add(panel2, BorderLayout.EAST);
+	    panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
         panel2.setLayout(new GridLayout(8,1,10,10));
         
         //Indsætter labels i vores JPanel panel1
@@ -98,7 +99,7 @@ public class Kundeoplysninger {
         
         //Indsætter panel3 i SOUTH, og laver et BorderLayout heri
         panel3 = new JPanel();
-        contentPane.add(panel3, BorderLayout.SOUTH);
+        panel.add(panel3, BorderLayout.SOUTH);
         panel3.setLayout(new BorderLayout());
         
         panelNorth2 = new JPanel();
@@ -120,7 +121,7 @@ public class Kundeoplysninger {
         panel5 = new JPanel();
         panel3.add(panel5, BorderLayout.EAST);
         panel5.setLayout(new GridLayout(3,1,10,10));
-	    panel5.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	    panel5.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
         
         //Indsætter labels i panel4
         labels();
