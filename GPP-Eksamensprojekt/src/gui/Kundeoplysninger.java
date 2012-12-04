@@ -25,6 +25,14 @@ public class Kundeoplysninger {
     private Container contentPane;
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth, panelNorth2;
     private int antalPassagerer;
+	private JTextField city;
+	private JLabel labelCity;
+	private JTextField postal;
+	private JLabel labelPostal;
+	private JLabel labelCountry;
+	private JTextField country;
+	private JLabel labelBirthday;
+	private JTextField birthday;
 	
     public Kundeoplysninger() {
         makeFrame();
@@ -59,12 +67,12 @@ public class Kundeoplysninger {
         panel1 = new JPanel();
         contentPane.add(panel1, BorderLayout.CENTER);
 	    panel1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel1.setLayout(new GridLayout(5,1,10,10));
+        panel1.setLayout(new GridLayout(8,1,10,10));
         
         panel2 = new JPanel();
         contentPane.add(panel2, BorderLayout.EAST);
 	    panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        panel2.setLayout(new GridLayout(5,1,10,10));
+        panel2.setLayout(new GridLayout(8,1,10,10));
         
         //Indsætter labels i vores JPanel panel1
         labels();
@@ -73,6 +81,9 @@ public class Kundeoplysninger {
         panel1.add(labelEmail);
         panel1.add(labelPhone);
         panel1.add(labelAddress);
+        panel1.add(labelCity);
+        panel1.add(labelPostal);
+        panel1.add(labelCountry);
         
         //Laver input-felterne til panel2
         inputTextFields();
@@ -81,6 +92,9 @@ public class Kundeoplysninger {
         panel2.add(email);
         panel2.add(phoneNumber);
         panel2.add(address);
+        panel2.add(city);
+        panel2.add(postal);
+        panel2.add(country);
         
         //Indsætter panel3 i SOUTH, og laver et BorderLayout heri
         panel3 = new JPanel();
@@ -92,37 +106,33 @@ public class Kundeoplysninger {
         panel3.add(panelNorth2, BorderLayout.NORTH);
         
         //JLabel i panel3 NORTH
-        JLabel labelNorth = new JLabel("Indtast personoplysninger her");
+        JLabel labelNorth = new JLabel("Indtast oplysninger på passagererne");
         labelNorth.setFont(new Font("String", Font.BOLD, 14));
         panelNorth2.add(labelNorth, BorderLayout.NORTH);
         
         //Sætter panel4 til CENTER i panel3, og giver det GridLayout
         panel4 = new JPanel();
         panel3.add(panel4, BorderLayout.CENTER);
-        panel4.setLayout(new GridLayout(5,1,10,10));
+        panel4.setLayout(new GridLayout(3,1,10,10));
 	    panel4.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         //Sætter panel5 til EAST i panel3, og giver det GridLayout
         panel5 = new JPanel();
         panel3.add(panel5, BorderLayout.EAST);
-        panel5.setLayout(new GridLayout(5,1,10,10));
+        panel5.setLayout(new GridLayout(3,1,10,10));
 	    panel5.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         //Indsætter labels i panel4
         labels();
         panel4.add(labelFirstname);
         panel4.add(labelSurname);
-        panel4.add(labelEmail);
-        panel4.add(labelPhone);
-        panel4.add(labelAddress);
+        panel4.add(labelBirthday);
         
         //Indsætter TextFields i panel5
         inputTextFields();
         panel5.add(firstname);
         panel5.add(surname);
-        panel5.add(email);
-        panel5.add(phoneNumber);
-        panel5.add(address);
+        panel5.add(birthday);
         
         //Sætter panel6 til SOUTH i panel3, og giver det FlowLayout
         panel6 = new JPanel();
@@ -149,10 +159,14 @@ public class Kundeoplysninger {
     
     private void inputTextFields() {
         firstname = new JTextField("Indtast fornavn");
-        surname = new JTextField("Indtast efternavn", 20);
+        surname = new JTextField("Indtast efternavn", 30);
         email = new JTextField("Indtast e-mail", 25);
         phoneNumber = new JTextField("Indtast telefonnr.", 11);
         address = new JTextField("Indtast adresse", 30);
+        city = new JTextField ("Indtast by", 30);
+        postal = new JTextField ("Indtast postnummer", 10);
+        country = new JTextField ("Indtast land");
+        birthday = new JTextField ("Indtast fødselsdag");
     }
     
     private void labels() {
@@ -161,6 +175,10 @@ public class Kundeoplysninger {
         labelEmail = new JLabel("E-mail");
         labelPhone = new JLabel("Telefonnr.");
         labelAddress = new JLabel("Adresse");
+        labelCity = new JLabel ("By");
+        labelPostal = new JLabel ("Postnummer");
+        labelCountry = new JLabel ("Land");
+        labelBirthday = new JLabel ("Fødselsdag");
     }
     
     //Tilføjer actionListeners til de to knapper
