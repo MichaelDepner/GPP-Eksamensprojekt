@@ -17,7 +17,8 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		
 		new gui.Forside2();
-		new gui.Bookingliste();
+		new gui.Betaling();
+		new gui.Kundeoplysninger();
 		
 //		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 //		db.queryGetAirports();

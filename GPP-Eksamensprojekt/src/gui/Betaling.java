@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class Betaling {
 	//Navn på kort, udløbsmåned, udløbsår, kortnr, kontrolcifre, korttype
@@ -17,20 +18,36 @@ public class Betaling {
 	private JTextField name, month, year, number, cvr, type;
 	private JButton next, back;
 	
-	private Betaling() {
+	public Betaling() {
 		frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(640, 460);
+        frame.setSize(700, 460);
         frame.setResizable(false);
         
         contentPane = frame.getContentPane();
         contentPane.setLayout(new BorderLayout());
         
-        //Laver et panel i contentPane, der får et Gridlayout
-        JPanel panel = new JPanel();
-        contentPane.add(panel, BorderLayout.CENTER);
-        panel.setLayout(new GridLayout(6,2));
+        //Laver panel til overskrift
+        JPanel panelNorth = new JPanel();
+        contentPane.add(panelNorth, BorderLayout.NORTH);
+        panelNorth.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
         
+        //Overskrift
+        JLabel overskrift = new JLabel("Indtast betalingsoplysninger her");
+        overskrift.setFont(new Font("String", Font.BOLD, 14));
+        panelNorth.add(overskrift);
+        
+        //Laver et panel i contentPane, der får et Gridlayout
+        JPanel panelCenter = new JPanel();
+        contentPane.add(panelCenter, BorderLayout.CENTER);
+        panelCenter.setLayout(new GridLayout(6,1,10,10));
+	    panelCenter.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+	    JPanel panelEast = new JPanel();
+        contentPane.add(panelEast, BorderLayout.EAST);
+        panelEast.setLayout(new GridLayout(6,1,10,10));
+	    panelEast.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	    
         //Opretter vores labels
         labelName = new JLabel("Navn på kort");
         labelMonth = new JLabel("Udløbsmåned");
@@ -40,7 +57,7 @@ public class Betaling {
         labelType = new JLabel("Korttype");
         
         //Opretter vores textFields
-        name = new JTextField();
+        name = new JTextField(20);
         month = new JTextField();
         year = new JTextField();
         number = new JTextField();
@@ -48,18 +65,19 @@ public class Betaling {
         type = new JTextField();
         
         //Adds labels and textFields to the GridLayout
-		panel.add(labelName);
-		panel.add(name);
-		panel.add(labelMonth);
-		panel.add(month);
-		panel.add(labelYear);
-		panel.add(year);
-		panel.add(labelNumber);
-		panel.add(number);
-		panel.add(labelCVR);
-		panel.add(cvr);
-		panel.add(labelType);
-		panel.add(type);
+		panelCenter.add(labelName);
+		panelCenter.add(labelMonth);
+		panelCenter.add(labelYear);
+		panelCenter.add(labelNumber);
+		panelCenter.add(labelCVR);
+		panelCenter.add(labelType);
+
+		panelEast.add(name);
+		panelEast.add(month);
+		panelEast.add(year);
+		panelEast.add(number);
+		panelEast.add(cvr);
+		panelEast.add(type);
 		
 		//
 		JPanel panelSouth = new JPanel();

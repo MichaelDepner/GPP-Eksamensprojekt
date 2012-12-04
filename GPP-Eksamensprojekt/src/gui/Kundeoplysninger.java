@@ -21,9 +21,9 @@ public class Kundeoplysninger {
 	private JFrame frame;
     private JTextField firstname, surname, email, phoneNumber, address;
     private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress;
-    private JButton back, next;
+    private JButton back, next, importerKunde;
     private Container contentPane;
-    private JPanel panel1, panel2, panel3, panel4, panel5, panel6;
+    private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth, panelNorth2;
     private int antalPassagerer;
 	
     public Kundeoplysninger() {
@@ -34,7 +34,7 @@ public class Kundeoplysninger {
     private void makeFrame() {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(640, 460);
+        frame.setSize(700, 460);
         frame.setResizable(false);
         
         contentPane = frame.getContentPane();
@@ -42,19 +42,29 @@ public class Kundeoplysninger {
         //contentPane.setBackground(Color.WHITE);
         //ImageIcon NORTH
         
-        //Laver en JLabel, og indsætter i NORTH
+        //Laver et BoxLayout i contentPane NORTH
+        panelNorth = new JPanel();
+        panelNorth.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
+        contentPane.add(panelNorth, BorderLayout.NORTH);
+        
+        //Laver en JLabel og JBUtton, og indsætter i NORTH
         JLabel labelUp = new JLabel("Indtast dine kontaktoplysninger her");
-        contentPane.add(labelUp, BorderLayout.NORTH);
+        labelUp.setFont(new Font("String", Font.BOLD, 14));
+        importerKunde = new JButton("Importer kunde");
+        panelNorth.add(labelUp, BorderLayout.NORTH);
+        panelNorth.add(importerKunde, BorderLayout.NORTH);
         
         //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
         //og giver dem et GridLayout
         panel1 = new JPanel();
         contentPane.add(panel1, BorderLayout.CENTER);
-        panel1.setLayout(new GridLayout(5,1));
+	    panel1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel1.setLayout(new GridLayout(5,1,10,10));
         
         panel2 = new JPanel();
         contentPane.add(panel2, BorderLayout.EAST);
-        panel2.setLayout(new GridLayout(5,1));
+	    panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel2.setLayout(new GridLayout(5,1,10,10));
         
         //Indsætter labels i vores JPanel panel1
         labels();
@@ -77,19 +87,26 @@ public class Kundeoplysninger {
         contentPane.add(panel3, BorderLayout.SOUTH);
         panel3.setLayout(new BorderLayout());
         
+        panelNorth2 = new JPanel();
+        panelNorth2.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
+        panel3.add(panelNorth2, BorderLayout.NORTH);
+        
         //JLabel i panel3 NORTH
         JLabel labelNorth = new JLabel("Indtast personoplysninger her");
-        panel3.add(labelNorth, BorderLayout.NORTH);
+        labelNorth.setFont(new Font("String", Font.BOLD, 14));
+        panelNorth2.add(labelNorth, BorderLayout.NORTH);
         
         //Sætter panel4 til CENTER i panel3, og giver det GridLayout
         panel4 = new JPanel();
         panel3.add(panel4, BorderLayout.CENTER);
-        panel4.setLayout(new GridLayout(5,1));
+        panel4.setLayout(new GridLayout(5,1,10,10));
+	    panel4.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         //Sætter panel5 til EAST i panel3, og giver det GridLayout
         panel5 = new JPanel();
         panel3.add(panel5, BorderLayout.EAST);
-        panel5.setLayout(new GridLayout(5,1));
+        panel5.setLayout(new GridLayout(5,1,10,10));
+	    panel5.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         //Indsætter labels i panel4
         labels();
@@ -150,6 +167,7 @@ public class Kundeoplysninger {
     private void addActionListeners(){
     	back.addActionListener(new Listener());
     	next.addActionListener(new Listener());
+    	importerKunde.addActionListener(new Listener());
     }
     
     //Lytter til knapperne
@@ -159,6 +177,8 @@ public class Kundeoplysninger {
                 System.out.println("Going back");
             } else if(event.getSource() == next) {
             	System.out.println("Going to the next step");
+            } else if(event.getSource() == importerKunde) {
+            	System.out.println("Hent info fra database om eksisterende kunder");
             }
         }
     }
