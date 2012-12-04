@@ -51,7 +51,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		
 		panel.setPreferredSize(new Dimension(760, 550));
 		//setResizable(false);
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
 	}
