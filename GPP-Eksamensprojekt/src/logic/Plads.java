@@ -3,6 +3,7 @@ package logic;
 import gui.Pladsbooking;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.*;
 
 import javax.swing.*;

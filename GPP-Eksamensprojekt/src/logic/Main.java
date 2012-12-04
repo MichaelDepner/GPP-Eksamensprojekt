@@ -16,12 +16,19 @@ public class Main {
 	 */
 	public static void main(String[] args) throws SQLException {
 		
+		
+		
+		
 		new gui.Forside2();
 		new gui.Betaling();
 		new gui.Kundeoplysninger();
 		
 		new gui.Bookinginfo();
 
+		
+		//new gui.Pladsbooking(1, false, false);
+		
+		new gui.Pladsbooking(1, true);
 		
 //		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 //		db.queryGetAirports();

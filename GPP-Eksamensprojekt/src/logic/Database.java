@@ -23,13 +23,15 @@ public class Database {
 		
 		connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, user, password);
 		dbStatement = connection.createStatement();
+		
 	}
 	
 	//sender en string til databasen, og returnerer det resultset, der kommer tilbage
 	public ResultSet execute(String cmd) throws SQLException {
-		boolean ok = dbStatement.execute(cmd);
+		boolean ok;
+			ok = dbStatement.execute(cmd);
 		if (ok) {
-			return dbStatement.getResultSet();
+				return dbStatement.getResultSet();
 		} else {
 			return null;
 		}
@@ -165,4 +167,5 @@ public class Database {
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
+	
 }

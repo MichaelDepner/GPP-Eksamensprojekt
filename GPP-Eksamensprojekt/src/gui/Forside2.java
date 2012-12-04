@@ -7,6 +7,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class Forside2  extends JFrame implements ActionListener{
 	
@@ -18,6 +19,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	private JTextField fraTextField, tilTextField;
 	private JRadioButton enkelt, turRetur;
 	private JXDatePicker udrejseDate, hjemrejseDate;
+	private JButton searchButton;
 	
 	public Forside2(){
 		setTitle("Forside");
@@ -62,7 +64,15 @@ public class Forside2  extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent event) {
 	    Object source = event.getSource();
-		System.out.println("Valgt");
+	    if(source.equals(searchButton)) {
+	    	try {
+				Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(),hjemrejseDate.getDate(), fraTextField.getText(), tilTextField.getText());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				System.out.println("SQL fejl");
+				e.printStackTrace();
+			}
+	    }
 		if(source == turRetur)
 		{
 			panelRight.setVisible(true);
@@ -175,7 +185,7 @@ public class Forside2  extends JFrame implements ActionListener{
   		panelRejser.add(panelSouth, BorderLayout.SOUTH);
   		
   		//Tilføjer "Søg"-knap til SOUTH
-  		JButton searchButton = new JButton("Søg");
+  		searchButton = new JButton("Søg");
   		panelSouth.add(searchButton);
   		//ActionListener
 	    searchButton.addActionListener(this);
