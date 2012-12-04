@@ -23,21 +23,13 @@ public class Bookinginfo {
 	//Skal have en importer-kunde-knap (øverst)
 	
 	private JFrame frame;
-    private JTextField firstname, surname, email, phoneNumber, address;
-    private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress;
-    private JButton back, next, importerKunde;
+    private JTextField firstname, surname, email, phoneNumber, address, birthday, country, postal, city;
+    private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress, labelBirthday, labelCountry, labelPostal, labelCity;
+    private JButton back, next, importerKunde, delete;
     private Container contentPane;
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth, panelNorth2;
     private int antalPassagerer;
-	private JButton delete;
-	private JLabel labelBirthday;
-	private JLabel labelCountry;
-	private JLabel labelPostal;
-	private JLabel labelCity;
-	private JTextField birthday;
-	private JTextField country;
-	private JTextField postal;
-	private JTextField city;
+
 	
     public Bookinginfo () {
         makeFrame();
@@ -193,6 +185,10 @@ public class Bookinginfo {
     	next.addActionListener(new Listener());
     	delete.addActionListener(new Listener());
 
+    }
+    
+    private void antalPassagere() {
+    	
     }
     
     //Lytter til knapperne
