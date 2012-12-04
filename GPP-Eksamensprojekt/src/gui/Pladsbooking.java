@@ -95,7 +95,7 @@ public class Pladsbooking extends JFrame {
 	
 	public void makeBookingWindow() {
 		JPanel leftPanel, middlePanel, centerPanel, rightPanel, bottomPanel;
-		JPanel leftBottomPanel, leftTopPanel;
+		JPanel leftBottomPanel, leftTopPanel, centerBottomPanel, centerTopPanel;
 		JLabel leftPanelTitle, centerPanelTitle, rightPanelTitle;
 		//frame = new JFrame();
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -119,6 +119,11 @@ public class Pladsbooking extends JFrame {
 			
 			leftPanel.setLayout(new BorderLayout());
 			leftBottomPanel = addPlane(rows, cols, panelList);
+			
+			middlePanel.setLayout(new BorderLayout());
+			centerBottomPanel = addPlane(rows, cols, panelList);
+			middlePanel.add(centerBottomPanel);
+//			centerPanel.add(centerBottomPanel);
 //			leftBottomPanel = new JPanel();
 //			leftBottomPanel.setLayout(new GridLayout(rows, cols, 2, 2));
 			leftPanel.add(leftBottomPanel, BorderLayout.CENTER);
