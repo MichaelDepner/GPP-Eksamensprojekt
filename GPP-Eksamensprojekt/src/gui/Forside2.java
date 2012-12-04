@@ -48,6 +48,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		
 		//laver hele fanevinduet til at søge rejser
 		searchRejser();
+		addHjemrejse();
 		
 		panel.setPreferredSize(new Dimension(760, 550));
 		//setResizable(false);
@@ -60,13 +61,11 @@ public class Forside2  extends JFrame implements ActionListener{
 	    Object source = event.getSource();
 		System.out.println("Valgt");
 		if(source == turRetur)
-		//&& turRetur IKKE allerede er valgt
 		{
-			addHjemrejse();
+			panelRight.setVisible(true);
 		}
 	    if(source == enkelt) {
 	    	panelRight.setVisible(false);
-	    	//Skal ændres til, at kalenderen bliver inaktiv/grå
 	    }
 	}
 	
@@ -80,6 +79,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	    panelRight.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 	    
 	    pack();
+	    panelRight.setVisible(false);
 	}
 	
 	private void searchRejser() {
