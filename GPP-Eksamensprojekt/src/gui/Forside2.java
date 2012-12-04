@@ -40,7 +40,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		panelAfgange = new JPanel();
 		panelBooking = new JPanel();
 		
-		//Tilføjer faner
+		//Tilføjer faner med tilhørende paneler
 		searchPane.addTab("Søg rejser", panelRejser);
 		searchPane.addTab("Søg afgange", panelAfgange);
 		searchPane.addTab("Søg bookinger", panelBooking);
@@ -51,6 +51,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		//laver hele fanevinduet til at søge rejser
 		searchRejser();
 		addHjemrejse();
+		searchBookinger();
 		
 		panel.setPreferredSize(new Dimension(700, 550));
 		//setResizable(false);
@@ -169,10 +170,6 @@ public class Forside2  extends JFrame implements ActionListener{
 	    udrejseDate = new JXDatePicker();
 	    panelLeft.add(udrejseDate);
 	    
-	    
-	    
-	    
-	    
 	    //Laver et panel, der sættes ind i panel SOUTH
   		panelSouth = new JPanel();
   		panelRejser.add(panelSouth, BorderLayout.SOUTH);
@@ -189,6 +186,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	}
 	
 	private void searchBookinger() {
-		
+		//Laver et BorderLayout inde i fane-vinduet bookinger
+		panelBooking.setLayout(new BorderLayout(10,10));
 	}
 }
