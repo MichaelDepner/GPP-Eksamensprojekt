@@ -54,7 +54,7 @@ public class Afgangsliste extends JFrame {
         
         //Sætter BorderLayout i contentPane, og laver panels indeni
         getContentPane().setLayout(new BorderLayout());
-        //NORTH
+        //NORTH - bruges ikke til noget!
         JPanel panelNorth = new JPanel();
         getContentPane().add(panelNorth, BorderLayout.NORTH);
         panelNorth.setLayout(new BorderLayout());
@@ -111,6 +111,7 @@ public class Afgangsliste extends JFrame {
         labelUdrejse.setText("Onsdag d. 28. november 2012" + "Udrejse - Lufthavn");
         jp1Udrejse.add(labelUdrejse);
         
+        //Skal evt. rykkes ned til table-metode
 		JTable departureTable = table(jp1Udrejse, departures);
 		//Tilføjer panel jp1Udrejse til jtp
         jtp.addTab("28/11", jp1Udrejse);
@@ -119,6 +120,7 @@ public class Afgangsliste extends JFrame {
         labelHjemrejse.setText("Onsdag d. 28. november 2012" + "Hjemrejse - Lufthavn");
 		jp1Hjemrejse.add(labelHjemrejse);
 		
+		//Skal evt. rykkes ned til table-metode
 		table(jp1Hjemrejse, departures2);
 		//Tilføjer panel jp1Hjemrejse til jtp
         jtp2.addTab("28/11", jp1Hjemrejse);

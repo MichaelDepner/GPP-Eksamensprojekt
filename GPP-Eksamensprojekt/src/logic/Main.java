@@ -20,6 +20,11 @@ public class Main {
 		
 		
 		new gui.Forside2();
+		new gui.Betaling();
+		new gui.Kundeoplysninger();
+		
+		new gui.Bookinginfo();
+
 		
 		//new gui.Pladsbooking(1, false, false);
 		
@@ -41,5 +46,6 @@ public class Main {
 		
 		//Afgangsliste tp = new Afgangsliste();
 		//tp.setVisible(true);
+		
 		}
 	}

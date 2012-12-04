@@ -6,8 +6,12 @@ import javax.swing.*;
 
 import java.awt.event.*;
 
-public class Kundeoplysninger {
+public class Bookinginfo {
 
+	////Info skal vise alle kundeoplysninger og passagerer, pladsreservationer
+	//Skal have en slet og rediger-knap (hvor den låser textFields op) og gem-knap
+	//TextFields, setText til den info, vi henter fra databasen
+	
 	//Skal have lavet et vindue, med kontaktperson øverst, og alle passagerer nederst.
 	//Start med at lave antal personer som int, vi laver den dynamisk senere.
 	
@@ -25,16 +29,17 @@ public class Kundeoplysninger {
     private Container contentPane;
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth, panelNorth2;
     private int antalPassagerer;
-	private JTextField city;
-	private JLabel labelCity;
-	private JTextField postal;
-	private JLabel labelPostal;
-	private JLabel labelCountry;
-	private JTextField country;
+	private JButton delete;
 	private JLabel labelBirthday;
+	private JLabel labelCountry;
+	private JLabel labelPostal;
+	private JLabel labelCity;
 	private JTextField birthday;
+	private JTextField country;
+	private JTextField postal;
+	private JTextField city;
 	
-    public Kundeoplysninger() {
+    public Bookinginfo () {
         makeFrame();
         addActionListeners();
     }
@@ -56,7 +61,7 @@ public class Kundeoplysninger {
         contentPane.add(panelNorth, BorderLayout.NORTH);
         
         //Laver en JLabel og JBUtton, og indsætter i NORTH
-        JLabel labelUp = new JLabel("Indtast dine kontaktoplysninger her");
+        JLabel labelUp = new JLabel("Kundens kontaktoplysninger");
         labelUp.setFont(new Font("String", Font.BOLD, 14));
         importerKunde = new JButton("Importer kunde");
         panelNorth.add(labelUp, BorderLayout.NORTH);
@@ -106,7 +111,7 @@ public class Kundeoplysninger {
         panel3.add(panelNorth2, BorderLayout.NORTH);
         
         //JLabel i panel3 NORTH
-        JLabel labelNorth = new JLabel("Indtast oplysninger på passagererne");
+        JLabel labelNorth = new JLabel("Passagerer");
         labelNorth.setFont(new Font("String", Font.BOLD, 14));
         panelNorth2.add(labelNorth, BorderLayout.NORTH);
         
@@ -140,10 +145,12 @@ public class Kundeoplysninger {
         panel6.setLayout(new FlowLayout());
         
         //Opretter knapperne, og lægger dem i panel6
-        back = new JButton("Tilbage");
-        next = new JButton("Næste");
+        back = new JButton("Tilbage til oversigten");
+        next = new JButton("Gem");
+        delete = new JButton("Slet reservation");
         panel6.add(back);
         panel6.add(next);
+        panel6.add(delete);
         
         /**
         //For hvert antal passagerer, laver vi en passager-liste
@@ -181,6 +188,7 @@ public class Kundeoplysninger {
         labelBirthday = new JLabel ("Fødselsdag");
     }
     
+    
     //Tilføjer actionListeners til de to knapper
     private void addActionListeners(){
     	back.addActionListener(new Listener());
@@ -192,11 +200,11 @@ public class Kundeoplysninger {
     private class Listener implements ActionListener {
         public void actionPerformed(ActionEvent event){
             if(event.getSource() == back) {
-                System.out.println("Going back");
+                System.out.println("Tilbage til oversigten");
             } else if(event.getSource() == next) {
-            	System.out.println("Going to the next step");
-            } else if(event.getSource() == importerKunde) {
-            	System.out.println("Hent info fra database om eksisterende kunder");
+            	System.out.println("Dine ændringer er gemt");
+            } else if (event.getSource() == delete) {
+            	System.out.println("Reservationen er slettet.");
             }
         }
     }
