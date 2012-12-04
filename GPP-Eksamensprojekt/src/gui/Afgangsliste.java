@@ -208,7 +208,11 @@ public class Afgangsliste extends JFrame {
     		String fromTo = a.getDepartureAirport()+" - "+a.getArrivalAirport();
     		String seats = a.getSeats();
     		
-    		model.addRow(new Object[]{price, time, "02.00", fromTo, seats});
+    									//MIDLERTIDIGT TILFØJER AFGANGE FLERE GANGE
+    		for(int j=0; j<5; j++) {
+    			model.addRow(new Object[]{price, time, "02.00", fromTo, seats});
+    		}
+    		
     	}
     	
     	//sætter bredden af kolonner
@@ -241,29 +245,52 @@ public class Afgangsliste extends JFrame {
     			int row = table.rowAtPoint(e.getPoint());
     			int id = dp.get(row).getId()+1;
     			try {
-					pb = new Pladsbooking(id-1);
+					pb = new Pladsbooking(id-1, false);
 					popupId = id-1;
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					System.out.println("Something sql went wrong.");
 					e1.printStackTrace();
 				}
+    			
+    			
     		}
     		
     		public void mouseMoved(MouseEvent e)
             {
                 JTable aTable =  (JTable)e.getSource();
                 int itsRow = aTable.rowAtPoint(e.getPoint());
+                
+                
+                
+                
                 int id = dp.get(itsRow).getId();
-                if(id == popupId) {
                 	
+               	if(id == popupId) {
+                    
                 } else if(pb == null) {
-                	mouseEntered(e);
+                	try {
+    					Thread.sleep(1000);
+    				} catch (InterruptedException e1) {
+    					System.out.println("Something went wrong when sleeping.");
+    					e1.printStackTrace();
+    				}
+                   	mouseEntered(e);
                 } else {
-                	popupId = id;
-                	mouseExited(e);
-                	mouseEntered(e);
+                	try {
+    					Thread.sleep(1000);
+    				} catch (InterruptedException e1) {
+    					System.out.println("Something went wrong when sleeping.");
+    					e1.printStackTrace();
+    				}
+                   	popupId = id;
+                   	mouseExited(e);
+                   	mouseEntered(e);
                 }
+                
+                
+                
+                
             }
     		
     		public void mouseExited(MouseEvent e) {
@@ -274,18 +301,18 @@ public class Afgangsliste extends JFrame {
     	//tiføjer mouselistener
     	table.addMouseListener(new MouseAdapter() {
     		
-    		public void mouseEntered(MouseEvent e) {
-    			int row = table.rowAtPoint(e.getPoint());
-    			int id = dp.get(row).getId()+1;
-    			try {
-					pb = new Pladsbooking(id-1);
-					popupId = id-1;
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					System.out.println("Something sql went wrong.");
-					e1.printStackTrace();
-				}
-    		}
+//    		public void mouseEntered(MouseEvent e) {
+//    			int row = table.rowAtPoint(e.getPoint());
+//    			int id = dp.get(row).getId()+1;
+//    			try {
+//					pb = new Pladsbooking(id-1);
+//					popupId = id-1;
+//				} catch (SQLException e1) {
+//					// TODO Auto-generated catch block
+//					System.out.println("Something sql went wrong.");
+//					e1.printStackTrace();
+//				}
+//    		}
     		
     		public void mouseExited(MouseEvent e) {
     			pb.close();
