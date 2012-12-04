@@ -16,6 +16,8 @@ public class Kundeoplysninger {
 	
 	//fortsæt-knap til betaling
 	
+	//Skal have en importer-kunde-knap (øverst)
+	
 	private JFrame frame;
     private JTextField firstname, surname, email, phoneNumber, address;
     private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress;
