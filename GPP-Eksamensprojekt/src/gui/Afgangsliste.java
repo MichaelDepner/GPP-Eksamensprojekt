@@ -70,11 +70,14 @@ public class Afgangsliste extends JFrame {
 		
 		//Opretter panels
         jp1Udrejse = new JPanel();
+        jp1Udrejse.setLayout(new BorderLayout());
         jp1Hjemrejse = new JPanel();
+        jp1Hjemrejse.setLayout(new BorderLayout());
         
         labelUdrejse = new JLabel();
-        labelUdrejse.setText("Onsdag d. 28. november 2012" + "Udrejse - Lufthavn");
-        jp1Udrejse.add(labelUdrejse);
+        labelUdrejse.setText("Onsdag d. 28. november 2012 " + "Udrejse - Lufthavn");
+        labelUdrejse.setFont(new Font("String", Font.BOLD, 14));
+        jp1Udrejse.add(labelUdrejse, BorderLayout.NORTH);
         
         //Skal evt. rykkes ned til table-metode
 		JTable departureTable = table(jp1Udrejse, departures);
@@ -82,8 +85,9 @@ public class Afgangsliste extends JFrame {
         jtp.addTab("28/11", jp1Udrejse);
 		
         labelHjemrejse = new JLabel();
-        labelHjemrejse.setText("Onsdag d. 28. november 2012" + "Hjemrejse - Lufthavn");
-		jp1Hjemrejse.add(labelHjemrejse);
+        labelHjemrejse.setText("Onsdag d. 28. november 2012 " + "Hjemrejse - Lufthavn");
+        labelHjemrejse.setFont(new Font("String", Font.BOLD, 14));
+		jp1Hjemrejse.add(labelHjemrejse, BorderLayout.NORTH);
 		
 		//Skal evt. rykkes ned til table-metode
 		table(jp1Hjemrejse, departures2);
@@ -95,6 +99,16 @@ public class Afgangsliste extends JFrame {
         panelSouth.add(next);
         next.addActionListener(new Listener());
         
+        /*
+        //Scrollbar
+        JScrollPane scrollUdrejse = new JScrollPane(jp1Udrejse);
+        jtp.add(scrollUdrejse);
+        JScrollPane scrollHjemrejse = new JScrollPane(jp1Hjemrejse);
+        jtp2.add(scrollHjemrejse);*/
+        
+        //Har tilføjet scrollPane og layouts til jp1Udrejse og -hjemrejse.
+        //Nu vil den ikke vise navne i fanerne
+        //Evt. ryk overskifterne over fanerne
         /**
         jp2 = new JPanel();
         jp3 = new JPanel();

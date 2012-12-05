@@ -26,7 +26,7 @@ public class Kundeoplysninger {
     private JButton back, next, importerKunde;
     private Container contentPane;
     private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth;
-    private JPanel panel, panelNorth2;
+    private JPanel panel, panelHeader, panelCenter, panelEast;
     private int antalPassagerer;
 	
     public Kundeoplysninger() {
@@ -63,7 +63,10 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
-        //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
+        centerPanel(2);
+        
+        /**
+         //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
         //og giver dem et GridLayout
         panel1 = new JPanel();
         panel.add(panel1, BorderLayout.CENTER);
@@ -97,6 +100,8 @@ public class Kundeoplysninger {
         panel2.add(postal);
         panel2.add(country);
         
+        
+        //Herfra og ned skal isoleres i en metode, og kalde en forløkke
         //Indsætter panel3 i SOUTH, og laver et BorderLayout heri
         panel3 = new JPanel();
         panel.add(panel3, BorderLayout.SOUTH);
@@ -107,7 +112,7 @@ public class Kundeoplysninger {
         panel3.add(panelNorth2, BorderLayout.NORTH);
         
         //JLabel i panel3 NORTH
-        JLabel labelNorth = new JLabel("Indtast oplysninger på passagererne");
+        JLabel labelNorth = new JLabel("Indtast oplysninger på passagererne\n");
         labelNorth.setFont(new Font("String", Font.BOLD, 14));
         panelNorth2.add(labelNorth, BorderLayout.NORTH);
         
@@ -134,10 +139,13 @@ public class Kundeoplysninger {
         panel5.add(firstname);
         panel5.add(surname);
         panel5.add(birthday);
+         */
+        
+     
         
         //Sætter panel6 til SOUTH i panel3, og giver det FlowLayout
         panel6 = new JPanel();
-        panel3.add(panel6, BorderLayout.SOUTH);
+        panel.add(panel6, BorderLayout.SOUTH);
         panel6.setLayout(new FlowLayout());
         
         //Opretter knapperne, og lægger dem i panel6
@@ -156,6 +164,61 @@ public class Kundeoplysninger {
         
         frame.pack();
         frame.setVisible(true);
+    }
+    
+    private void centerPanel(int antalPassagerer) {
+    	//Laver et panel i panel BorderLayout CENTER og EAST
+        panelCenter = new JPanel();
+        panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.PAGE_AXIS));
+        panel.add(panelCenter, BorderLayout.CENTER);
+        
+        JPanel flowPanel1 = new JPanel();
+        flowPanel1.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panelCenter.add(flowPanel1);
+        
+        //Panel1 og 2 anvendes til kontaktoplysninger
+        //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
+        //og giver dem et GridLayout
+        panel1 = new JPanel();
+        flowPanel1.add(panel1);
+	    //panel1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel1.setLayout(new GridLayout(8,1,10,14));
+        
+        panel2 = new JPanel();
+        flowPanel1.add(panel2);
+	    //panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+        panel2.setLayout(new GridLayout(8,1,10,10));
+        
+        //Indsætter labels i vores JPanel panel1
+        labels();
+        panel1.add(labelFirstname);
+        panel1.add(labelSurname);
+        panel1.add(labelEmail);
+        panel1.add(labelPhone);
+        panel1.add(labelAddress);
+        panel1.add(labelCity);
+        panel1.add(labelPostal);
+        panel1.add(labelCountry);
+        
+        //Laver input-felterne til panel2
+        inputTextFields();
+        panel2.add(firstname);
+        panel2.add(surname);
+        panel2.add(email);
+        panel2.add(phoneNumber);
+        panel2.add(address);
+        panel2.add(city);
+        panel2.add(postal);
+        panel2.add(country);
+        
+        JPanel flowPanel2 = new JPanel();
+        flowPanel2.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        panelCenter.add(flowPanel2);
+        JLabel header = new JLabel("Indtast passageroplysninger her");
+        header.setFont(new Font("String", Font.BOLD, 14));
+        flowPanel2.add(header);
+        
+        passengers(antalPassagerer);
     }
     
     private void inputTextFields() {
@@ -180,6 +243,44 @@ public class Kundeoplysninger {
         labelPostal = new JLabel ("Postnummer");
         labelCountry = new JLabel ("Land");
         labelBirthday = new JLabel ("Fødselsdag");
+    }
+    
+    private void passengers(int antalPassagerer) {
+    	for(int i = 1; i < antalPassagerer+1; i++) {
+    		//Laver passagerer        
+            JPanel flowPanel = new JPanel();
+            flowPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+            panelCenter.add(flowPanel);
+            JLabel passengerHeader = new JLabel("Passager " + i);
+            passengerHeader.setFont(new Font("String", Font.BOLD, 13));
+            flowPanel.add(passengerHeader);
+            
+            JPanel holder = new JPanel();
+            holder.setLayout(new FlowLayout());
+            panelCenter.add(holder);
+            
+            JPanel labelPanel = new JPanel();
+            labelPanel.setLayout(new GridLayout(3,1,10,15));
+    	    labelPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 10));
+    	    holder.add(labelPanel);
+    	    
+    	    //Indsætter labels i labelPanel
+            labels();
+            labelPanel.add(labelFirstname);
+            labelPanel.add(labelSurname);
+            labelPanel.add(labelBirthday);
+            
+            JPanel textFieldPanel = new JPanel();
+            textFieldPanel.setLayout(new GridLayout(3,1,10,10));
+    	    textFieldPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 30));
+            holder.add(textFieldPanel);
+            
+            //Indsætter TextFields i textFieldPanel
+            inputTextFields();
+            textFieldPanel.add(firstname);
+            textFieldPanel.add(surname);
+            textFieldPanel.add(birthday);
+    	}
     }
     
     //Tilføjer actionListeners til de to knapper

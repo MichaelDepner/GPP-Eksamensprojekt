@@ -28,7 +28,7 @@ public class Main {
 		
 		//new gui.Pladsbooking(1, false, false);
 		
-		new gui.Pladsbooking(1, true);
+		//new gui.Pladsbooking(1, true);
 		
 //		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 //		db.queryGetAirports();
