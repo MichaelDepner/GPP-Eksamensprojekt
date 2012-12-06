@@ -21,12 +21,13 @@ public class Main {
 		
 		new gui.Forside2();
 		//new gui.Betaling();
-		new gui.Kundeoplysninger();
+		//new gui.Kundeoplysninger();
+		new gui.Kvittering();
 		
 		//new gui.Bookinginfo();
 
 		
-		//new gui.Pladsbooking(1, false, false);
+		new gui.Pladsbooking(1, 4);
 		
 		//new gui.Pladsbooking(1, true);
 		

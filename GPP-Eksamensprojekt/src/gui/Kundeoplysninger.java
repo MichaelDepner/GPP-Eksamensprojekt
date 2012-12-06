@@ -25,7 +25,7 @@ public class Kundeoplysninger {
 	private JLabel labelCity, labelPostal, labelCountry, labelBirthday;
     private JButton back, next, importerKunde;
     private Container contentPane;
-    private JPanel panel1, panel2, panel3, panel4, panel5, panel6, panelNorth;
+    private JPanel panel1, panel2, panel6, panelNorth;
     private JPanel panel, panelHeader, panelCenter, panelEast;
     private int antalPassagerer;
 	
@@ -37,7 +37,7 @@ public class Kundeoplysninger {
     private void makeFrame() {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(700, 460);
+        frame.setSize(500, 480);
         frame.setResizable(false);
         
         contentPane = frame.getContentPane();
@@ -63,6 +63,7 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
+<<<<<<< HEAD
         centerPanel(17);
         
         /**
@@ -142,6 +143,9 @@ public class Kundeoplysninger {
          */
         
      
+=======
+        centerPanel(3);
+>>>>>>> branch 'master' of https://github.com/Mibias/GPP-Eksamensprojekt.git
         
         //Sætter panel6 til SOUTH i panel3, og giver det FlowLayout
         panel6 = new JPanel();
@@ -154,15 +158,7 @@ public class Kundeoplysninger {
         panel6.add(back);
         panel6.add(next);
         
-        /**
-        //For hvert antal passagerer, laver vi en passager-liste
-        //OBS! Har ikke lavet nyt BorderLayout for hver passager. Skal tage hensyn til panels...
-        for(int i = 0; i < antalPassagerer; i++) {
-            passengers();
-        }*/
         
-        
-        frame.pack();
         frame.setVisible(true);
     }
     

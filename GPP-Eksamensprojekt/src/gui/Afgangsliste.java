@@ -80,7 +80,8 @@ public class Afgangsliste extends JFrame {
         jp1Udrejse.add(labelUdrejse, BorderLayout.NORTH);
         
         //Skal evt. rykkes ned til table-metode
-		JTable departureTable = table(jp1Udrejse, departures);
+		JTable departureTable = table(departures);
+		jp1Udrejse.add(departureTable, BorderLayout.CENTER);
 		//Tilføjer panel jp1Udrejse til jtp
         jtp.addTab("28/11", jp1Udrejse);
 		
@@ -90,7 +91,9 @@ public class Afgangsliste extends JFrame {
 		jp1Hjemrejse.add(labelHjemrejse, BorderLayout.NORTH);
 		
 		//Skal evt. rykkes ned til table-metode
-		table(jp1Hjemrejse, departures2);
+		JTable arrivalTable = table(departures2);
+		jp1Hjemrejse.add(arrivalTable, BorderLayout.NORTH);
+		
 		//Tilføjer panel jp1Hjemrejse til jtp
         jtp2.addTab("28/11", jp1Hjemrejse);
         
@@ -99,12 +102,12 @@ public class Afgangsliste extends JFrame {
         panelSouth.add(next);
         next.addActionListener(new Listener());
         
-        /*
+        
         //Scrollbar
         JScrollPane scrollUdrejse = new JScrollPane(jp1Udrejse);
         jtp.add(scrollUdrejse);
         JScrollPane scrollHjemrejse = new JScrollPane(jp1Hjemrejse);
-        jtp2.add(scrollHjemrejse);*/
+        jtp2.add(scrollHjemrejse);
         
         //Har tilføjet scrollPane og layouts til jp1Udrejse og -hjemrejse.
         //Nu vil den ikke vise navne i fanerne
@@ -177,10 +180,7 @@ public class Afgangsliste extends JFrame {
     		String fromTo = a.getDepartureAirport()+" - "+a.getArrivalAirport();
     		String seats = a.getSeats();
     		
-    									//MIDLERTIDIGT TILFØJER AFGANGE FLERE GANGE
-    		for(int j=0; j<5; j++) {
-    			model.addRow(new Object[]{price, time, "02.00", fromTo, seats});
-    		}
+
     		
     	}
     	
@@ -276,11 +276,11 @@ public class Afgangsliste extends JFrame {
     	return table;
     }
     
-    private JTable table(JPanel panel, ArrayList<Afgang> departures){
+    private JTable table(ArrayList<Afgang> departures){
     	JTable table = departureTable(departures);
         //Indhold af panel
-        panel.add(table.getTableHeader());
-        panel.add(table);
+        //panel.add(table.getTableHeader());
+        //panel.add(table);
         return table;
     }
     
