@@ -48,6 +48,7 @@ public class Kvittering extends JFrame {
 		panel.add(bookingPanel);
 		bookingPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		bookingNumber = new JLabel("Bookingnr.: " + "bookingnr");
+        bookingNumber.setFont(new Font("String", Font.BOLD, 16));
 		bookingPanel.add(bookingNumber);
 		bookingPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 0));
 		
