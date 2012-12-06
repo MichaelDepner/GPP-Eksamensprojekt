@@ -63,7 +63,7 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
-        centerPanel(2);
+        centerPanel(17);
         
         /**
          //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
