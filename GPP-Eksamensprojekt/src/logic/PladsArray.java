@@ -10,6 +10,7 @@ import java.util.Collections;
 public class PladsArray {
 	private Database db;
 	private int departureId;
+	private ArrayList<Plads> reservations = new ArrayList<>();
 	//private int columns;
 	//private int rows;
 	//private Plads[] pladser;
@@ -27,6 +28,18 @@ public class PladsArray {
 		//overblikArray = new int[getCols()][getRows()];
 		
 		
+	}
+	
+	public void addReservation(Plads p) {
+		reservations.add(p);
+	}
+	
+	public void removeReservation(Plads p) {
+		reservations.remove(p);
+	}
+	
+	public ArrayList<Plads> getReservations() {
+		return reservations;
 	}
 	
 	

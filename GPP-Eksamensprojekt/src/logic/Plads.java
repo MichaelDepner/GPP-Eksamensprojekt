@@ -18,17 +18,20 @@ public class Plads extends JPanel {
 	private boolean hasJLabel = false;
 	private String name;
 	private int price;
-	
+	private PladsArray pa;
+	private Pladsbooking pb;
 	
 	/**
 	 * @param seatNo Placeringen af sædet i afgang-arrayet
 	 * @param isReserved Pladsens status
 	 * @param isAisle Er pladsen en mellemgang?
 	 */
-	public Plads(int seatNo, boolean isReserved, boolean isAisle, Pladsbooking pb) {
+	public Plads(int seatNo, boolean isReserved, boolean isAisle, Pladsbooking pb, PladsArray pa) {
 		this.seatNo = seatNo;
 		this.isReserved = isReserved;
 		this.isAisle = isAisle;
+		this.pa = pa;
+		this.pb = pb;
 		Color();
 		addMouseListener(new MouseListener());
 		
@@ -54,6 +57,7 @@ public class Plads extends JPanel {
 	public boolean getIsMarked() {
 //		System.out.println("Somebody asked me if I was marked and I told them "+isMarked);
 		return isMarked;
+		
 	}
 	
 	public boolean hasJLabel() {
@@ -68,17 +72,35 @@ public class Plads extends JPanel {
 		hasJLabel = false;
 	}
 	
+	
 	public String toString() {
 		String s = GetName()+"    -    "+GetPrice()+"kr.";
 		return s;
 	}
 	
+	public void addReservation() {
+		pa.addReservation(this);
+		pb.addReservationLabels(pa);
+	}
+	
+	public void removeReservation() {
+		pa.removeReservation(this);
+		pb.addReservationLabels(pa);
+	}
 	
 	
 	private class MouseListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
 			if(!isReserved && !isMarked && !isAisle) {
 				isMarked = true;
+				addReservation();
+				
+				Color();
+				
+			} else if(!isReserved && isMarked && !isAisle) {
+				isMarked = false;
+				removeReservation();
+				
 				Color();
 			}
 		}

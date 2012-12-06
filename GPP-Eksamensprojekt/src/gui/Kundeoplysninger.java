@@ -63,7 +63,6 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
-<<<<<<< HEAD
         centerPanel(17);
         
         /**
@@ -143,9 +142,7 @@ public class Kundeoplysninger {
          */
         
      
-=======
         centerPanel(3);
->>>>>>> branch 'master' of https://github.com/Mibias/GPP-Eksamensprojekt.git
         
         //Sætter panel6 til SOUTH i panel3, og giver det FlowLayout
         panel6 = new JPanel();
