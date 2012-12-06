@@ -26,7 +26,7 @@ public class Main {
 		//new gui.Bookinginfo();
 
 		
-		//new gui.Pladsbooking(1, false, false);
+		new gui.Pladsbooking(1, 4);
 		
 		//new gui.Pladsbooking(1, true);
 		
