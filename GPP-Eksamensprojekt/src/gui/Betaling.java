@@ -84,7 +84,7 @@ public class Betaling {
         contentPane.add(panelSouth, BorderLayout.SOUTH);
         panelSouth.setLayout(new FlowLayout());
         
-        next = new JButton("Næste");
+        next = new JButton("Bestil");
         back = new JButton("Tilbage");
         panelSouth.add(back);
         panelSouth.add(next);
