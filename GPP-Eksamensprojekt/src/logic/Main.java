@@ -22,7 +22,7 @@ public class Main {
 		new gui.Forside2();
 		//new gui.Betaling();
 		//new gui.Kundeoplysninger();
-		new gui.Gennemse();
+		new gui.Kvittering();
 		
 		//new gui.Bookinginfo();
 
