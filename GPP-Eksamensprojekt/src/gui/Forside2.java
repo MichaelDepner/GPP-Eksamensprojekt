@@ -12,15 +12,15 @@ import java.sql.SQLException;
 public class Forside2  extends JFrame implements ActionListener{
 	
 	private JTabbedPane searchPane;
-	private JPanel panel, panelRejser, panelNorth, radioPanel, labelPanel, panelSouth;
-	private JPanel panelAfgange, panelBooking, panelCenter, panelLeft, panelRight;
-	private JLabel logoLabel, fraLabel, tilLabel, tomLabel1, tomLabel2, tomLabel3, tomLabel4;
+	private JPanel panel, panelRejser, panelNorth, radioPanel, tilFraPanel, panelSouth;
+	private JPanel panelBooking, panelCenter, panelLeft, panelRight, tilPanel, fraPanel;
+	private JLabel logoLabel, fraLabel, tilLabel;
 	private JLabel udrejse, hjemrejse;
-	private JTextField fraTextField, tilTextField, bookingText;
+	private JTextField bookingText;
 	private JRadioButton enkelt, turRetur;
 	private JXDatePicker udrejseDate, hjemrejseDate;
 	private JButton searchButton, searchBooking;
-	private JComboBox searchList;
+	private JComboBox searchList,searchList1,searchList2;
 	
 	public Forside2(){
 		setTitle("Forside");
@@ -40,12 +40,10 @@ public class Forside2  extends JFrame implements ActionListener{
 		//Opretter tabbedPane og tilhørende panels
 		searchPane = new JTabbedPane();
 		panelRejser = new JPanel();
-		panelAfgange = new JPanel();
 		panelBooking = new JPanel();
 		
 		//Tilføjer faner med tilhørende paneler
 		searchPane.addTab("Bestil rejse", panelRejser);
-		searchPane.addTab("Søg afgange", panelAfgange);
 		searchPane.addTab("Søg bookinger", panelBooking);
 				
 		//Tilføjer fanevinduerne til panel CENTER
@@ -115,31 +113,38 @@ public class Forside2  extends JFrame implements ActionListener{
 	    
 	    //Skal tilføje actions til knapperne
 	    
-	    //Tilføjer labelPanel til panelNorth, og giver GridLayout
-	    labelPanel = new JPanel();
-	    labelPanel.setLayout(new GridLayout(2,4));
-	    labelPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-	    panelNorth.add(labelPanel);
+	    //Tilføjer tilFraPanel til panelNorth, og giver GridLayout
+	    tilFraPanel = new JPanel();
+	    tilFraPanel.setLayout(new GridLayout(2, 1, 10, 10));
+	    tilFraPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+	    panelNorth.add(tilFraPanel);
+	    
+	    //opretter to flowLayouts i tilFraPanel
+	    fraPanel = new JPanel();
+	    fraPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+	    tilFraPanel.add(fraPanel);
+	    
+	    tilPanel = new JPanel();
+	    tilPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+	    tilFraPanel.add(tilPanel);
 	    
 	    //Opretter indhold til labelPanel
 	    fraLabel = new JLabel("Fra");
+	    fraPanel.add(fraLabel);
 	    tilLabel = new JLabel("Til");
-	    fraTextField = new JTextField();
-	    tilTextField = new JTextField();
-	    tomLabel1 = new JLabel();
-	    tomLabel2 = new JLabel();
-	    tomLabel3 = new JLabel();
-	    tomLabel4 = new JLabel();
+	    tilPanel.add(tilLabel);
 	    
-	    //Opretter indhold til labelPanel
-	    labelPanel.add(tomLabel1);
-	    labelPanel.add(fraLabel);
-	    labelPanel.add(fraTextField);
-	    labelPanel.add(tomLabel2);
-	    labelPanel.add(tomLabel3);
-	    labelPanel.add(tilLabel);
-	    labelPanel.add(tilTextField);
-	    labelPanel.add(tomLabel4);
+	    //Combo box til panelNorth
+  		String[] searchAfgange = {"København", "Billund", "Rønne", 
+  					"Timbuktu", "Athen", "London", "Paris", "Tokyo", "Atlanta"};
+  		searchList1 = new JComboBox(searchAfgange);
+  		searchList2 = new JComboBox(searchAfgange);
+  		fraPanel.add(searchList1);
+  		tilPanel.add(searchList2);
+  		searchList1.setSelectedIndex(8);
+  		searchList2.setSelectedIndex(8);
+  		searchList1.addActionListener(this);
+  		searchList2.addActionListener(this);
 	    
 	    //Laver et i panelRejser CENTER
 	    panelCenter = new JPanel();
@@ -170,10 +175,6 @@ public class Forside2  extends JFrame implements ActionListener{
   		panelSouth.add(searchButton);
   		//ActionListener
 	    searchButton.addActionListener(this);
-	}
-	
-	private void searchAfgange() {
-		
 	}
 	
 	private void searchBookinger() {
@@ -226,7 +227,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	    Object source = event.getSource();
 	    if(source.equals(searchButton)) {
 	    	try {
-				Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(),hjemrejseDate.getDate(), fraTextField.getText(), tilTextField.getText());
+				Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(),hjemrejseDate.getDate(), (String)searchList1.getSelectedItem(), (String)searchList2.getSelectedItem());
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				System.out.println("SQL fejl");
