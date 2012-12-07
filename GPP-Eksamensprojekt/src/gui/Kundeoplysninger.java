@@ -63,6 +63,85 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
+        centerPanel(17);
+        
+        /**
+         //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
+        //og giver dem et GridLayout
+        panel1 = new JPanel();
+        panel.add(panel1, BorderLayout.CENTER);
+	    panel1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        panel1.setLayout(new GridLayout(8,1,10,10));
+        
+        panel2 = new JPanel();
+        panel.add(panel2, BorderLayout.EAST);
+	    panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+        panel2.setLayout(new GridLayout(8,1,10,10));
+        
+        //Indsætter labels i vores JPanel panel1
+        labels();
+        panel1.add(labelFirstname);
+        panel1.add(labelSurname);
+        panel1.add(labelEmail);
+        panel1.add(labelPhone);
+        panel1.add(labelAddress);
+        panel1.add(labelCity);
+        panel1.add(labelPostal);
+        panel1.add(labelCountry);
+        
+        //Laver input-felterne til panel2
+        inputTextFields();
+        panel2.add(firstname);
+        panel2.add(surname);
+        panel2.add(email);
+        panel2.add(phoneNumber);
+        panel2.add(address);
+        panel2.add(city);
+        panel2.add(postal);
+        panel2.add(country);
+        
+        
+        //Herfra og ned skal isoleres i en metode, og kalde en forløkke
+        //Indsætter panel3 i SOUTH, og laver et BorderLayout heri
+        panel3 = new JPanel();
+        panel.add(panel3, BorderLayout.SOUTH);
+        panel3.setLayout(new BorderLayout());
+        
+        panelNorth2 = new JPanel();
+        panelNorth2.setLayout(new FlowLayout(FlowLayout.LEFT,10,10));
+        panel3.add(panelNorth2, BorderLayout.NORTH);
+        
+        //JLabel i panel3 NORTH
+        JLabel labelNorth = new JLabel("Indtast oplysninger på passagererne\n");
+        labelNorth.setFont(new Font("String", Font.BOLD, 14));
+        panelNorth2.add(labelNorth, BorderLayout.NORTH);
+        
+        //Sætter panel4 til CENTER i panel3, og giver det GridLayout
+        panel4 = new JPanel();
+        panel3.add(panel4, BorderLayout.CENTER);
+        panel4.setLayout(new GridLayout(3,1,10,10));
+	    panel4.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        //Sætter panel5 til EAST i panel3, og giver det GridLayout
+        panel5 = new JPanel();
+        panel3.add(panel5, BorderLayout.EAST);
+        panel5.setLayout(new GridLayout(3,1,10,10));
+	    panel5.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
+        
+        //Indsætter labels i panel4
+        labels();
+        panel4.add(labelFirstname);
+        panel4.add(labelSurname);
+        panel4.add(labelBirthday);
+        
+        //Indsætter TextFields i panel5
+        inputTextFields();
+        panel5.add(firstname);
+        panel5.add(surname);
+        panel5.add(birthday);
+         */
+        
+     
         centerPanel(3);
         
         //Sætter panel6 til SOUTH i panel3, og giver det FlowLayout
