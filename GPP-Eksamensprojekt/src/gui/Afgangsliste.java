@@ -78,8 +78,8 @@ public class Afgangsliste extends JFrame {
         jp1Udrejse.add(labelUdrejse);
         
         //Skal evt. rykkes ned til table-metode
-		JTable departureTable = table(departures);
-		jp1Udrejse.add(departureTable, BorderLayout.CENTER);
+		JTable departureTable = table(jp1Udrejse, departures);
+		//jp1Udrejse.add(departureTable, BorderLayout.CENTER);
 		//Tilføjer panel jp1Udrejse til jtp
         jtp.addTab("28/11", jp1Udrejse);
 		
@@ -89,8 +89,8 @@ public class Afgangsliste extends JFrame {
 		jp1Hjemrejse.add(labelHjemrejse);
 		
 		//Skal evt. rykkes ned til table-metode
-		JTable arrivalTable = table(departures2);
-		jp1Hjemrejse.add(arrivalTable);
+		JTable arrivalTable = table(jp1Hjemrejse, departures2);
+		//jp1Hjemrejse.add(arrivalTable);
 		
 		//Tilføjer panel jp1Hjemrejse til jtp
         jtp2.addTab("28/11", jp1Hjemrejse);
@@ -178,8 +178,7 @@ public class Afgangsliste extends JFrame {
     		String fromTo = a.getDepartureAirport()+" - "+a.getArrivalAirport();
     		String seats = a.getSeats();
     		
-
-    		
+    		model.addRow(new Object[]{price,time,travelTime,fromTo,seats});	
     	}
     	
     	//sætter bredden af kolonner
@@ -274,11 +273,11 @@ public class Afgangsliste extends JFrame {
     	return table;
     }
     
-    private JTable table(ArrayList<Afgang> departures){
+    private JTable table(JPanel panel, ArrayList<Afgang> departures){
     	JTable table = departureTable(departures);
         //Indhold af panel
-        //panel.add(table.getTableHeader());
-        //panel.add(table);
+        panel.add(table.getTableHeader());
+        panel.add(table);
         return table;
     }
     

@@ -27,7 +27,7 @@ public class Pladsbooking extends JFrame {
 	private ArrayList<Plads> newReservations1 = new ArrayList<>();
 	private ArrayList<Plads> newReservations2 = new ArrayList<>();
 	private Boolean booking, multipleDepartures;
-	private JPanel rightMiddlePanel;
+	private JPanel rightMiddleTopPanel, rightMiddleBottomPanel;
 	private ArrayList<JPanel> labelList = new ArrayList<>();
 	
 	public Pladsbooking(int departureId, Boolean booking) throws SQLException {
@@ -168,8 +168,26 @@ public class Pladsbooking extends JFrame {
 			centerPanel.add(rightPanel);
 			//contentPane.add(bottomPanel, BorderLayout.SOUTH);
 			
+			JPanel rightMiddlePanel = new JPanel();
+			rightMiddlePanel.setLayout(new GridLayout(2,1));
+			rightPanel.setLayout(new BorderLayout());
+			rightTopPanel = new JPanel();
+			rightMiddleTopPanel = new JPanel();
+			rightMiddleTopPanel.setLayout(new BoxLayout(rightMiddleTopPanel, BoxLayout.Y_AXIS));
+			rightBottomPanel = new JPanel();
+			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
+			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
+			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
+			rightPanelTitle = new JLabel("Info");
+			rightTopPanel.add(rightPanelTitle);
+			
+			rightMiddleBottomPanel = new JPanel();
+			rightMiddleBottomPanel.setLayout(new BoxLayout(rightMiddleBottomPanel, BoxLayout.Y_AXIS));
+			rightMiddlePanel.add(rightMiddleTopPanel);
+			rightMiddlePanel.add(rightMiddleBottomPanel);
+			
 			leftPanel.setLayout(new BorderLayout());
-			leftBottomPanel = addPlane(pladsArray1, panelList1);
+			leftBottomPanel = addPlane(pladsArray1, panelList1, rightMiddleTopPanel);
 			leftPanel.add(leftBottomPanel, BorderLayout.CENTER);
 			leftTopPanel = new JPanel();
 			leftPanel.add(leftTopPanel, BorderLayout.NORTH);
@@ -178,7 +196,7 @@ public class Pladsbooking extends JFrame {
 			
 			
 			middlePanel.setLayout(new BorderLayout());
-			middleBottomPanel = addPlane(pladsArray2, panelList2);
+			middleBottomPanel = addPlane(pladsArray2, panelList2, rightMiddleBottomPanel);
 			middlePanel.add(middleBottomPanel);
 			middleTopPanel = new JPanel();
 			middlePanel.add(middleTopPanel, BorderLayout.NORTH);
@@ -186,16 +204,7 @@ public class Pladsbooking extends JFrame {
 			middleTopPanel.add(centerPanelTitle);
 			
 			
-			rightPanel.setLayout(new BorderLayout());
-			rightTopPanel = new JPanel();
-			rightMiddlePanel = new JPanel();
-			rightMiddlePanel.setLayout(new BoxLayout(rightMiddlePanel, BoxLayout.Y_AXIS));
-			rightBottomPanel = new JPanel();
-			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
-			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
-			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
-			rightPanelTitle = new JLabel("Info");
-			rightTopPanel.add(rightPanelTitle);
+			
 			
 			
 			
@@ -228,19 +237,31 @@ public class Pladsbooking extends JFrame {
 	public void addSeatLabel(Plads p, JPanel panel) {
 		JLabel label = new JLabel(p.toString());		
 		panel.add(label);
-		validate();
+		panel.validate();
+		panel.repaint();
 	}
 	
-	public void addReservationLabels(PladsArray pa) {
-		rightMiddlePanel.removeAll();
-		rightMiddlePanel.validate();
+	public void addReservationLabels(PladsArray pa, JPanel labelPanel) {
+		labelPanel.removeAll();
+		repaint();
 		for(int i=0; i<pa.getReservations().size(); i++) {
-			addSeatLabel(pa.getReservations().get(i), rightMiddlePanel);
+			addSeatLabel(pa.getReservations().get(i), labelPanel);
+		}
+	}
+	
+	public void addReservationLabels(PladsArray pa, PladsArray pa2, JPanel labelPanel) {
+		labelPanel.removeAll();
+		repaint();
+		for(int i=0; i<pa.getReservations().size(); i++) {
+			addSeatLabel(pa.getReservations().get(i), labelPanel);
+		}
+		for(int i=0; i<pa2.getReservations().size(); i++) {
+			addSeatLabel(pa2.getReservations().get(i), labelPanel);
 		}
 	}
 	
 	
-	public JPanel addPlane(PladsArray pladsArray, ArrayList<Plads> panelList) throws SQLException {		
+	public JPanel addPlane(PladsArray pladsArray, ArrayList<Plads> panelList, JPanel labelPanel) throws SQLException {		
 		int rows = pladsArray.getRows();
 		int cols = pladsArray.getCols();
 		JPanel panel = new JPanel();
@@ -249,7 +270,7 @@ public class Pladsbooking extends JFrame {
 		for(int i = 0; i<rows; i++) {
 			for(int j = 0; j<cols; j++) {
 				counting++;
-				Plads p = new Plads(counting, false, false, this, pladsArray);
+				Plads p = new Plads(counting, false, false, this, pladsArray, labelPanel);
 																				//p.addMouseListener(new MouseListener());
 				panel.add(p);
 				panelList.add(p);
