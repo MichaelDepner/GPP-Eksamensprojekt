@@ -14,6 +14,41 @@ public class Customer {
 		this.city = city;
 		this.postalCode = postalCode;
 		this.country = country;
-		
+	}
+	
+	public String GetFirstname() {
+		return firstname;
+	}
+	
+	public String GetSurname() {
+		return surname;
+	}
+	
+	public String GetFullName() {
+		return firstname+" "+surname;
+	}
+	
+	public String GetEmail() {
+		return email;
+	}
+	
+	public String GetPhone() {
+		return phone;
+	}
+	
+	public String GetAdress() {
+		return address;
+	}
+	
+	public String GetCity() {
+		return city;
+	}
+	
+	public String GetPostalCode() {
+		return postalCode;
+	}
+	
+	public String GetCountry() {
+		return country;
 	}
 }

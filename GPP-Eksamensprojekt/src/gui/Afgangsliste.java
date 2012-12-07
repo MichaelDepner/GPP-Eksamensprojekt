@@ -28,6 +28,7 @@ public class Afgangsliste extends JFrame {
 	//private JTable table;
 	private JTabbedPane jtp, jtp2;
 	private Pladsbooking pb;
+	private JTable departureTable, arrivalTable;
 	
 	//holder styr på popup vinduet
 	private int popupId;
@@ -78,7 +79,7 @@ public class Afgangsliste extends JFrame {
         jp1Udrejse.add(labelUdrejse);
         
         //Skal evt. rykkes ned til table-metode
-		JTable departureTable = table(jp1Udrejse, departures);
+		departureTable = table(jp1Udrejse, departures);
 		//jp1Udrejse.add(departureTable, BorderLayout.CENTER);
 		jp1Udrejse.add(departureTable);
 		//Tilføjer panel jp1Udrejse til jtp
@@ -90,7 +91,7 @@ public class Afgangsliste extends JFrame {
 		jp1Hjemrejse.add(labelHjemrejse);
 		
 		//Skal evt. rykkes ned til table-metode
-		JTable arrivalTable = table(jp1Hjemrejse, departures2);
+		arrivalTable = table(jp1Hjemrejse, departures2);
 		//jp1Hjemrejse.add(arrivalTable);
 		jp1Hjemrejse.add(arrivalTable);
 		//github.com/Mibias/GPP-Eksamensprojekt.git
@@ -169,6 +170,7 @@ public class Afgangsliste extends JFrame {
     	model.addColumn("Rejsetid");
     	model.addColumn("Lufthavne");
     	model.addColumn("Ledige pladser");
+    	model.addColumn("DepartureId");
 
     	//Tilføjer rejser
     	for(int i=0; i<departures.size(); i++) {
@@ -180,8 +182,9 @@ public class Afgangsliste extends JFrame {
     		String travelTime = "20 years";
     		String fromTo = a.getDepartureAirport()+" - "+a.getArrivalAirport();
     		String seats = a.getSeats();
+    		int id = a.getId();
     		
-    		model.addRow(new Object[]{price,time,travelTime,fromTo,seats});	
+    		model.addRow(new Object[]{price,time,travelTime,fromTo,seats,id+""});	
     	}
     	
     	//sætter bredden af kolonner
@@ -237,7 +240,7 @@ public class Afgangsliste extends JFrame {
                     
                 } else if(pb == null) {
                 	try {
-    					Thread.sleep(1000);
+    					Thread.sleep(100);
     				} catch (InterruptedException e1) {
     					System.out.println("Something went wrong when sleeping.");
     					e1.printStackTrace();
@@ -245,7 +248,7 @@ public class Afgangsliste extends JFrame {
                    	mouseEntered(e);
                 } else {
                 	try {
-    					Thread.sleep(1000);
+    					Thread.sleep(100);
     				} catch (InterruptedException e1) {
     					System.out.println("Something went wrong when sleeping.");
     					e1.printStackTrace();
@@ -284,14 +287,35 @@ public class Afgangsliste extends JFrame {
         return table;
     }
     
+    
     private class Listener implements ActionListener {
         public void actionPerformed(ActionEvent event){
             if(event.getSource() == nextWeek) {
             	System.out.println("Næste uge");
             } else if(event.getSource() == lastWeek) {
             	System.out.println("Forrige uge");
+            	
             } else if(event.getSource() == next) {
-            	System.out.println("Næste");
+            	int id1 = departureTable.getSelectedRow();
+            	int id2 = arrivalTable.getSelectedRow();
+            	
+            	if (id1<0 ||  id2<0) {
+            		System.out.println("Rows not selected properly!");
+            	} else {
+            		try {
+            			String id11 = (String)departureTable.getValueAt(id1, 5);
+                    	id1 = Integer.parseInt(id11);
+                    	
+                    	String id22 = (String)arrivalTable.getValueAt(id2, 5);
+                    	id2 = Integer.parseInt(id22);
+                    	
+            			System.out.println("Making pladsbooking with ID's "+id1+" and "+id2);
+						Pladsbooking pb = new Pladsbooking(id1, id2);
+					} catch (SQLException e) {
+						System.out.println("Something SQL went wrong!");
+//						e.printStackTrace();
+					}
+            	}
             	
             	
             }

@@ -19,12 +19,12 @@ public class Main {
 		new gui.Forside2();
 		//new gui.Betaling();
 		//new gui.Kundeoplysninger();
-		new gui.Kvittering();
+		//new gui.Kvittering();
 		
 		//new gui.Bookinginfo();
 
 		
-		new gui.Pladsbooking(1, 4);
+		//new gui.Pladsbooking(1, 4);
 		
 		//new gui.Pladsbooking(1, true);
 		
@@ -35,15 +35,10 @@ public class Main {
 //		db.queryGetCols(1);
 //		db.close();
 		
-		//PladsArray pa = new PladsArray(1);
-		
-		//Pladsbooking pb = new Pladsbooking(pa);
 		
 		
 		//Kundeoplysninger ko = new Kundeoplysninger();
-		
-		//Afgangsliste tp = new Afgangsliste();
-		//tp.setVisible(true);
+		new gui.Gennemse(null, null, null, null);
 		
 		}
 	}

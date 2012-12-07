@@ -31,6 +31,12 @@ public class Gennemse extends JFrame{
 	
 	public Gennemse(ArrayList<Plads> reserved1, ArrayList<Plads> reserved2, ArrayList<Person> passengers, Customer customer) {
 		
+//		for(int i=0; i<reserved1.size(); i++) {
+//			
+//		}
+		
+		
+		
 		setTitle("Gennemse");
 		
 		panel = new JPanel();

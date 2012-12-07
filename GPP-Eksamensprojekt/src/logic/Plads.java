@@ -34,7 +34,6 @@ public class Plads extends JPanel {
 		this.pa = pa;
 		this.pb = pb;
 		this.panel = panel;
-		System.out.println(panel);
 		Color();
 		addMouseListener(new MouseListener());
 		
@@ -137,10 +136,5 @@ public class Plads extends JPanel {
 		Color();
 	}
 	
-	public class addActionListener implements ActionListener {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			System.out.println("I have been clicked!");
-		}
-	}
+	
 }

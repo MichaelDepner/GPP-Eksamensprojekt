@@ -35,7 +35,11 @@ public class Kundeoplysninger {
     private JPanel panel, panelHeader, panelCenter, panelEast;
     private ArrayList<Plads> reservations1, reservations2;
     private ArrayList<Person> passengers = new ArrayList<>();
+    private ArrayList<JPanel> passengerPanels = new ArrayList<>();
     private Customer customer;
+    private ArrayList<JTextField> firstnameList = new ArrayList<>();
+    private ArrayList<JTextField> surnameList = new ArrayList<>();
+    private ArrayList<JTextField> birthdayList = new ArrayList<>();
 	
     public Kundeoplysninger(ArrayList<Plads> reservations) {
     	this.reservations1 = reservations;
@@ -230,7 +234,12 @@ public class Kundeoplysninger {
         header.setFont(new Font("String", Font.BOLD, 14));
         flowPanel2.add(header);
         
+        
+        
         passengers(antalPassagerer);
+        
+        
+        
     }
     
     private void inputTextFields() {
@@ -292,6 +301,12 @@ public class Kundeoplysninger {
             textFieldPanel.add(firstname);
             textFieldPanel.add(surname);
             textFieldPanel.add(birthday);
+            
+            System.out.println("OPRETTER");;
+            
+            firstnameList.add(firstname);
+            surnameList.add(surname);
+            birthdayList.add(birthday);
     	}
     }
     
@@ -302,13 +317,42 @@ public class Kundeoplysninger {
     	importerKunde.addActionListener(new Listener());
     }
     
+    private void makeCustomer() {
+    	String firstnameS = firstname.getText();
+    	String surnameS = surname.getText();
+    	String emailS = email.getText();
+    	String phoneS = phoneNumber.getText();
+    	String addressS = address.getText();
+    	String cityS = city.getText();
+    	String postalCodeS = postal.getText();
+    	String countryS = country.getText();
+    	
+    	customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+    }
+    
+    private void makePeople() {
+    	for(int i=0; i<firstnameList.size(); i++) {
+    		String firstname = firstnameList.get(i).getText();
+    		String surname = surnameList.get(i).getText();
+    		String birthday = birthdayList.get(i).getText();
+    		
+    		passengers.add(new Person(firstname, surname, birthday));
+    	}
+    }
+    
     //Lytter til knapperne
     private class Listener implements ActionListener {
         public void actionPerformed(ActionEvent event){
             if(event.getSource() == back) {
                 System.out.println("Going back");
             } else if(event.getSource() == next) {
+            	
+            	makeCustomer();
+            	makePeople();
+            	
             	System.out.println("Going to the next step");
+            	
+            	
             } else if(event.getSource() == importerKunde) {
             	System.out.println("Hent info fra database om eksisterende kunder");
             }

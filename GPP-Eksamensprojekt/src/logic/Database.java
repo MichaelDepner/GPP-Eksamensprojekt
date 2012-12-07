@@ -57,16 +57,13 @@ public class Database {
 				"ORDER BY " +
 				"Airports.name ASC";
 		ResultSet rs = this.execute(query);
-		System.out.println(query);
-		while (rs.next()) {
-			System.out.println(rs.getString("name"));
-		}
+//		System.out.println(query);
 		return rs;
 	}
 	
 	public ResultSet queryGetReservedSeats(int departureId) throws SQLException {
 		String query;
-										System.out.println("finding reserved seats from departureId "+departureId);
+//										System.out.println("finding reserved seats from departureId "+departureId);
 		query = "SELECT " +
 				"Booking.seats " +
 				"FROM " +
@@ -74,7 +71,7 @@ public class Database {
 				"WHERE " +
 				"Booking.departure_id = " + departureId;
 		ResultSet rs = this.execute(query);
-		System.out.println(query);
+//		System.out.println(query);
 		//while (rs.next()) {
 		//	System.out.println(rs.getString("seats"));
 		//}
@@ -147,7 +144,7 @@ public class Database {
 				"Airports " +
 				"WHERE " +
 				"Airports.name = \"" + airport+"\"";
-		System.out.println(query);
+//		System.out.println(query);
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
