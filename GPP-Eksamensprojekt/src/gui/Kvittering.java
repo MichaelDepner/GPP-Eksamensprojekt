@@ -39,10 +39,9 @@ public class Kvittering extends JFrame {
         logoPanel = new JPanel();
         panel.add(logoPanel);
         
-        //ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan6.jpg"));
-        
-//		logoLabel = new JLabel(imageLogo);
-//		logoPanel.add(logoLabel);
+        ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan6.jpg"));
+		logoLabel = new JLabel(imageLogo);
+		logoPanel.add(logoLabel);
 		
 		//Panel til bookingnr.
 		bookingPanel = new JPanel();
