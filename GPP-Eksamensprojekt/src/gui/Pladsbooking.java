@@ -31,6 +31,7 @@ public class Pladsbooking extends JFrame {
 	private Boolean booking, multipleDepartures;
 	private JPanel rightMiddleTopPanel, rightMiddleMiddlePanel;
 	private ArrayList<JPanel> labelList = new ArrayList<>();
+	private JLabel udrejseLabel, hjemrejseLabel;
 	
 	public Pladsbooking(int departureId, Boolean booking) throws SQLException {
 		this.booking = booking;
@@ -162,9 +163,10 @@ public class Pladsbooking extends JFrame {
 			middlePanel = new JPanel();
 			bottomPanel = new JPanel();
 			
-			contentPane.setLayout(new BorderLayout(5, 5));
-			contentPane.add(centerPanel, BorderLayout.CENTER);
-			centerPanel.setLayout(new GridLayout(1, 3));
+			//contentPane.setLayout(new BorderLayout(5, 5));
+			contentPane.add(centerPanel);
+			//centerPanel.setLayout(new GridLayout(1, 3));
+			centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
 			centerPanel.add(leftPanel);
 			centerPanel.add(middlePanel);
 			centerPanel.add(rightPanel);
@@ -173,18 +175,26 @@ public class Pladsbooking extends JFrame {
 			JPanel rightMiddlePanel = new JPanel();
 			rightMiddlePanel.setLayout(new GridLayout(3, 1, 5, 5));
 			rightPanel.setLayout(new BorderLayout());
+			rightPanel.setSize(300, 720);
 			rightTopPanel = new JPanel();
 			rightMiddleTopPanel = new JPanel();
 			rightMiddleTopPanel.setLayout(new BoxLayout(rightMiddleTopPanel, BoxLayout.Y_AXIS));
+			JLabel udrejseLabel = new JLabel("Udrejse");
+            udrejseLabel.setFont(new Font("String", Font.BOLD, 14));
+			rightMiddleTopPanel.add(udrejseLabel);
 			rightBottomPanel = new JPanel();
 			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
 			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
 			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
 			rightPanelTitle = new JLabel("Info");
+            rightPanelTitle.setFont(new Font("String", Font.BOLD, 16));
 			rightTopPanel.add(rightPanelTitle);
 			
 			rightMiddleMiddlePanel = new JPanel();
 			rightMiddleMiddlePanel.setLayout(new BoxLayout(rightMiddleMiddlePanel, BoxLayout.Y_AXIS));
+			JLabel hjemrejseLabel = new JLabel("Hjemrejse");
+            hjemrejseLabel.setFont(new Font("String", Font.BOLD, 14));
+			rightMiddleMiddlePanel.add(hjemrejseLabel);
 			rightMiddlePanel.add(rightMiddleTopPanel);
 			rightMiddlePanel.add(rightMiddleMiddlePanel);
 			
@@ -197,18 +207,81 @@ public class Pladsbooking extends JFrame {
 			leftBottomPanel = addPlane(pladsArray1, panelList1, rightMiddleTopPanel);
 			leftPanel.add(leftBottomPanel, BorderLayout.CENTER);
 			leftTopPanel = new JPanel();
+			leftTopPanel.setLayout(new BoxLayout(leftTopPanel, BoxLayout.Y_AXIS));
 			leftPanel.add(leftTopPanel, BorderLayout.NORTH);
 			leftPanelTitle = new JLabel("Udrejse");
+            leftPanelTitle.setFont(new Font("String", Font.BOLD, 16));
 			leftTopPanel.add(leftPanelTitle);
 			
+			//Indsætter venstre flyvinge
+			JPanel leftLeftPanel = new JPanel();
+			leftPanel.add(leftLeftPanel, BorderLayout.WEST);
+			ImageIcon imageLogo1 = new ImageIcon(getClass().getResource("png/venstreFlyvinge3.jpg"));
+			JLabel logoLabel1 = new JLabel(imageLogo1);
+			leftLeftPanel.add(logoLabel1);
 			
+			//Højre flyvinge
+			JPanel leftRightPanel = new JPanel();
+			leftPanel.add(leftRightPanel, BorderLayout.EAST);
+			ImageIcon imageLogo2 = new ImageIcon(getClass().getResource("png/vinge_right3.jpg"));
+			JLabel logoLabel2 = new JLabel(imageLogo2);
+			leftRightPanel.add(logoLabel2);
+			
+			//Flyfront
+			JPanel leftTop2Panel = new JPanel();
+			leftTop2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+			leftTopPanel.add(leftTop2Panel);
+			ImageIcon imageLogo3 = new ImageIcon(getClass().getResource("png/fly_front4.jpg"));
+			JLabel logoLabel3 = new JLabel(imageLogo3);
+			leftTop2Panel.add(logoLabel3);
+			
+			//Fly bagende
+			JPanel leftBottomBottomPanel = new JPanel();
+			leftPanel.add(leftBottomBottomPanel, BorderLayout.SOUTH);
+			ImageIcon imageLogo4 = new ImageIcon(getClass().getResource("png/fly_bag3.jpg"));
+			JLabel logoLabel4 = new JLabel(imageLogo4);
+			leftBottomBottomPanel.add(logoLabel4);
+			
+			//Middle panel
 			middlePanel.setLayout(new BorderLayout());
+			middlePanel.setSize(300, 720);
 			middleBottomPanel = addPlane(pladsArray2, panelList2, rightMiddleMiddlePanel);
-			middlePanel.add(middleBottomPanel);
+			middlePanel.add(middleBottomPanel, BorderLayout.CENTER);
 			middleTopPanel = new JPanel();
+			middleTopPanel.setLayout(new BoxLayout(middleTopPanel, BoxLayout.PAGE_AXIS));
 			middlePanel.add(middleTopPanel, BorderLayout.NORTH);
 			centerPanelTitle = new JLabel("Hjemrejse");
+            centerPanelTitle.setFont(new Font("String", Font.BOLD, 16));
 			middleTopPanel.add(centerPanelTitle);
+			
+			//Indsætter venstre flyvinge
+			JPanel middleLeftPanel = new JPanel();
+			middlePanel.add(middleLeftPanel, BorderLayout.WEST);
+			ImageIcon imageLogo5 = new ImageIcon(getClass().getResource("png/venstreFlyvinge3.jpg"));
+			JLabel logoLabel5 = new JLabel(imageLogo5);
+			middleLeftPanel.add(logoLabel5);
+			
+			//Højre flyvinge
+			JPanel middleRightPanel = new JPanel();
+			middlePanel.add(middleRightPanel, BorderLayout.EAST);
+			ImageIcon imageLogo6 = new ImageIcon(getClass().getResource("png/vinge_right3.jpg"));
+			JLabel logoLabel6 = new JLabel(imageLogo6);
+			middleRightPanel.add(logoLabel6);
+			
+			//Flyfront
+			JPanel middleTop2Panel = new JPanel();
+			middleTop2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+			middleTopPanel.add(middleTop2Panel);
+			ImageIcon imageLogo7 = new ImageIcon(getClass().getResource("png/fly_front4.jpg"));
+			JLabel logoLabel7 = new JLabel(imageLogo7);
+			middleTop2Panel.add(logoLabel7);
+			
+			//Fly bagende
+			JPanel middleBottomBottomPanel = new JPanel();
+			middlePanel.add(middleBottomBottomPanel, BorderLayout.SOUTH);
+			ImageIcon imageLogo8 = new ImageIcon(getClass().getResource("png/fly_bag3.jpg"));
+			JLabel logoLabel8 = new JLabel(imageLogo8);
+			middleBottomBottomPanel.add(logoLabel8);
 			
 			JButton next = new JButton("Næste");
 			rightBottomPanel.add(next);
@@ -238,7 +311,9 @@ public class Pladsbooking extends JFrame {
 //			}
 			
 			
-			this.setSize(720,720);
+			this.setSize(1200,720);
+			this.setResizable(false);
+			//this.pack();
 			this.setVisible(true);
 }
 	}
@@ -262,6 +337,16 @@ public class Pladsbooking extends JFrame {
 	public void addReservationLabels(PladsArray pa, JPanel labelPanel) {
 		labelPanel.removeAll();
 		repaint();
+		if(labelPanel == rightMiddleTopPanel) {
+			udrejseLabel = new JLabel("Udrejse");
+			udrejseLabel.setFont(new Font("String", Font.BOLD, 14));
+			labelPanel.add(udrejseLabel);
+		}
+		else if(labelPanel == rightMiddleMiddlePanel) {
+			hjemrejseLabel = new JLabel("Hjemrejse");
+	        hjemrejseLabel.setFont(new Font("String", Font.BOLD, 14));
+			labelPanel.add(hjemrejseLabel);
+		}
 		for(int i=0; i<pa.getReservations().size(); i++) {
 			addSeatLabel(pa.getReservations().get(i), labelPanel);
 		}

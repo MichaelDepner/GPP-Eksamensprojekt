@@ -24,7 +24,11 @@ public class Main {
 		//new gui.Bookinginfo();
 
 		
+<<<<<<< HEAD
 		//new gui.Pladsbooking(1, 4);
+=======
+		new gui.Pladsbooking(4, 4);
+>>>>>>> branch 'master' of https://github.com/Mibias/GPP-Eksamensprojekt.git
 		
 		//new gui.Pladsbooking(1, true);
 		
