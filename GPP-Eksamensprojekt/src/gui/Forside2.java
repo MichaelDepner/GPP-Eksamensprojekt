@@ -227,7 +227,10 @@ public class Forside2  extends JFrame implements ActionListener{
 	    Object source = event.getSource();
 	    if(source.equals(searchButton)) {
 	    	try {
-				Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(),hjemrejseDate.getDate(), (String)searchList1.getSelectedItem(), (String)searchList2.getSelectedItem());
+				Afgangsliste afgange = new Afgangsliste(
+						udrejseDate.getDate(),hjemrejseDate.getDate(), 
+						(String)searchList1.getSelectedItem(), 
+						(String)searchList2.getSelectedItem());
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				System.out.println("SQL fejl");
