@@ -5,6 +5,12 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.util.ArrayList;
+
+import logic.Customer;
+import logic.Person;
+import logic.Plads;
+import logic.Reservation;
 
 public class Kundeoplysninger {
 
@@ -27,11 +33,21 @@ public class Kundeoplysninger {
     private Container contentPane;
     private JPanel panel1, panel2, panel6, panelNorth;
     private JPanel panel, panelHeader, panelCenter, panelEast;
-    private int antalPassagerer;
+    private ArrayList<Plads> reservations1, reservations2;
+    private ArrayList<Person> passengers = new ArrayList<>();
+    private Customer customer;
 	
-    public Kundeoplysninger() {
+    public Kundeoplysninger(ArrayList<Plads> reservations) {
+    	this.reservations1 = reservations;
         makeFrame();
         addActionListeners();
+    }
+    
+    public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2) {
+    	this.reservations1 = reservations1;
+    	this.reservations2 = reservations2;
+    	makeFrame();
+    	addActionListeners();
     }
     
     private void makeFrame() {
@@ -63,7 +79,12 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
-        centerPanel(17);
+        
+        int counter = 0;
+        for(int i=0; i<reservations1.size(); i++) {
+        	counter++;
+        }
+        centerPanel(counter);
         
         /**
          //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
@@ -141,8 +162,6 @@ public class Kundeoplysninger {
         panel5.add(birthday);
          */
         
-     
-        centerPanel(3);
         
         //Sætter panel6 til SOUTH i panel3, og giver det FlowLayout
         panel6 = new JPanel();
