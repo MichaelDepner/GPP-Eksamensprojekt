@@ -22,8 +22,6 @@ public class Afgangsliste extends JFrame {
 	
 	private JPanel jp1Udrejse, jp2Udrejse, jp3Udrejse, jp4Udrejse;
 	private JPanel jp1Hjemrejse, jp2Hjemrejse, jp3Hjemrejse, jp4Hjemrejse;
-	private JLabel label1, label2, label3, label4;
-	private JLabel weekNumber;
 	private JLabel labelHjemrejse, labelUdrejse;
 	private JButton lastWeek, nextWeek, next;
 	private TableColumn column;
