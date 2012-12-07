@@ -233,6 +233,7 @@ public class Pladsbooking extends JFrame {
 	
 	public void addReservationLabels(PladsArray pa) {
 		rightMiddlePanel.removeAll();
+		rightMiddlePanel.validate();
 		for(int i=0; i<pa.getReservations().size(); i++) {
 			addSeatLabel(pa.getReservations().get(i), rightMiddlePanel);
 		}
