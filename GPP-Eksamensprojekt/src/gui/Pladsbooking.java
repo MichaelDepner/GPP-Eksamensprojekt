@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -27,7 +29,7 @@ public class Pladsbooking extends JFrame {
 	private ArrayList<Plads> newReservations1 = new ArrayList<>();
 	private ArrayList<Plads> newReservations2 = new ArrayList<>();
 	private Boolean booking, multipleDepartures;
-	private JPanel rightMiddlePanel;
+	private JPanel rightMiddleTopPanel, rightMiddleMiddlePanel;
 	private ArrayList<JPanel> labelList = new ArrayList<>();
 	
 	public Pladsbooking(int departureId, Boolean booking) throws SQLException {
@@ -168,8 +170,31 @@ public class Pladsbooking extends JFrame {
 			centerPanel.add(rightPanel);
 			//contentPane.add(bottomPanel, BorderLayout.SOUTH);
 			
+			JPanel rightMiddlePanel = new JPanel();
+			rightMiddlePanel.setLayout(new GridLayout(3, 1, 5, 5));
+			rightPanel.setLayout(new BorderLayout());
+			rightTopPanel = new JPanel();
+			rightMiddleTopPanel = new JPanel();
+			rightMiddleTopPanel.setLayout(new BoxLayout(rightMiddleTopPanel, BoxLayout.Y_AXIS));
+			rightBottomPanel = new JPanel();
+			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
+			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
+			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
+			rightPanelTitle = new JLabel("Info");
+			rightTopPanel.add(rightPanelTitle);
+			
+			rightMiddleMiddlePanel = new JPanel();
+			rightMiddleMiddlePanel.setLayout(new BoxLayout(rightMiddleMiddlePanel, BoxLayout.Y_AXIS));
+			rightMiddlePanel.add(rightMiddleTopPanel);
+			rightMiddlePanel.add(rightMiddleMiddlePanel);
+			
+			JPanel rightMiddleBottomPanel = new JPanel();
+			rightMiddleBottomPanel.setLayout(new BoxLayout(rightMiddleBottomPanel, BoxLayout.Y_AXIS));
+			rightMiddlePanel.add(rightMiddleBottomPanel);
+			
+			
 			leftPanel.setLayout(new BorderLayout());
-			leftBottomPanel = addPlane(pladsArray1, panelList1);
+			leftBottomPanel = addPlane(pladsArray1, panelList1, rightMiddleTopPanel);
 			leftPanel.add(leftBottomPanel, BorderLayout.CENTER);
 			leftTopPanel = new JPanel();
 			leftPanel.add(leftTopPanel, BorderLayout.NORTH);
@@ -178,24 +203,26 @@ public class Pladsbooking extends JFrame {
 			
 			
 			middlePanel.setLayout(new BorderLayout());
-			middleBottomPanel = addPlane(pladsArray2, panelList2);
+			middleBottomPanel = addPlane(pladsArray2, panelList2, rightMiddleMiddlePanel);
 			middlePanel.add(middleBottomPanel);
 			middleTopPanel = new JPanel();
 			middlePanel.add(middleTopPanel, BorderLayout.NORTH);
 			centerPanelTitle = new JLabel("Hjemrejse");
 			middleTopPanel.add(centerPanelTitle);
 			
+			JButton next = new JButton("Næste");
+			rightBottomPanel.add(next);
+			next.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations());
+					
+				}
+			});
 			
-			rightPanel.setLayout(new BorderLayout());
-			rightTopPanel = new JPanel();
-			rightMiddlePanel = new JPanel();
-			rightMiddlePanel.setLayout(new BoxLayout(rightMiddlePanel, BoxLayout.Y_AXIS));
-			rightBottomPanel = new JPanel();
-			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
-			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
-			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
-			rightPanelTitle = new JLabel("Info");
-			rightTopPanel.add(rightPanelTitle);
+			
+			
 			
 			
 			
@@ -228,19 +255,31 @@ public class Pladsbooking extends JFrame {
 	public void addSeatLabel(Plads p, JPanel panel) {
 		JLabel label = new JLabel(p.toString());		
 		panel.add(label);
-		validate();
+		panel.validate();
+		panel.repaint();
 	}
 	
-	public void addReservationLabels(PladsArray pa) {
-		rightMiddlePanel.removeAll();
-		rightMiddlePanel.validate();
+	public void addReservationLabels(PladsArray pa, JPanel labelPanel) {
+		labelPanel.removeAll();
+		repaint();
 		for(int i=0; i<pa.getReservations().size(); i++) {
-			addSeatLabel(pa.getReservations().get(i), rightMiddlePanel);
+			addSeatLabel(pa.getReservations().get(i), labelPanel);
+		}
+	}
+	
+	public void addReservationLabels(PladsArray pa, PladsArray pa2, JPanel labelPanel) {
+		labelPanel.removeAll();
+		repaint();
+		for(int i=0; i<pa.getReservations().size(); i++) {
+			addSeatLabel(pa.getReservations().get(i), labelPanel);
+		}
+		for(int i=0; i<pa2.getReservations().size(); i++) {
+			addSeatLabel(pa2.getReservations().get(i), labelPanel);
 		}
 	}
 	
 	
-	public JPanel addPlane(PladsArray pladsArray, ArrayList<Plads> panelList) throws SQLException {		
+	public JPanel addPlane(PladsArray pladsArray, ArrayList<Plads> panelList, JPanel labelPanel) throws SQLException {		
 		int rows = pladsArray.getRows();
 		int cols = pladsArray.getCols();
 		JPanel panel = new JPanel();
@@ -249,7 +288,7 @@ public class Pladsbooking extends JFrame {
 		for(int i = 0; i<rows; i++) {
 			for(int j = 0; j<cols; j++) {
 				counting++;
-				Plads p = new Plads(counting, false, false, this, pladsArray);
+				Plads p = new Plads(counting, false, false, this, pladsArray, labelPanel);
 																				//p.addMouseListener(new MouseListener());
 				panel.add(p);
 				panelList.add(p);
@@ -259,27 +298,6 @@ public class Pladsbooking extends JFrame {
 		
 		return panel;
 	}
-	
-
-	
-//	private class MouseListener extends MouseAdapter {
-//		public void mousePressed(MouseEvent e) {
-//			
-//			for(int i=0; i<panelList1.size(); i++) {
-//				Plads p = panelList1.get(i);
-//				if (p.getIsMarked()) {
-//					if(p.hasJLabel()) {
-//						System.out.println(p+" is already marked");
-//					} else {
-//						p.setHasJLabel();
-//						addSeatLabel(p, rightMiddlePanel);
-//						
-//					}
-//				}
-//			}
-//			
-//		}
-//	}
 	
 	public void close() {
 		this.dispose();
@@ -330,5 +348,6 @@ public class Pladsbooking extends JFrame {
 	    }
 	    return Character.toString(alphabet[i]);
 	}
+	
 	
 }

@@ -79,6 +79,7 @@ public class Afgangsliste extends JFrame {
         
         //Skal evt. rykkes ned til table-metode
 		JTable departureTable = table(jp1Udrejse, departures);
+		//jp1Udrejse.add(departureTable, BorderLayout.CENTER);
 		jp1Udrejse.add(departureTable);
 		//Tilføjer panel jp1Udrejse til jtp
         jtp.addTab("28/11", jp1Udrejse);
@@ -90,7 +91,9 @@ public class Afgangsliste extends JFrame {
 		
 		//Skal evt. rykkes ned til table-metode
 		JTable arrivalTable = table(jp1Hjemrejse, departures2);
+		//jp1Hjemrejse.add(arrivalTable);
 		jp1Hjemrejse.add(arrivalTable);
+		//github.com/Mibias/GPP-Eksamensprojekt.git
 		
 		//Tilføjer panel jp1Hjemrejse til jtp
         jtp2.addTab("28/11", jp1Hjemrejse);
@@ -178,8 +181,7 @@ public class Afgangsliste extends JFrame {
     		String fromTo = a.getDepartureAirport()+" - "+a.getArrivalAirport();
     		String seats = a.getSeats();
     		
-
-    		
+    		model.addRow(new Object[]{price,time,travelTime,fromTo,seats});	
     	}
     	
     	//sætter bredden af kolonner

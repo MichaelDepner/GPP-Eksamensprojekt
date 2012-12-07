@@ -4,6 +4,11 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
+import logic.Customer;
+import logic.Person;
+import logic.Plads;
 
 public class Gennemse extends JFrame{
 	//Alle oplysninger
@@ -24,7 +29,7 @@ public class Gennemse extends JFrame{
 	private int antalPassagerer;
 	private JButton tilbage, bestil;
 	
-	public Gennemse() {
+	public Gennemse(ArrayList<Plads> reserved1, ArrayList<Plads> reserved2, ArrayList<Person> passengers, Customer customer) {
 		
 		setTitle("Gennemse");
 		
