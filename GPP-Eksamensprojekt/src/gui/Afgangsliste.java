@@ -92,7 +92,7 @@ public class Afgangsliste extends JFrame {
 		
 		//Skal evt. rykkes ned til table-metode
 		JTable arrivalTable = table(departures2);
-		jp1Hjemrejse.add(arrivalTable, BorderLayout.NORTH);
+		jp1Hjemrejse.add(arrivalTable);
 		
 		//Tilføjer panel jp1Hjemrejse til jtp
         jtp2.addTab("28/11", jp1Hjemrejse);
@@ -102,12 +102,12 @@ public class Afgangsliste extends JFrame {
         panelSouth.add(next);
         next.addActionListener(new Listener());
         
-        
+        /*
         //Scrollbar
         JScrollPane scrollUdrejse = new JScrollPane(jp1Udrejse);
         jtp.add(scrollUdrejse);
         JScrollPane scrollHjemrejse = new JScrollPane(jp1Hjemrejse);
-        jtp2.add(scrollHjemrejse);
+        jtp2.add(scrollHjemrejse);*/
         
         //Har tilføjet scrollPane og layouts til jp1Udrejse og -hjemrejse.
         //Nu vil den ikke vise navne i fanerne
