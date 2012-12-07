@@ -70,14 +70,14 @@ public class Afgangsliste extends JFrame {
 		
 		//Opretter panels
         jp1Udrejse = new JPanel();
-        jp1Udrejse.setLayout(new BorderLayout());
+        //jp1Udrejse.setLayout(new BorderLayout());
         jp1Hjemrejse = new JPanel();
-        jp1Hjemrejse.setLayout(new BorderLayout());
+        //jp1Hjemrejse.setLayout(new BorderLayout());
         
         labelUdrejse = new JLabel();
         labelUdrejse.setText("Onsdag d. 28. november 2012 " + "Udrejse - Lufthavn");
         labelUdrejse.setFont(new Font("String", Font.BOLD, 14));
-        jp1Udrejse.add(labelUdrejse, BorderLayout.NORTH);
+        jp1Udrejse.add(labelUdrejse);
         
         //Skal evt. rykkes ned til table-metode
 		JTable departureTable = table(jp1Udrejse, departures);
@@ -87,7 +87,7 @@ public class Afgangsliste extends JFrame {
         labelHjemrejse = new JLabel();
         labelHjemrejse.setText("Onsdag d. 28. november 2012 " + "Hjemrejse - Lufthavn");
         labelHjemrejse.setFont(new Font("String", Font.BOLD, 14));
-		jp1Hjemrejse.add(labelHjemrejse, BorderLayout.NORTH);
+		jp1Hjemrejse.add(labelHjemrejse);
 		
 		//Skal evt. rykkes ned til table-metode
 		table(jp1Hjemrejse, departures2);

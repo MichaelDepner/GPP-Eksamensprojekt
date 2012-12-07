@@ -165,7 +165,7 @@ public class Kvittering extends JFrame {
 		//Passagerer
         flowPanel2 = new JPanel();
         panel.add(flowPanel2);
-        flowPanel2.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        flowPanel2.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         //flowPanel2.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
 		panelPassengers = new JPanel();
@@ -181,7 +181,7 @@ public class Kvittering extends JFrame {
 		//pris
         flowPanel3 = new JPanel();
         panel.add(flowPanel3);
-        flowPanel3.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        flowPanel3.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         
 		panelPris = new JPanel();
 		flowPanel3.add(panelPris);

@@ -16,10 +16,11 @@ public class Forside2  extends JFrame implements ActionListener{
 	private JPanel panelAfgange, panelBooking, panelCenter, panelLeft, panelRight;
 	private JLabel logoLabel, fraLabel, tilLabel, tomLabel1, tomLabel2, tomLabel3, tomLabel4;
 	private JLabel udrejse, hjemrejse;
-	private JTextField fraTextField, tilTextField;
+	private JTextField fraTextField, tilTextField, bookingText;
 	private JRadioButton enkelt, turRetur;
 	private JXDatePicker udrejseDate, hjemrejseDate;
-	private JButton searchButton;
+	private JButton searchButton, searchBooking;
+	private JComboBox searchList;
 	
 	public Forside2(){
 		setTitle("Forside");
@@ -60,26 +61,6 @@ public class Forside2  extends JFrame implements ActionListener{
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
-	}
-	
-	public void actionPerformed(ActionEvent event) {
-	    Object source = event.getSource();
-	    if(source.equals(searchButton)) {
-	    	try {
-				Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(),hjemrejseDate.getDate(), fraTextField.getText(), tilTextField.getText());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("SQL fejl");
-				e.printStackTrace();
-			}
-	    }
-		if(source == turRetur)
-		{
-			panelRight.setVisible(true);
-		}
-	    if(source == enkelt) {
-	    	panelRight.setVisible(false);
-	    }
 	}
 	
 	private void addHjemrejse() {
@@ -198,5 +179,79 @@ public class Forside2  extends JFrame implements ActionListener{
 	private void searchBookinger() {
 		//Laver et BorderLayout inde i fane-vinduet bookinger
 		panelBooking.setLayout(new BorderLayout(10,10));
+		
+		//Panel north
+		JPanel panelNorth = new JPanel();
+		panelNorth.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		panelBooking.add(panelNorth, BorderLayout.NORTH);
+		
+		//Label til panelNorth
+		JLabel labelNorth = new JLabel("Søg på ");
+		panelNorth.add(labelNorth);
+        labelNorth.setFont(new Font("String", Font.BOLD, 14));
+		
+		//Combo box til panelNorth
+		String[] searchStrings = {"Bookingnr.", "Adresse", "E-mail", "Tlf.nr."};
+		searchList = new JComboBox(searchStrings);
+		panelNorth.add(searchList);
+		searchList.setSelectedIndex(3);
+        searchList.setFont(new Font("String", Font.BOLD, 13));
+		searchList.addActionListener(this);
+		
+		//Panel center
+		JPanel panelCenter = new JPanel();
+		panelCenter.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		panelBooking.add(panelCenter, BorderLayout.CENTER);
+		
+		//Label til panelCenter
+		JLabel labelCenter = new JLabel("Indtast søgekriterie: ");
+		panelCenter.add(labelCenter);
+        labelCenter.setFont(new Font("String", Font.BOLD, 14));
+        
+        bookingText = new JTextField(20);
+        panelCenter.add(bookingText);
+        bookingText.addActionListener(this);
+		
+		//Panel til søg-knap
+		JPanel panelSouth = new JPanel();
+		panelSouth.setLayout(new FlowLayout(FlowLayout.CENTER,10,20));
+		panelBooking.add(panelSouth, BorderLayout.SOUTH);
+		
+		searchBooking = new JButton("Søg booking");
+		panelSouth.add(searchBooking);
+		searchBooking.addActionListener(this);
+	}
+	
+	public void actionPerformed(ActionEvent event) {
+	    Object source = event.getSource();
+	    if(source.equals(searchButton)) {
+	    	try {
+				Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(),hjemrejseDate.getDate(), fraTextField.getText(), tilTextField.getText());
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				System.out.println("SQL fejl");
+				e.printStackTrace();
+			}
+	    }
+	    else if(source == turRetur)
+		{
+			panelRight.setVisible(true);
+		}
+	    else if(source == enkelt) {
+	    	panelRight.setVisible(false);
+	    }
+	    else if(source == searchBooking) {
+	    	System.out.println("Søger bookinger");
+	    }
+	    else if(source == bookingText) {
+	    	
+	    }
+	    else if(source == searchList) {
+	    	//if == bookingnr.
+	    	//if == adresse
+	    	//if == e-mail
+	    	//if == tlf.nr.
+	    	
+	    }
 	}
 }
