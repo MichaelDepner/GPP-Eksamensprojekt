@@ -289,7 +289,7 @@ public class Pladsbooking extends JFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations());
+					Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), departureId, departureId2);
 					
 				}
 			});

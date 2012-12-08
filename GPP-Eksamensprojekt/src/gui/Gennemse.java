@@ -4,9 +4,12 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import logic.Booking;
 import logic.Customer;
+import logic.Database;
 import logic.Person;
 import logic.Plads;
 
@@ -27,9 +30,20 @@ public class Gennemse extends JFrame{
 	private JLabel pladser, labelSeat, labelPassengers, passenger, birthday, header;
 	private JLabel labelPris, total, prisTekst;
 	private int antalPassagerer;
+	
 	private JButton tilbage, bestil;
 	
-	public Gennemse(ArrayList<Plads> reserved1, ArrayList<Plads> reserved2, ArrayList<Person> passengers, Customer customer) {
+	//Ting, der skal sendes til databasen
+	private ArrayList<Person> passengers;
+	private Customer customer;
+	private ArrayList<Booking> bookings = new ArrayList<>();
+	
+	
+	public Gennemse(ArrayList<Plads> reserved1, ArrayList<Plads> reserved2, ArrayList<Person> passengers, Customer customer,
+			int departureId1, int departureId2) {
+		
+		this.passengers = passengers;
+		this.customer = customer;
 		
 //		for(int i=0; i<reserved1.size(); i++) {
 //			
@@ -245,6 +259,29 @@ public class Gennemse extends JFrame{
                 System.out.println("Going back");
             } else if(event.getSource() == bestil) {
             	System.out.println("Bestiller");
+            	
+            	//opretter passagerer
+            	String passengerString = "";
+            	int customerId = 0;
+            	for(int i=0; i<passengers.size(); i++) {
+            		try {
+            			//skab passagér og gem passengerId
+						Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+						int passengerId = db.queryMakePassenger(passengers.get(i));
+						passengerString = passengerString + " " + passengerId;
+						
+						//skab customer og gem customerId
+						customerId = db.queryMakeCustomer(customer);
+					} catch (SQLException e) {
+						System.out.println("Something SQL went wrong when making passengers");
+						e.printStackTrace();
+					}
+            	}
+            	System.out.println("passengerString: "+passengerString);
+            	System.out.println("customerId: "+customerId);
+            	
+            	//opretter customer
+            	
             }
         }
     }

@@ -14,6 +14,7 @@ public class Customer {
 		this.city = city;
 		this.postalCode = postalCode;
 		this.country = country;
+		System.out.println("Making customer: "+firstname+" "+surname+" "+email+" "+phone+" "+address+" "+city+" "+postalCode+" "+country);
 	}
 	
 	public String GetFirstname() {

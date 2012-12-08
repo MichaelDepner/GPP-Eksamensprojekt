@@ -164,5 +164,55 @@ public class Database {
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
+
+	public void queryMakeBooking(int departureId, int customerId, String seats, String passengerIds) throws SQLException {
+		String query = "INSERT INTO Booking (departure_id, customer_id, seats, passenger-ids) " +
+				"VALUES ('" + departureId + "', '" + customerId + "', '" + seats + "', '" + passengerIds + "'); ";
+		this.execute(query);
+	}
 	
+	public int queryMakeCustomer(Customer c) throws SQLException {
+		//indsæt customer i databasen
+		String query = "INSERT INTO Customer (Firstname, Surname, Address, City, Postal_Code, Country, Email, Phone_Number) " +
+				"VALUES ('" + c.GetFirstname() + "', '" + c.GetSurname() + "', '" + c.GetAdress() + "', '" + c.GetCity() + "', '" + c.GetPostalCode() + "', '" + c.GetCountry() + "', '" + c.GetEmail() + "', '" + c.GetPhone() + "'); ";
+		System.out.println(query);
+		this.execute(query);
+		
+		//find customers givne id og returner det
+		String query2 = "SELECT " +
+				"id " +
+				"FROM " +
+				"Customer " +
+				"WHERE " +
+				"Customer.Firstname = '" + c.GetFirstname() + "' " +
+				"AND " +
+				"Customer.Surname = '" + c.GetSurname() + "' " +
+				"AND " +
+				"Customer.Phone_Number = '" + c.GetPhone() + "'";
+		ResultSet rs = this.execute(query2);
+		rs.next();
+		return rs.getInt("id");
+	}
+	
+	public int queryMakePassenger(Person p) throws SQLException {
+		//indsæt passageren i databasen
+		String query = "INSERT INTO Person (Firstname, Surname, Birthday) " +
+				"VALUES ('" + p.GetFirstname() + "', '" + p.GetSurname() + "', '" + p.GetBirthday() + "'); ";
+		this.execute(query);
+		
+		//find hans givne id og returner det
+		String query2 = "SELECT " +
+				"id " +
+				"FROM " +
+				"Person " +
+				"WHERE " +
+				"Person.Firstname = '" + p.GetFirstname() + "' " +
+				"AND " +
+				"Person.Surname = '" + p.GetSurname() + "' " +
+				"AND " +
+				"Person.Birthday = '" + p.GetBirthday() + "'";
+		ResultSet rs = this.execute(query2);
+		rs.next();
+		return rs.getInt("id");
+	}
 }
