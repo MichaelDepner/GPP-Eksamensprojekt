@@ -12,6 +12,8 @@ import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import logic.Database;
+import logic.Departure;
 import logic.Plads;
 import logic.PladsArray;
 
@@ -33,6 +35,8 @@ public class Pladsbooking extends JFrame {
 	private ArrayList<JPanel> labelList = new ArrayList<>();
 	private JLabel udrejseLabel, hjemrejseLabel;
 	
+	private Departure d1, d2;
+	
 	public Pladsbooking(int departureId, Boolean booking) throws SQLException {
 		this.booking = booking;
 		this.departureId = departureId;
@@ -50,15 +54,17 @@ public class Pladsbooking extends JFrame {
 	}
 	
 	public Pladsbooking(int departureId1, int departureId2) throws SQLException {
+		//finder al information om afgangene og gemmer dem i et Departure objekt
+		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		d1 = db.queryGetDeparture(departureId1);
+		d2 = db.queryGetDeparture(departureId2);
+		db.close();
+		
 		booking = true;
 		this.departureId = departureId1;
 		this.departureId2 = departureId2;
 		pladsArray1 = new PladsArray(departureId1);
 		pladsArray2 = new PladsArray(departureId2);
-//		int rows1 = pladsArray1.getRows();
-//		int rows2 = pladsArray2.getRows();
-//		int cols1 = pladsArray1.getCols();
-//		int cols2 = pladsArray2.getCols();
 		emptyColumns1 = pladsArray1.getEmptyCols();
 		emptyColumns2 = pladsArray2.getEmptyCols();
 		
@@ -289,7 +295,7 @@ public class Pladsbooking extends JFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), departureId, departureId2);
+					Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2);
 					
 				}
 			});
@@ -372,8 +378,9 @@ public class Pladsbooking extends JFrame {
 		int counting=0;
 		for(int i = 0; i<rows; i++) {
 			for(int j = 0; j<cols; j++) {
-				counting++;
+				
 				Plads p = new Plads(counting, false, false, this, pladsArray, labelPanel);
+				counting++;
 																				//p.addMouseListener(new MouseListener());
 				panel.add(p);
 				panelList.add(p);

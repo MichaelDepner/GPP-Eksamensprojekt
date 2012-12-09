@@ -41,6 +41,10 @@ public class Plads extends JPanel {
 			
 	}
 	
+	public int getSeatNo() {
+		return seatNo;
+	}
+	
 	
 	public void SetName(String name) {
 		this.name = name;

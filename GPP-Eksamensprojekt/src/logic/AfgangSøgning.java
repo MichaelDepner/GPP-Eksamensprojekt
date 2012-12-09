@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class AfgangSøgning {
 
-	private ArrayList<Afgang> afgangeOnDate = new ArrayList<Afgang>();
+	private ArrayList<Departure> departuresOnDate = new ArrayList<Departure>();
 	private String departureAirport, arrivalAirport;
 	private int departureId, arrivalId;
 	private String formattedDate;
@@ -62,29 +62,22 @@ public class AfgangSøgning {
 	}
 	
 	
-	public ArrayList<Afgang> getDepartures() throws SQLException {
+	public ArrayList<Departure> getDepartures() throws SQLException {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-	
+		ResultSet rs = db.queryGetDeparturesOnDate(formattedDate, departureId, arrivalId);
 		
-		ResultSet rs = db.queryGetDepartures(formattedDate, departureId, arrivalId);
-		
+		ArrayList<Integer> ids = new ArrayList<>();
 		while(rs.next()) {
-			int airplaneId;
-			Time departureTime, arrivalTime;
-			
 			int id = rs.getInt("id");
-			airplaneId = rs.getInt("airplane_id");
-			departureTime = rs.getTime("departure_time");
-			arrivalTime = rs.getTime("arrival_time");
-			
-			Afgang afgang = new Afgang(id, airplaneId, departureId, arrivalId, departureAirport, arrivalAirport, departureTime, arrivalTime);
-			System.out.println("Opretter afgang: airplaneId: "+airplaneId+", departureId: "+departureId+"" +
-					", arrivalId: "+arrivalId+", departureTime: "+departureTime+", arrivalTime: "+arrivalTime);
-			
-			afgangeOnDate.add(afgang);
+			ids.add(id);
+		}
+		
+		for(int i=0; i<ids.size(); i++) {
+			Departure d = db.queryGetDeparture(ids.get(i));
+			departuresOnDate.add(d);
 		}
 		
 		db.close();
-		return afgangeOnDate;
+		return departuresOnDate;
 	}
 }

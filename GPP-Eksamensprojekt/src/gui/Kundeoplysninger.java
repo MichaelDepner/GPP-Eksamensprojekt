@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 import logic.Customer;
+import logic.Departure;
 import logic.Person;
 import logic.Plads;
 import logic.Reservation;
@@ -40,7 +41,8 @@ public class Kundeoplysninger {
     private ArrayList<JTextField> firstnameList = new ArrayList<>();
     private ArrayList<JTextField> surnameList = new ArrayList<>();
     private ArrayList<JTextField> birthdayList = new ArrayList<>();
-    private int departureId1, departureId2;
+    
+    private Departure d1, d2;
     
     private String firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS;
 	
@@ -50,11 +52,11 @@ public class Kundeoplysninger {
         addActionListeners();
     }
     
-    public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2, int departureId1, int departureid2) {
+    public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2, Departure d1, Departure d2) {
     	this.reservations1 = reservations1;
     	this.reservations2 = reservations2;
-    	this.departureId1 = departureId1;
-    	this.departureId2 = departureid2;
+    	this.d1 = d1;
+    	this.d2 = d2;
     	makeFrame();
     	addActionListeners();
     }
@@ -356,7 +358,7 @@ public class Kundeoplysninger {
             	makeCustomer();
             	makePeople();
             	
-            	Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, customer, departureId1, departureId2);
+            	Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, customer, d1, d2);
             	System.out.println("Going to the next step");
             	
             	

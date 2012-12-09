@@ -149,7 +149,7 @@ public class Database {
 		return rs;
 	}
 	
-	public ResultSet queryGetDepartures(String date, int departureAirport, int arrivalAirport) throws SQLException {
+	public ResultSet queryGetDeparturesOnDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
 		String query;
 		query = "SELECT " +
 				"* " +
@@ -164,10 +164,68 @@ public class Database {
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
+	
+	public Departure queryGetDeparture(int departureId) throws SQLException {
+		//finder departure i sql serveren
+		String query;
+		query = "SELECT " +
+				"* " +
+				"FROM " +
+				"Departures " +
+				"WHERE " +
+				"Departures.id = "+ departureId;
+		ResultSet rs = this.execute(query);
+		rs.next();
+		//gemmer informationer fra resultsettet
+		int airplaneId = rs.getInt("airplane_id");
+		int departureAirportId = rs.getInt("departure_airport_id");
+		int arrivalAirportId = rs.getInt("arrival_airport_id");
+		Timestamp departureTime = rs.getTimestamp("departure_time");
+		Timestamp arrivalTime = rs.getTimestamp("arrival_time");
+		Date departureDate = rs.getDate("Departure_date");
+		int price = rs.getInt("price");
+		
+		//finder afgangslufthavnen
+		String query2;
+		query2 = "SELECT " +
+				"* " +
+				"FROM " +
+				"Airports " +
+				"WHERE " +
+				"Airports.id = " + departureAirportId;
+		ResultSet rs2 = this.execute(query2);
+		rs2.next();
+		String departureName = rs2.getString("name");
+		String departureAbbrevation = rs2.getString("abbrevation");
+		
+		//finder ankomstlufthavnen
+		String query3;
+		query3 = "SELECT " +
+				"* " +
+				"FROM " +
+				"Airports " +
+				"WHERE " +
+				"Airports.id = " + arrivalAirportId;
+		ResultSet rs3 = this.execute(query3);
+		rs3.next();
+		String arrivalName = rs3.getString("name");
+		String arrivalAbbrevation = rs3.getString("abbrevation");
+		
+		//laver departure ud fra informationerne i de 3 resultsets
+		Departure d = new Departure(departureId, airplaneId, departureAirportId, arrivalAirportId, 
+				departureTime, arrivalTime, departureDate, price, 
+				departureName, departureAbbrevation, arrivalName, arrivalAbbrevation);
+		
+		System.out.println(airplaneId+" "+ departureAirportId+" "+ arrivalAirportId+" "+ 
+				departureTime+" "+ arrivalTime+" "+ departureDate+" "+ price+" "+ 
+				departureName+" "+ departureAbbrevation+" "+ arrivalName+" "+ arrivalAbbrevation);
+		return d;
+	}
 
 	public void queryMakeBooking(int departureId, int customerId, String seats, String passengerIds) throws SQLException {
-		String query = "INSERT INTO Booking (departure_id, customer_id, seats, passenger-ids) " +
+		String query = "INSERT INTO Booking (departure_id, customer_id, seats, passenger_ids) " +
 				"VALUES ('" + departureId + "', '" + customerId + "', '" + seats + "', '" + passengerIds + "'); ";
+		System.out.println(query);
 		this.execute(query);
 	}
 	
@@ -197,7 +255,7 @@ public class Database {
 	public int queryMakePassenger(Person p) throws SQLException {
 		//indsæt passageren i databasen
 		String query = "INSERT INTO Person (Firstname, Surname, Birthday) " +
-				"VALUES ('" + p.GetFirstname() + "', '" + p.GetSurname() + "', '" + p.GetBirthday() + "'); ";
+				"VALUES ('" + p.getFirstname() + "', '" + p.getSurname() + "', '" + p.getBirthday() + "'); ";
 		this.execute(query);
 		
 		//find hans givne id og returner det
@@ -206,11 +264,11 @@ public class Database {
 				"FROM " +
 				"Person " +
 				"WHERE " +
-				"Person.Firstname = '" + p.GetFirstname() + "' " +
+				"Person.Firstname = '" + p.getFirstname() + "' " +
 				"AND " +
-				"Person.Surname = '" + p.GetSurname() + "' " +
+				"Person.Surname = '" + p.getSurname() + "' " +
 				"AND " +
-				"Person.Birthday = '" + p.GetBirthday() + "'";
+				"Person.Birthday = '" + p.getBirthday() + "'";
 		ResultSet rs = this.execute(query2);
 		rs.next();
 		return rs.getInt("id");

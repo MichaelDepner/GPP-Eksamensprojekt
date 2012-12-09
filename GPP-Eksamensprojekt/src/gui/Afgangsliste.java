@@ -34,7 +34,7 @@ public class Afgangsliste extends JFrame {
 	private int popupId;
 	
 	private AfgangSøgning as, as2;
-	ArrayList<Afgang> departures, departures2;
+	ArrayList<Departure> departures, departures2;
 	
     public Afgangsliste(Date departureDate, Date arrivalDate, String departureAirport, String arrivalAirport) throws SQLException {
     	
@@ -42,7 +42,7 @@ public class Afgangsliste extends JFrame {
     	as = new AfgangSøgning(departureDate, departureAirport, arrivalAirport);
     	departures = as.getDepartures();
     	
-    	as2 = new AfgangSøgning(arrivalDate, departureAirport, arrivalAirport);
+    	as2 = new AfgangSøgning(arrivalDate, arrivalAirport, departureAirport);
     	departures2 = as2.getDepartures();
     	
         setTitle("Afgange");
@@ -153,8 +153,8 @@ public class Afgangsliste extends JFrame {
 		column.setPreferredWidth(j);
     }
     
-    private JTable departureTable(ArrayList<Afgang> departures) {
-    	final ArrayList<Afgang> dp = departures;
+    private JTable departureTable(ArrayList<Departure> departures) {
+    	final ArrayList<Departure> dp = departures;
     	DefaultTableModel model = new DefaultTableModel(); 
     	final JTable table = new JTable(model); 
     	
@@ -174,15 +174,15 @@ public class Afgangsliste extends JFrame {
 
     	//Tilføjer rejser
     	for(int i=0; i<departures.size(); i++) {
-    		Afgang a = dp.get(i);
+    		Departure d = dp.get(i);
     		//TODO mangler at tilføje priser i databasen
-    		String price = "1234-1235 kr.";
-    		String time = a.getDepartureTime()+" - "+a.getArrivalTime();
+    		String price = d.getPrice()+"";
+    		String time = d.getDepartureTime()+" - "+d.getArrivalTime();
     		//TODO tilføj udregning af rejsetid
     		String travelTime = "20 years";
-    		String fromTo = a.getDepartureAirport()+" - "+a.getArrivalAirport();
-    		String seats = a.getSeats();
-    		int id = a.getId();
+    		String fromTo = d.getDepartureAirportName()+" - "+d.getArrivalAirportName();
+    		String seats = " ";//d.getSeats();
+    		int id = d.getDepartureId();
     		
     		model.addRow(new Object[]{price,time,travelTime,fromTo,seats,id+""});	
     	}
@@ -213,7 +213,7 @@ public class Afgangsliste extends JFrame {
     		
     		public void mouseEntered(MouseEvent e) {
     			int row = table.rowAtPoint(e.getPoint());
-    			int id = dp.get(row).getId()+1;
+    			int id = dp.get(row).getDepartureId()+1;
     			try {
 					pb = new Pladsbooking(id-1, false);
 					popupId = id-1;
@@ -234,7 +234,7 @@ public class Afgangsliste extends JFrame {
                 
                 
                 
-                int id = dp.get(itsRow).getId();
+                int id = dp.get(itsRow).getDepartureId();
                 	
                	if(id == popupId) {
                     
@@ -279,7 +279,7 @@ public class Afgangsliste extends JFrame {
     	return table;
     }
     
-    private JTable table(JPanel panel, ArrayList<Afgang> departures){
+    private JTable table(JPanel panel, ArrayList<Departure> departures){
     	JTable table = departureTable(departures);
         //Indhold af panel
         panel.add(table.getTableHeader());
@@ -313,7 +313,7 @@ public class Afgangsliste extends JFrame {
 						Pladsbooking pb = new Pladsbooking(id1, id2);
 					} catch (SQLException e) {
 						System.out.println("Something SQL went wrong!");
-//						e.printStackTrace();
+						e.printStackTrace();
 					}
             	}
             	
