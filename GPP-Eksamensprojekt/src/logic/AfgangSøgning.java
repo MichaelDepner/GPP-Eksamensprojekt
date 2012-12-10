@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class AfgangSøgning {
 
 	private ArrayList<Departure> departuresOnDate = new ArrayList<Departure>();
+	private ArrayList<Departure> departuresBeforeDate, departuresAfterDate;
 	private String departureAirport, arrivalAirport;
 	private int departureId, arrivalId;
 	private String formattedDate;
@@ -31,15 +32,11 @@ public class AfgangSøgning {
 		//afgangeOnDate = getDepartures();
 		
 		
-		//Søger på afgange før og ligger dem i en arraylist
-		
-		
-		//Søger på afgange efter og ligger dem i en arraylist
-		
-		//Laver Afgangsliste - nej lad være med det.
-		//Afgangsliste al = new Afgangsliste();
-		
-		
+	    Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+	    //Søger på afgange før og ligger dem i en arraylist, således at datoen tættest på ligger ved index = 0
+	    departuresBeforeDate = db.queryGetDeparturesBeforeDate(formattedDate, departureId, arrivalId);
+	    //Søger på afgange efter og ligger dem i en arraylist, således at datoen tættest på ligger ved index = 0
+	    departuresAfterDate = db.queryGetDeparturesAfterDate(formattedDate, departureId, arrivalId);
 	}
 	
 	public String formatDate(java.util.Date date) {
@@ -79,5 +76,13 @@ public class AfgangSøgning {
 		
 		db.close();
 		return departuresOnDate;
+	}
+	
+	public ArrayList<Departure> getDeparturesBefore() {
+		return departuresBeforeDate;
+	}
+	
+	public ArrayList<Departure> getDeparturesAfter() {
+		return departuresAfterDate;
 	}
 }

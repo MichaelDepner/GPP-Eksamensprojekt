@@ -1,6 +1,7 @@
 package logic;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database {
 	private final Connection connection;
@@ -165,6 +166,59 @@ public class Database {
 		return rs;
 	}
 	
+	public ArrayList<Departure> queryGetDeparturesBeforeDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
+		ArrayList<Departure> departures = new ArrayList<>();
+		String query;
+		query = "SELECT " +
+				"* " +
+				"FROM " +
+				"Departures " +
+				"WHERE " +
+				"Departures.Departure_date < " + date + " " +
+				"AND " +
+				"Departures.departure_airport_id = " + departureAirport + " " +
+				"AND " +
+				"Departures.arrival_airport_id = " + arrivalAirport + " " +
+				"ORDER BY " +
+				"Departures.Departure_time DESC";
+		ResultSet rs = this.execute(query);
+		
+		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		while(rs.next()) {
+			int id = rs.getInt("id");
+			departures.add(db.queryGetDeparture(id));
+		}
+		db.close();
+		return departures;	
+	}
+	
+	//returner en arraylist af departures før en dato
+	public ArrayList<Departure> queryGetDeparturesAfterDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
+		ArrayList<Departure> departures = new ArrayList<>();
+		String query;
+		query = "SELECT " +
+				"* " +
+				"FROM " +
+				"Departures " +
+				"WHERE " +
+				"Departures.Departure_date > " + date + " " +
+				"AND " +
+				"Departures.departure_airport_id = " + departureAirport + " " +
+				"AND " +
+				"Departures.arrival_airport_id = " + arrivalAirport + " " +
+				"ORDER BY " +
+				"Departures.Departure_time ASC";
+		ResultSet rs = this.execute(query);
+		
+		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		while(rs.next()) {
+			int id = rs.getInt("id");
+			departures.add(db.queryGetDeparture(id));
+		}
+		db.close();
+		return departures;		
+	}
+	
 	public Departure queryGetDeparture(int departureId) throws SQLException {
 		//finder departure i sql serveren
 		String query;
@@ -215,10 +269,6 @@ public class Database {
 		Departure d = new Departure(departureId, airplaneId, departureAirportId, arrivalAirportId, 
 				departureTime, arrivalTime, departureDate, price, 
 				departureName, departureAbbrevation, arrivalName, arrivalAbbrevation);
-		
-		System.out.println(airplaneId+" "+ departureAirportId+" "+ arrivalAirportId+" "+ 
-				departureTime+" "+ arrivalTime+" "+ departureDate+" "+ price+" "+ 
-				departureName+" "+ departureAbbrevation+" "+ arrivalName+" "+ arrivalAbbrevation);
 		return d;
 	}
 

@@ -4,7 +4,9 @@ import gui.Kundeoplysninger;
 import gui.Pladsbooking;
 import gui.Afgangsliste;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -28,9 +30,10 @@ public class Main {
 		
 		//new gui.Pladsbooking(1, true);
 		
-//		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		ArrayList<Departure> rs = db.queryGetDeparturesAfterDate("20121210", 1, 8);
 //		db.queryMakeCustomer("Dennis", "Hansen", "Pludrevej 17", "Hillerød", "1234", "Danmark", "Dennis@hansen.dk", "14253647");
-//		db.close();
+		db.close();
 		
 		
 		

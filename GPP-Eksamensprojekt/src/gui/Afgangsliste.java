@@ -51,6 +51,8 @@ public class Afgangsliste extends JFrame {
         jtp = new JTabbedPane();
         jtp2 = new JTabbedPane();
         
+        
+        
         //Sætter BorderLayout i contentPane, og laver panels indeni
         getContentPane().setLayout(new BorderLayout());
         //CENTER
@@ -66,6 +68,9 @@ public class Afgangsliste extends JFrame {
         //Sætter fane-vinduerne ind i layouts'ene
         panelCenter.add(jtp);
         panelCenter.add(jtp2);
+        
+        //tilføjer tabs til departures fundet før den valgte dato
+        addTabsBeforeDate(as, jtp);
 		
 		//Opretter panels
         jp1Udrejse = new JPanel();
@@ -84,6 +89,9 @@ public class Afgangsliste extends JFrame {
 		jp1Udrejse.add(departureTable);
 		//Tilføjer panel jp1Udrejse til jtp
         jtp.addTab("28/11", jp1Udrejse);
+        
+        //tilføjer tabs til departures fundet efter den valgte dato
+        addTabsAfterDate(as, jtp);
 		
         labelHjemrejse = new JLabel();
         labelHjemrejse.setText("Onsdag d. 28. november 2012 " + "Hjemrejse - Lufthavn");
@@ -143,6 +151,23 @@ public class Afgangsliste extends JFrame {
         setVisible(true);
     }
     
+    private void addTabsBeforeDate(AfgangSøgning as, JTabbedPane tp) {
+    	for(int i=5; i>0; i--) {
+    		if(as.getDeparturesBefore().size()>i) {
+    			JPanel panel = new JPanel();
+        		tp.addTab(as.getDeparturesBefore().get(i).getDepartureDate(), panel);
+    		}
+    	}
+    }
+    
+    private void addTabsAfterDate(AfgangSøgning as, JTabbedPane tp) {
+    	for(int i=0; i<5; i++) {
+    		if(as.getDeparturesAfter().size()>i) {
+    			JPanel panel = new JPanel();
+    			tp.addTab(as.getDeparturesAfter().get(i).getDepartureDate(), panel);
+    		}
+    	}
+    }
     
     							
     private void setWidth(JTable table, int i, int j) {

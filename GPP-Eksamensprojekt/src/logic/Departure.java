@@ -57,6 +57,12 @@ public class Departure {
 		return dateFormatted;
 	}
 	
+	public String getDepartureDate() {
+		DateFormat formatter = new SimpleDateFormat("dd/MM");
+		String dateFormatted = formatter.format(departureTime);
+		return dateFormatted;
+	}
+	
 	public String getArrivalTime() {
 		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'klokken' HH:mm:ss");
 		String dateFormatted = formatter.format(arrivalTime);
