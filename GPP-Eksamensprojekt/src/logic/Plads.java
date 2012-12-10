@@ -35,10 +35,16 @@ public class Plads extends JPanel {
 		this.pb = pb;
 		this.panel = panel;
 		Color();
-		addMouseListener(new MouseListener());
-		
-		price = 600;
-			
+		addMouseListener(new MouseListener());		
+	}
+	
+	public Plads(int seatNo, Pladsbooking pb) {
+		this.seatNo = seatNo;
+		isReserved = false;
+		isAisle = false;
+		this.pa = pa;
+		this.pb = pb;
+		Color();
 	}
 	
 	public int getSeatNo() {

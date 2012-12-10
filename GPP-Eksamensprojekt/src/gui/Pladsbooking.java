@@ -46,11 +46,29 @@ public class Pladsbooking extends JFrame {
 		emptyColumns1 = pladsArray1.getEmptyCols();
 		
 		if(!booking) {
-			//makePreviewWindow();
-			//reservations();
+			makePreviewWindow(pladsArray1);
+			reservations(panelList1, pladsArray1);
 		} else {
 			makeBookingWindow();
 		}
+	}
+	
+	public void changePreview(int departureId) throws SQLException {
+		panelList1.clear();
+		this.getContentPane().setVisible(false);
+		this.departureId = departureId;
+		pladsArray1 = new PladsArray(departureId);
+		emptyColumns1 = pladsArray1.getEmptyCols();
+		makePreviewWindow(pladsArray1);
+		reservations(panelList1, pladsArray1);
+		this.getContentPane().setVisible(true);
+	}
+	
+	public void makeInvisible() {
+		this.getContentPane().setVisible(false);
+	}
+	public void makeVisible() {
+		this.getContentPane().setVisible(true);
 	}
 	
 	public Pladsbooking(int departureId1, int departureId2) throws SQLException {
@@ -120,30 +138,34 @@ public class Pladsbooking extends JFrame {
 		
 	}
 	
-//	private void makePreviewWindow() throws SQLException {
-//		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-//		
-//		
-//		Container contentPane = this.getContentPane();
-//		contentPane.setLayout(new GridLayout(rows1, cols1, 2, 2));
-//		
-//		//fylder arrayet med ureserverede pladser
-//		
-//		int counting=0;
-//		for(int i = 0; i<rows1; i++) {
-//			for(int j = 0; j<cols1; j++) {
-//				counting++;
-//				Plads p = new Plads(counting, false, false, this);
-//				contentPane.add(p);
-//				panelList1.add(p);
-//			}
-//		}
-//		
-//		this.setPreferredSize(new Dimension(cols1*30, rows1*30));
-//		this.setResizable(false);
-//		this.pack();
-//		this.setVisible(true);
-//	}
+	private void makePreviewWindow(PladsArray pa) throws SQLException {
+		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		
+		int rows = pa.getRows();
+		int cols = pa.getCols();
+		
+		Container contentPane = this.getContentPane();
+		contentPane.removeAll();
+		contentPane.setLayout(new GridLayout(rows, cols, 2, 2));
+		
+		//fylder arrayet med ureserverede pladser
+		
+		int counting=0;
+		for(int i = 0; i<rows; i++) {
+			for(int j = 0; j<cols; j++) {
+				counting++;
+				Plads p = new Plads(counting, this);
+				//Plads p = new Plads(counting, false, false, this);
+				contentPane.add(p);
+				panelList1.add(p);
+			}
+		}
+		
+		this.setPreferredSize(new Dimension(cols*30, rows*30));
+		this.setResizable(false);
+		this.pack();
+		this.setVisible(true);
+	}
 	
 	public void makeBookingWindow() throws SQLException {
 		JPanel leftPanel, middlePanel, centerPanel, rightPanel, bottomPanel;

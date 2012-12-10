@@ -146,6 +146,7 @@ public class Afgangsliste extends JFrame {
     
     							
     private void setWidth(JTable table, int i, int j) {
+    	//column = table.getColumnModel().getColumn(i);
     	column = table.getColumnModel().getColumn(i);
     	
     	column.setMinWidth(j);
@@ -155,14 +156,27 @@ public class Afgangsliste extends JFrame {
     
     private JTable departureTable(ArrayList<Departure> departures) {
     	final ArrayList<Departure> dp = departures;
-    	DefaultTableModel model = new DefaultTableModel(); 
+    	DefaultTableModel model = new DefaultTableModel() {
+    		public boolean isCellEditable(int row, int column) {
+    			return false;
+    		}
+    	}; 
     	final JTable table = new JTable(model); 
+    	
     	
     	//overskriver metoden moveColumn, så man ikke længere kan rykke rundt på dem.
     	table.setColumnModel(new DefaultTableColumnModel() {  
     		public void moveColumn(int columnIndex, int newIndex) { 
-    		}  
-    		});  
+    		}   
+    	});  
+
+    	
+    	
+//    	table.setModel(new DefaultTableModel() {
+//    		public boolean isCellEditable(int row, int column){  
+//    			return false;  
+//    		} 
+//    	});
 
     	//Laver columns
     	model.addColumn("Pris"); 
@@ -179,7 +193,7 @@ public class Afgangsliste extends JFrame {
     		String price = d.getPrice()+"";
     		String time = d.getDepartureTime()+" - "+d.getArrivalTime();
     		//TODO tilføj udregning af rejsetid
-    		String travelTime = "20 years";
+    		String travelTime = d.getTravelTime();
     		String fromTo = d.getDepartureAirportName()+" - "+d.getArrivalAirportName();
     		String seats = " ";//d.getSeats();
     		int id = d.getDepartureId();
@@ -193,6 +207,7 @@ public class Afgangsliste extends JFrame {
     	setWidth(table, 2, 120);
     	setWidth(table, 3, 120);
     	setWidth(table, 4, 120);
+    	
     	
     	//tilføjer actionlistener som åbner rækkens afgang som pladssøgning
     	table.addMouseMotionListener(new MouseMotionAdapter() {
@@ -231,36 +246,25 @@ public class Afgangsliste extends JFrame {
                 JTable aTable =  (JTable)e.getSource();
                 int itsRow = aTable.rowAtPoint(e.getPoint());
                 
-                
-                
-                
                 int id = dp.get(itsRow).getDepartureId();
                 	
                	if(id == popupId) {
-                    
+               		
                 } else if(pb == null) {
-                	try {
-    					Thread.sleep(100);
-    				} catch (InterruptedException e1) {
-    					System.out.println("Something went wrong when sleeping.");
-    					e1.printStackTrace();
-    				}
                    	mouseEntered(e);
                 } else {
-                	try {
-    					Thread.sleep(100);
-    				} catch (InterruptedException e1) {
-    					System.out.println("Something went wrong when sleeping.");
-    					e1.printStackTrace();
-    				}
                    	popupId = id;
-                   	mouseExited(e);
-                   	mouseEntered(e);
-                }
-                
-                
-                
-                
+                   	try {
+                   		pb.makeInvisible();
+						pb.changePreview(id);
+						pb.makeVisible();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+                   	//mouseExited(e);
+                   	//mouseEntered(e);
+                }  
             }
     		
     		public void mouseExited(MouseEvent e) {
@@ -270,6 +274,21 @@ public class Afgangsliste extends JFrame {
     	
     	//tiføjer mouselistener
     	table.addMouseListener(new MouseAdapter() {
+    		
+    		public void mouseEntered(MouseEvent e) {
+    			int row = table.rowAtPoint(e.getPoint());
+    			int id = dp.get(row).getDepartureId()+1;
+    			try {
+					pb = new Pladsbooking(id-1, false);
+					popupId = id-1;
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Something sql went wrong.");
+					e1.printStackTrace();
+				}
+    			
+    			
+    		}
     		
     		public void mouseExited(MouseEvent e) {
     			pb.close();
