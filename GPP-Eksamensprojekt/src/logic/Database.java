@@ -348,7 +348,7 @@ public class Database {
 		c.setId(id);
 		return c;
 	}
-	
+
 	public ArrayList<Booking> queryFindBookingsMadeBy(int customerId) throws SQLException {
 		ArrayList<Booking> bookings = new ArrayList();
 		String query;
