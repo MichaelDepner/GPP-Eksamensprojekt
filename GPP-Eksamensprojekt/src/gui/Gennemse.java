@@ -46,7 +46,7 @@ public class Gennemse extends JFrame{
 	
 	public Gennemse(ArrayList<Plads> reserved1, ArrayList<Plads> reserved2, ArrayList<Person> passengers, Customer customer,
 			Departure d1, Departure d2) {
-		
+
 		this.passengers = passengers;
 		this.customer = customer;
 		this.reserved1 = reserved1;
@@ -54,38 +54,47 @@ public class Gennemse extends JFrame{
 		this.d1 = d1;
 		this.d2 = d2;
 		
-//		for(int i=0; i<reserved1.size(); i++) {
-//			
-//		}
+		makeGennemseWindow(true, true);
 		
-		
-		
+		makeGennemseWindow(true, false);
+
+	}
+	
+	public Gennemse(Departure d1, ArrayList<Person> passengers, Customer customer) {
+		this.passengers = passengers;
+		this.customer = customer;
+		this.d1 = d1;
+	}
+
+
+	public void makeGennemseWindow(boolean turRetur, boolean editing) {
+
 		setTitle("Gennemse");
-		
+
 		panel = new JPanel();
 		getContentPane().add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		
+
 		//Scrollbar
-        JScrollPane scroll = new JScrollPane(panel);
-        getContentPane().add(scroll);
-		
+		JScrollPane scroll = new JScrollPane(panel);
+		getContentPane().add(scroll);
+
 		//Panel til kontaktoplysninger
-        flowPanel1 = new JPanel();
-        panel.add(flowPanel1);
-        flowPanel1.setLayout(new FlowLayout(FlowLayout.LEFT));
-        
+		flowPanel1 = new JPanel();
+		panel.add(flowPanel1);
+		flowPanel1.setLayout(new FlowLayout(FlowLayout.LEFT));
+
 		panelKontaktoplysninger = new JPanel();
 		flowPanel1.add(panelKontaktoplysninger);
 		//panelKontaktoplysninger.setLayout(new GridLayout(7, 1));
 		panelKontaktoplysninger.setLayout
-				(new BoxLayout(panelKontaktoplysninger, BoxLayout.PAGE_AXIS));
+		(new BoxLayout(panelKontaktoplysninger, BoxLayout.PAGE_AXIS));
 
-	    panelKontaktoplysninger.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		
+		panelKontaktoplysninger.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
 		//Tilføjer kontaktoplysninger fra Customer
 		kontaktoplysninger = new JLabel("Kontaktoplysninger");
-        kontaktoplysninger.setFont(new Font("String", Font.BOLD, 16));
+		kontaktoplysninger.setFont(new Font("String", Font.BOLD, 16));
 		panelKontaktoplysninger.add(kontaktoplysninger);
 		name = new JLabel(customer.GetFirstname() + " " + customer.GetSurname());
 		panelKontaktoplysninger.add(name);
@@ -100,139 +109,146 @@ public class Gennemse extends JFrame{
 		email = new JLabel(customer.GetEmail());
 		panelKontaktoplysninger.add(email);
 		
+		//tilføjer knap til redigering
+		if(editing) {
+			JButton editCustomerButton = new JButton("Redigér kundeoplysninger");
+			panelKontaktoplysninger.add(editCustomerButton);
+		}
 		
+
 		panelRejse = new JPanel();
 		panel.add(panelRejse);
 		panelRejse.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		panelRejse.setLayout(new GridLayout(1,2,10,10));
 		panelRejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		
+
 		//Udrejse-info
 		panelUdrejse = new JPanel();
 		panelRejse.add(panelUdrejse);
 		panelUdrejse.setLayout(new GridLayout(5,1));
 		panelUdrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    panelUdrejse.setBackground(Color.lightGray);
-		
+		panelUdrejse.setBackground(Color.lightGray);
+
 		udrejse = new JLabel("Udrejse");
-        udrejse.setFont(new Font("String", Font.BOLD, 16));
-        panelUdrejse.add(udrejse);
-        airport = new JLabel(d1.getDepartureAirportName() + " "+ d1.getDepartureAirportAbbrevation() + " - " + d1.getArrivalAirportName() + " " + d1.getArrivalAirportAbbrevation());
-        panelUdrejse.add(airport);
-        afgang = new JLabel("Afgang: " + d1.getDepartureTime());
+		udrejse.setFont(new Font("String", Font.BOLD, 16));
+		panelUdrejse.add(udrejse);
+		airport = new JLabel(d1.getDepartureAirportName() + " "+ d1.getDepartureAirportAbbrevation() + " - " + d1.getArrivalAirportName() + " " + d1.getArrivalAirportAbbrevation());
+		panelUdrejse.add(airport);
+		afgang = new JLabel("Afgang: " + d1.getDepartureTime());
 		panelUdrejse.add(afgang);
 		ankomst = new JLabel("Ankomst: " + d1.getArrivalTime());
 		panelUdrejse.add(ankomst);
 		rejsetid = new JLabel("Rejsetid: " + d1.getTravelTime());
 		panelUdrejse.add(rejsetid);
-        
+
 		//Hjemrejse-info
 		panelHjemrejse = new JPanel();
 		panelRejse.add(panelHjemrejse);
 		panelHjemrejse.setLayout(new GridLayout(5,1));
 		panelHjemrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    panelHjemrejse.setBackground(Color.lightGray);
-		
+		panelHjemrejse.setBackground(Color.lightGray);
+
 		hjemrejse = new JLabel("Hjemrejse");
-        hjemrejse.setFont(new Font("String", Font.BOLD, 16));
-        panelHjemrejse.add(hjemrejse);
-        airport = new JLabel(d2.getDepartureAirportName() + " "+ d2.getDepartureAirportAbbrevation() + " - " + d2.getArrivalAirportName() + " " + d2.getArrivalAirportAbbrevation());
-        panelHjemrejse.add(airport);
-        afgang = new JLabel("Afgang: " + d2.getDepartureTime());
+		hjemrejse.setFont(new Font("String", Font.BOLD, 16));
+		panelHjemrejse.add(hjemrejse);
+		airport = new JLabel(d2.getDepartureAirportName() + " "+ d2.getDepartureAirportAbbrevation() + " - " + d2.getArrivalAirportName() + " " + d2.getArrivalAirportAbbrevation());
+		panelHjemrejse.add(airport);
+		afgang = new JLabel("Afgang: " + d2.getDepartureTime());
 		panelHjemrejse.add(afgang);
 		ankomst = new JLabel("Ankomst: " + d2.getArrivalTime());
 		panelHjemrejse.add(ankomst);
 		rejsetid = new JLabel("Rejsetid: " + d2.getTravelTime());
 		panelHjemrejse.add(rejsetid);
-		
+
 		//Pladser info
 		panelPladser = new JPanel();
 		panel.add(panelPladser);
 		//panelPladser.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 		panelPladser.setLayout(new GridLayout(1,2,10,10));
 		panelPladser.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		
+
 		//Info om pladser til udrejsen
 		panelPladserUdrejse = new JPanel();
 		panelPladser.add(panelPladserUdrejse);
 		panelPladserUdrejse.setLayout(new GridLayout(10,1));
 		//panelPladserUdrejse.setLayout(new GridLayout(antalPassagerer,1));
 		panelPladserUdrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    panelPladserUdrejse.setBackground(Color.lightGray);
-		
+		panelPladserUdrejse.setBackground(Color.lightGray);
+
 		pladser = new JLabel("Pladser udrejse");
-        pladser.setFont(new Font("String", Font.BOLD, 16));
-        panelPladserUdrejse.add(pladser);
-        
-      	//Bestilte pladser
-        antalPladser(reserved1, panelPladserUdrejse);
-			
-        //Info om pladser til hjemrejsen
-        panelPladserHjemrejse = new JPanel();
+		pladser.setFont(new Font("String", Font.BOLD, 16));
+		panelPladserUdrejse.add(pladser);
+
+		//Bestilte pladser
+		antalPladser(reserved1, panelPladserUdrejse);
+
+		//Info om pladser til hjemrejsen
+		panelPladserHjemrejse = new JPanel();
 		panelPladser.add(panelPladserHjemrejse);
 		panelPladserHjemrejse.setLayout(new GridLayout(10,1));
 		//panelPladserUdrejse.setLayout(new GridLayout(antalPassagerer,1));
 		panelPladserHjemrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    panelPladserHjemrejse.setBackground(Color.lightGray);
-	    
-	    pladser = new JLabel("Pladser hjemrejse");
-        pladser.setFont(new Font("String", Font.BOLD, 16));
-        panelPladserHjemrejse.add(pladser);
-        
-        antalPladser(reserved2, panelPladserHjemrejse);
-        
+		panelPladserHjemrejse.setBackground(Color.lightGray);
+
+		pladser = new JLabel("Pladser hjemrejse");
+		pladser.setFont(new Font("String", Font.BOLD, 16));
+		panelPladserHjemrejse.add(pladser);
+
+		antalPladser(reserved2, panelPladserHjemrejse);
+
 		//Passagerer
-        flowPanel2 = new JPanel();
-        panel.add(flowPanel2);
-        flowPanel2.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        //flowPanel2.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        
+		flowPanel2 = new JPanel();
+		panel.add(flowPanel2);
+		flowPanel2.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+		//flowPanel2.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
 		panelPassengers = new JPanel();
 		flowPanel2.add(panelPassengers);
 		panelPassengers.setLayout(new BoxLayout(panelPassengers, BoxLayout.PAGE_AXIS));
-		
+
 		labelPassengers = new JLabel("Passagerer");
-        labelPassengers.setFont(new Font("String", Font.BOLD, 16));
-        panelPassengers.add(labelPassengers);
-        
-        //skaber passagerer
-        passengers(passengers.size());
-        
+		labelPassengers.setFont(new Font("String", Font.BOLD, 16));
+		panelPassengers.add(labelPassengers);
+
+		//skaber passagerer
+		passengers(passengers.size());
+
 		//pris
-        flowPanel3 = new JPanel();
-        panel.add(flowPanel3);
-        flowPanel3.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-        
+		flowPanel3 = new JPanel();
+		panel.add(flowPanel3);
+		flowPanel3.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+
 		panelPris = new JPanel();
 		flowPanel3.add(panelPris);
 		panelPris.setLayout(new BoxLayout(panelPris, BoxLayout.PAGE_AXIS));
-		
+
 		labelPris = new JLabel("Pris");
-        labelPris.setFont(new Font("String", Font.BOLD, 16));
-        panelPris.add(labelPris);
-        prisTekst = new JLabel("antalPassagerer" + " x sæder á " + "pris");
-        panelPris.add(prisTekst);
-        total = new JLabel("Total = " + "antalPassagerer*pris" + " kr.");
-        total.setFont(new Font("String", Font.BOLD, 14));
-        panelPris.add(total);
-        
-        //Knapper
-        panelKnapper = new JPanel();
-        panel.add(panelKnapper);
-        panelKnapper.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
-        
-        tilbage = new JButton("Tilbage");
-        panelKnapper.add(tilbage);
-        bestil = new JButton("Bestil");
-        panelKnapper.add(bestil);
-        
-        addActionListeners();
-        
+		labelPris.setFont(new Font("String", Font.BOLD, 16));
+		panelPris.add(labelPris);
+		prisTekst = new JLabel("antalPassagerer" + " x sæder á " + "pris");
+		panelPris.add(prisTekst);
+		total = new JLabel("Total = " + "antalPassagerer*pris" + " kr.");
+		total.setFont(new Font("String", Font.BOLD, 14));
+		panelPris.add(total);
+
+		//Knapper
+		panelKnapper = new JPanel();
+		panel.add(panelKnapper);
+		panelKnapper.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
+
+		tilbage = new JButton("Tilbage");
+		panelKnapper.add(tilbage);
+		bestil = new JButton("Bestil");
+		panelKnapper.add(bestil);
+
+		addActionListeners();
+
 		setPreferredSize(new Dimension(640, 500));
-        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        pack();
-        setVisible(true);
-        setResizable(false);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		pack();
+		setVisible(true);
+		setResizable(false);
+
 	}
 	
 	//tilføj pladsers navne
