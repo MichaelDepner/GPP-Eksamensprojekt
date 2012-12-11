@@ -41,6 +41,7 @@ public class Gennemse extends JFrame{
 	//private ArrayList<Booking> bookings = new ArrayList<>();
 	private ArrayList<Plads> reserved1, reserved2;
 	private Departure d1, d2;
+	private boolean turRetur;
 	
 	
 	
@@ -53,17 +54,20 @@ public class Gennemse extends JFrame{
 		this.reserved2 = reserved2;
 		this.d1 = d1;
 		this.d2 = d2;
+		turRetur = true;
 		
-		makeGennemseWindow(true, true);
 		
 		makeGennemseWindow(true, false);
-
 	}
 	
-	public Gennemse(Departure d1, ArrayList<Person> passengers, Customer customer) {
+	public Gennemse(ArrayList<Plads> reserved, Departure d1, ArrayList<Person> passengers, Customer customer) {
 		this.passengers = passengers;
 		this.customer = customer;
+		this.reserved1 = reserved;
 		this.d1 = d1;
+		turRetur = false;
+		
+		makeGennemseWindow(false, false);
 	}
 
 
@@ -144,21 +148,24 @@ public class Gennemse extends JFrame{
 		//Hjemrejse-info
 		panelHjemrejse = new JPanel();
 		panelRejse.add(panelHjemrejse);
-		panelHjemrejse.setLayout(new GridLayout(5,1));
-		panelHjemrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		panelHjemrejse.setBackground(Color.lightGray);
 
-		hjemrejse = new JLabel("Hjemrejse");
-		hjemrejse.setFont(new Font("String", Font.BOLD, 16));
-		panelHjemrejse.add(hjemrejse);
-		airport = new JLabel(d2.getDepartureAirportName() + " "+ d2.getDepartureAirportAbbrevation() + " - " + d2.getArrivalAirportName() + " " + d2.getArrivalAirportAbbrevation());
-		panelHjemrejse.add(airport);
-		afgang = new JLabel("Afgang: " + d2.getDepartureTime());
-		panelHjemrejse.add(afgang);
-		ankomst = new JLabel("Ankomst: " + d2.getArrivalTime());
-		panelHjemrejse.add(ankomst);
-		rejsetid = new JLabel("Rejsetid: " + d2.getTravelTime());
-		panelHjemrejse.add(rejsetid);
+		if(turRetur) {
+			panelHjemrejse.setLayout(new GridLayout(5,1));
+			panelHjemrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			panelHjemrejse.setBackground(Color.lightGray);
+
+			hjemrejse = new JLabel("Hjemrejse");
+			hjemrejse.setFont(new Font("String", Font.BOLD, 16));
+			panelHjemrejse.add(hjemrejse);
+			airport = new JLabel(d2.getDepartureAirportName() + " "+ d2.getDepartureAirportAbbrevation() + " - " + d2.getArrivalAirportName() + " " + d2.getArrivalAirportAbbrevation());
+			panelHjemrejse.add(airport);
+			afgang = new JLabel("Afgang: " + d2.getDepartureTime());
+			panelHjemrejse.add(afgang);
+			ankomst = new JLabel("Ankomst: " + d2.getArrivalTime());
+			panelHjemrejse.add(ankomst);
+			rejsetid = new JLabel("Rejsetid: " + d2.getTravelTime());
+			panelHjemrejse.add(rejsetid);
+		}
 
 		//Pladser info
 		panelPladser = new JPanel();
@@ -185,16 +192,19 @@ public class Gennemse extends JFrame{
 		//Info om pladser til hjemrejsen
 		panelPladserHjemrejse = new JPanel();
 		panelPladser.add(panelPladserHjemrejse);
-		panelPladserHjemrejse.setLayout(new GridLayout(10,1));
-		//panelPladserUdrejse.setLayout(new GridLayout(antalPassagerer,1));
-		panelPladserHjemrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		panelPladserHjemrejse.setBackground(Color.lightGray);
 
-		pladser = new JLabel("Pladser hjemrejse");
-		pladser.setFont(new Font("String", Font.BOLD, 16));
-		panelPladserHjemrejse.add(pladser);
+		if(turRetur) {
+			panelPladserHjemrejse.setLayout(new GridLayout(10,1));
+			//panelPladserUdrejse.setLayout(new GridLayout(antalPassagerer,1));
+			panelPladserHjemrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			panelPladserHjemrejse.setBackground(Color.lightGray);
 
-		antalPladser(reserved2, panelPladserHjemrejse);
+			pladser = new JLabel("Pladser hjemrejse");
+			pladser.setFont(new Font("String", Font.BOLD, 16));
+			panelPladserHjemrejse.add(pladser);
+
+			antalPladser(reserved2, panelPladserHjemrejse);
+		}
 
 		//Passagerer
 		flowPanel2 = new JPanel();
@@ -302,7 +312,7 @@ public class Gennemse extends JFrame{
     					int passengerId = db.queryMakePassenger(passengers.get(i));
     					passengerString = passengerString + " " + passengerId;
     				}
-    				
+
     				//skab customer og gem customerId
     				customerId = db.queryMakeCustomer(customer);
 
@@ -313,24 +323,28 @@ public class Gennemse extends JFrame{
     				}
     				//skab booking for udrejse
     				db.queryMakeBooking(d1.getDepartureId(), customerId, seatNums1, passengerString);
-    				
-    				//lav string med id på reserverede pladser hjem
-    				for(int j=0; j<reserved2.size(); j++) {
-    					int num = reserved2.get(j).getSeatNo();
-    					seatNums2 = num+" "+seatNums2;
+
+
+    				if(turRetur) {
+    					//lav string med id på reserverede pladser hjem
+    					for(int j=0; j<reserved2.size(); j++) {
+    						int num = reserved2.get(j).getSeatNo();
+    						seatNums2 = num+" "+seatNums2;
+    					}
+    					//skab booking for hjemrejse
+    					db.queryMakeBooking(d2.getDepartureId(), customerId, seatNums2, passengerString);
+
+
+    					System.out.println("passengerString: "+passengerString);
+    					System.out.println("customerId: "+customerId);
     				}
-    				//skab booking for hjemrejse
-    				db.queryMakeBooking(d2.getDepartureId(), customerId, seatNums2, passengerString);
-
-
-    				System.out.println("passengerString: "+passengerString);
-    				System.out.println("customerId: "+customerId);
 
     			} catch (SQLException e) {
     				System.out.println("Something SQL went wrong when making passengers");
     				e.printStackTrace();
     			}
     		}
+
     	}
     }
 }

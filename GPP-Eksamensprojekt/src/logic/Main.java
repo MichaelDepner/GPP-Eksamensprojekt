@@ -1,5 +1,6 @@
 package logic;
 
+import gui.Bookinginfo;
 import gui.Kundeoplysninger;
 import gui.Pladsbooking;
 import gui.Afgangsliste;
@@ -19,6 +20,7 @@ public class Main {
 	public static void main(String[] args) throws SQLException {
 		
 		new gui.Forside2();
+		new Bookinginfo();
 		//new gui.Betaling();
 		//new gui.Kundeoplysninger();
 		//new gui.Kvittering();

@@ -11,7 +11,6 @@ import logic.Customer;
 import logic.Departure;
 import logic.Person;
 import logic.Plads;
-import logic.Reservation;
 
 public class Kundeoplysninger {
 
@@ -41,22 +40,32 @@ public class Kundeoplysninger {
     private ArrayList<JTextField> firstnameList = new ArrayList<>();
     private ArrayList<JTextField> surnameList = new ArrayList<>();
     private ArrayList<JTextField> birthdayList = new ArrayList<>();
+    private boolean turRetur;
     
     private Departure d1, d2;
     
     private String firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS;
 	
-    public Kundeoplysninger(ArrayList<Plads> reservations) {
-    	this.reservations1 = reservations;
-        makeFrame();
-        addActionListeners();
-    }
+//    public Kundeoplysninger(ArrayList<Plads> reservations) {
+//    	this.reservations1 = reservations;
+//        makeFrame();
+//        addActionListeners();
+//    }
     
     public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2, Departure d1, Departure d2) {
+    	turRetur = true;
     	this.reservations1 = reservations1;
     	this.reservations2 = reservations2;
     	this.d1 = d1;
     	this.d2 = d2;
+    	makeFrame();
+    	addActionListeners();
+    }
+    
+    public Kundeoplysninger(ArrayList<Plads> reservations1, Departure d1) {
+    	turRetur = false;
+    	this.reservations1 = reservations1;
+    	this.d1 = d1;
     	makeFrame();
     	addActionListeners();
     }
@@ -358,8 +367,12 @@ public class Kundeoplysninger {
             	makeCustomer();
             	makePeople();
             	
-            	Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, customer, d1, d2);
-            	System.out.println("Going to the next step");
+            	if(turRetur) {
+            		Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, customer, d1, d2);
+            	} else {
+            		Gennemse gennemse = new Gennemse(reservations1, d1, passengers, customer);
+            	}
+            	
             	
             	
             } else if(event.getSource() == importerKunde) {

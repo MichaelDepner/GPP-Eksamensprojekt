@@ -27,13 +27,14 @@ public class Plads extends JPanel {
 	 * @param isReserved Pladsens status
 	 * @param isAisle Er pladsen en mellemgang?
 	 */
-	public Plads(int seatNo, boolean isReserved, boolean isAisle, Pladsbooking pb, PladsArray pa, JPanel panel) {
+	public Plads(int seatNo, boolean isReserved, boolean isAisle, Pladsbooking pb, PladsArray pa, JPanel panel, int price) {
 		this.seatNo = seatNo;
 		this.isReserved = isReserved;
 		this.isAisle = isAisle;
 		this.pa = pa;
 		this.pb = pb;
 		this.panel = panel;
+		this.price = price;
 		Color();
 		addMouseListener(new MouseListener());		
 	}

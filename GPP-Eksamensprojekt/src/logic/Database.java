@@ -323,4 +323,52 @@ public class Database {
 		rs.next();
 		return rs.getInt("id");
 	}
+	
+	public Customer queryFindCustomer(String searchingFor, String arg) throws SQLException {
+		String query;
+		query = "SELECT " +
+				"* " +
+				"FROM " +
+				"Customer " +
+				"WHERE " +
+				searchingFor + " = '" + arg+ " '";
+		ResultSet rs = this.execute(query);
+		rs.next();
+		int id = rs.getInt("id");
+		String firstname = rs.getString("firstname");
+		String surname = rs.getString("surname");
+		String address = rs.getString("address");
+		String city = rs.getString("city");
+		String postalCode = rs.getString("postal_code");
+		String country = rs.getString("country");
+		String email = rs.getString("email");
+		String phoneNumber = rs.getString("phone_number");
+		
+		Customer c = new Customer(firstname, surname, email, phoneNumber, address, city, postalCode, country);
+		c.setId(id);
+		return c;
+	}
+	
+	public ArrayList<Booking> queryFindBookingsMadeBy(int customerId) throws SQLException {
+		ArrayList<Booking> bookings = new ArrayList();
+		String query;
+		query = "SELECT " +
+				"* " +
+				"FROM " +
+				"Booking " +
+				"WHERE " +
+				"Booking.passenger_ids = " + customerId;
+		ResultSet rs = this.execute(query);
+		 
+		while(rs.next()) {
+			int id = rs.getInt("id");
+			int dId = rs.getInt("departure_id");
+			String seats = rs.getString("seats");
+			String passengers = rs.getString("passenger_ids");
+			
+			Booking b = new Booking(dId, seats, passengers);
+			bookings.add(b);
+		}
+		return bookings;
+	}
 }

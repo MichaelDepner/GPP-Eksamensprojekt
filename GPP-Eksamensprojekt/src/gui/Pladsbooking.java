@@ -34,6 +34,7 @@ public class Pladsbooking extends JFrame {
 	private JPanel rightMiddleTopPanel, rightMiddleMiddlePanel;
 	private ArrayList<JPanel> labelList = new ArrayList<>();
 	private JLabel udrejseLabel, hjemrejseLabel;
+	private boolean turRetur;
 	
 	private Departure d1, d2;
 	
@@ -41,15 +42,13 @@ public class Pladsbooking extends JFrame {
 		this.booking = booking;
 		this.departureId = departureId;
 		pladsArray1 = new PladsArray(departureId);
-		//rows1 = pladsArray1.getRows();
-		//cols1 = pladsArray1.getCols();
 		emptyColumns1 = pladsArray1.getEmptyCols();
 		
 		if(!booking) {
 			makePreviewWindow(pladsArray1);
 			reservations(panelList1, pladsArray1);
 		} else {
-			makeBookingWindow();
+			makeBookingWindow(true);
 		}
 	}
 	
@@ -72,6 +71,7 @@ public class Pladsbooking extends JFrame {
 	}
 	
 	public Pladsbooking(int departureId1, int departureId2) throws SQLException {
+		turRetur = true;
 		//finder al information om afgangene og gemmer dem i et Departure objekt
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		d1 = db.queryGetDeparture(departureId1);
@@ -86,12 +86,23 @@ public class Pladsbooking extends JFrame {
 		emptyColumns1 = pladsArray1.getEmptyCols();
 		emptyColumns2 = pladsArray2.getEmptyCols();
 		
-		makeBookingWindow();
+		makeBookingWindow(true);
 		reservations(panelList1, pladsArray1);
 		reservations(panelList2, pladsArray2);
+	}
+	
+	public Pladsbooking(int departureId1) throws SQLException {
+		turRetur = false;
+		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		d1 = db.queryGetDeparture(departureId1);
+		db.close();
 		
-		
-		
+		booking = true;
+		this.departureId = departureId1;
+		pladsArray1 = new PladsArray(departureId1);
+		emptyColumns1 = pladsArray1.getEmptyCols();
+		makeBookingWindow(false);
+		reservations(panelList1, pladsArray1);
 	}
 	
 
@@ -167,7 +178,7 @@ public class Pladsbooking extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public void makeBookingWindow() throws SQLException {
+	public void makeBookingWindow(final boolean turRetur) throws SQLException {
 		JPanel leftPanel, middlePanel, centerPanel, rightPanel, bottomPanel;
 		JPanel leftBottomPanel, leftTopPanel, middleBottomPanel, middleTopPanel, rightTopPanel, rightBottomPanel;
 		JLabel leftPanelTitle, centerPanelTitle, rightPanelTitle;
@@ -214,6 +225,7 @@ public class Pladsbooking extends JFrame {
 			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
 			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
 			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
+			
 			rightPanelTitle = new JLabel("Info");
             rightPanelTitle.setFont(new Font("String", Font.BOLD, 16));
 			rightTopPanel.add(rightPanelTitle);
@@ -226,13 +238,17 @@ public class Pladsbooking extends JFrame {
 			rightMiddlePanel.add(rightMiddleTopPanel);
 			rightMiddlePanel.add(rightMiddleMiddlePanel);
 			
+			if(!turRetur) {
+				rightMiddleMiddlePanel.setVisible(false);
+			}
+			
 			JPanel rightMiddleBottomPanel = new JPanel();
 			rightMiddleBottomPanel.setLayout(new BoxLayout(rightMiddleBottomPanel, BoxLayout.Y_AXIS));
 			rightMiddlePanel.add(rightMiddleBottomPanel);
 			
 			
 			leftPanel.setLayout(new BorderLayout());
-			leftBottomPanel = addPlane(pladsArray1, panelList1, rightMiddleTopPanel);
+			leftBottomPanel = addPlane(d1, pladsArray1, panelList1, rightMiddleTopPanel);
 			leftPanel.add(leftBottomPanel, BorderLayout.CENTER);
 			leftTopPanel = new JPanel();
 			leftTopPanel.setLayout(new BoxLayout(leftTopPanel, BoxLayout.Y_AXIS));
@@ -273,8 +289,11 @@ public class Pladsbooking extends JFrame {
 			//Middle panel
 			middlePanel.setLayout(new BorderLayout());
 			middlePanel.setSize(300, 720);
-			middleBottomPanel = addPlane(pladsArray2, panelList2, rightMiddleMiddlePanel);
-			middlePanel.add(middleBottomPanel, BorderLayout.CENTER);
+			if(turRetur) {
+				middleBottomPanel = addPlane(d2, pladsArray2, panelList2, rightMiddleMiddlePanel);
+				middlePanel.add(middleBottomPanel, BorderLayout.CENTER);
+			}
+
 			middleTopPanel = new JPanel();
 			middleTopPanel.setLayout(new BoxLayout(middleTopPanel, BoxLayout.PAGE_AXIS));
 			middlePanel.add(middleTopPanel, BorderLayout.NORTH);
@@ -314,32 +333,25 @@ public class Pladsbooking extends JFrame {
 			JButton next = new JButton("Næste");
 			rightBottomPanel.add(next);
 			next.addActionListener(new ActionListener() {
-				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2);
+					if(turRetur) {
+						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2);
+					} else {
+						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), d1);
+					}
+					
 					
 				}
 			});
 			
 			
+			if(!turRetur) {
+				middlePanel.setVisible(false);
+			}
 			
-			
-			
-			
-			
-//			int counting=0;
-//			for(int i = 0; i<rows; i++) {
-//				for(int j = 0; j<cols; j++) {
-//					counting++;
-//					Plads p = new Plads(counting, false, false, this);
-//					leftBottomPanel.add(p);
-//					panelList.add(p);
-//				}
-//			}
-			
-			
-			this.setSize(1200,720);
+			//this.setSize(1200,720);
+			this.setSize(1200,800);
 			this.setResizable(false);
 			//this.pack();
 			this.setVisible(true);
@@ -392,7 +404,7 @@ public class Pladsbooking extends JFrame {
 	}
 	
 	
-	public JPanel addPlane(PladsArray pladsArray, ArrayList<Plads> panelList, JPanel labelPanel) throws SQLException {		
+	public JPanel addPlane(Departure d, PladsArray pladsArray, ArrayList<Plads> panelList, JPanel labelPanel) throws SQLException {	
 		int rows = pladsArray.getRows();
 		int cols = pladsArray.getCols();
 		JPanel panel = new JPanel();
@@ -401,7 +413,7 @@ public class Pladsbooking extends JFrame {
 		for(int i = 0; i<rows; i++) {
 			for(int j = 0; j<cols; j++) {
 				
-				Plads p = new Plads(counting, false, false, this, pladsArray, labelPanel);
+				Plads p = new Plads(counting, false, false, this, pladsArray, labelPanel, d.getPrice());
 				counting++;
 																				//p.addMouseListener(new MouseListener());
 				panel.add(p);
