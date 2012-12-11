@@ -82,6 +82,14 @@ public class Forside2  extends JFrame implements ActionListener{
 	
 	private void searchRejser() {
 		
+		////////////////////////////////////////////////////////////
+    	JDialog dialog = new JDialog();
+    	dialog.setVisible(true);
+    	JOptionPane.showInputDialog("Daaamn");
+    	String[] options = {"Option1","Option2","Option3" };
+    	JOptionPane.showOptionDialog(dialog, "choose!", "Quite.", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "Option 1");
+    	////////////////////////////////////////////////////
+		
 		//Laver et BorderLayout inde i fane-vinduet rejser
 		panelRejser.setLayout(new BorderLayout(10,10));
 		

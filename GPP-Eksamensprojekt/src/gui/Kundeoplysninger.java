@@ -377,6 +377,12 @@ public class Kundeoplysninger {
             	
             } else if(event.getSource() == importerKunde) {
             	System.out.println("Hent info fra database om eksisterende kunder");
+            	JPopupMenu popupMenu = new JPopupMenu("Importér kunde");
+            	popupMenu.setVisible(true);
+            	JDialog dialog = new JDialog();
+            	dialog.setVisible(true);
+            	dialog.add(popupMenu);
+            	
             }
         }
     }
