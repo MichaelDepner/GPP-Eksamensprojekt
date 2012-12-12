@@ -34,7 +34,7 @@ public class Gennemse extends JFrame{
 	private JButton editCustomerButton, editReservation;
 	//private int antalPassagerer;
 	
-	private JButton tilbage, bestil;
+	private JButton tilbage, bestil, slet, gem, annuller;
 	
 	//Ting, der skal sendes til databasen
 	private ArrayList<Person> passengers;
@@ -61,6 +61,7 @@ public class Gennemse extends JFrame{
 		
 		
 		makeGennemseWindow(true, false);
+		knapperGennemse();
 	}
 	
 	//gennemse enkelt rejse
@@ -73,6 +74,7 @@ public class Gennemse extends JFrame{
 		this.importingCustomer = importingCustomer;
 		
 		makeGennemseWindow(false, false);
+		knapperGennemse();
 	}
 	
 	//gennemse og ændre eksisterende booking
@@ -89,6 +91,11 @@ public class Gennemse extends JFrame{
 		}
 		
 		makeGennemseWindow(false, true);
+		knapperRedigering();
+	}
+	
+	public JFrame returnMe() {
+		return this;
 	}
 
 
@@ -271,6 +278,15 @@ public class Gennemse extends JFrame{
 		total.setFont(new Font("String", Font.BOLD, 14));
 		panelPris.add(total);
 
+		setPreferredSize(new Dimension(640, 500));
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		pack();
+		setVisible(true);
+		setResizable(false);
+
+	}
+	
+	private void knapperGennemse() {
 		//Knapper
 		panelKnapper = new JPanel();
 		panel.add(panelKnapper);
@@ -282,13 +298,22 @@ public class Gennemse extends JFrame{
 		panelKnapper.add(bestil);
 
 		addActionListeners();
+	}
+	
+	private void knapperRedigering() {
+		//Knapper
+		panelKnapper = new JPanel();
+		panel.add(panelKnapper);
+		panelKnapper.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
 
-		setPreferredSize(new Dimension(640, 500));
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		pack();
-		setVisible(true);
-		setResizable(false);
+		slet = new JButton("Slet");
+		panelKnapper.add(slet);
+		gem = new JButton("Gem");
+		panelKnapper.add(gem);
+		annuller = new JButton("Tilbage");
+		panelKnapper.add(annuller);
 
+		addActionListeners();
 	}
 	
 	//tilføj pladsers navne
@@ -325,6 +350,9 @@ public class Gennemse extends JFrame{
     private void addActionListeners(){
     	tilbage.addActionListener(new Listener());
     	bestil.addActionListener(new Listener());
+    	slet.addActionListener(new Listener());
+    	gem.addActionListener(new Listener());
+    	annuller.addActionListener(new Listener());
     }
     
     private Gennemse getThis() {
@@ -383,11 +411,19 @@ public class Gennemse extends JFrame{
     					System.out.println("passengerString: "+passengerString);
     					System.out.println("customerId: "+customerId);
     				}
-
+    				
+    			JOptionPane.showMessageDialog(returnMe(), "Bestillingen er gennemført. Du kan lukke vinduerne nu.");
+					
     			} catch (SQLException e) {
     				System.out.println("Something SQL went wrong when making passengers");
     				e.printStackTrace();
     			}
+    		} else if(event.getSource() == gem) {
+    			JOptionPane.showMessageDialog(returnMe(), "Ændringerne er gemt.");
+    		} else if(event.getSource() == annuller) {
+    			dispose();
+    		} else if(event.getSource() == slet) {
+    			JOptionPane.showMessageDialog(returnMe(), "Bookingen er slettet.");
     		} else if(event.getSource() == editCustomerButton) {
     			Kundeoplysninger ko = new Kundeoplysninger(customer, getThis());
     		} else if(event.getSource() == editReservation) {

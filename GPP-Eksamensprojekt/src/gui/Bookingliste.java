@@ -148,8 +148,11 @@ public class Bookingliste extends JFrame {
     	}
     	
     	//sætter bredden af kolonner
-    	setWidth(table, 0, 230);
-    	setWidth(table, 1, 120);
+    	setWidth(table, 0, 130);
+    	setWidth(table, 1, 100);
+    	setWidth(table, 2, 160);
+    	setWidth(table, 3, 150);
+    	
     	
     	return table;
     }

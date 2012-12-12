@@ -394,7 +394,7 @@ public class Pladsbooking extends JFrame {
 							Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 							db.queryUpdateBookingSeats(b.getId(), seatNums1);
 							
-							JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning");
+							JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning.");
 							
 							
 						} catch (SQLException e) {
