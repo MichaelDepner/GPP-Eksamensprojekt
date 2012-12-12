@@ -52,7 +52,8 @@ public class Departure {
 	}
 	
 	public String getDepartureTime() {
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'klokken' HH:mm:ss");
+		//DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'klokken' HH:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateFormatted = formatter.format(departureTime);
 		return dateFormatted;
 	}
@@ -64,14 +65,15 @@ public class Departure {
 	}
 	
 	public String getArrivalTime() {
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'klokken' HH:mm:ss");
+		//DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'klokken' HH:mm:ss");
+		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String dateFormatted = formatter.format(arrivalTime);
 		return dateFormatted;
 	}
 	
 	public String getTravelTime() {
 		long diffInMillies = arrivalTime.getTime() - departureTime.getTime();
-		Time t = new Time(diffInMillies-3600600);
+		Time t = new Time(diffInMillies-3600000);
 		return t.toString();
 	}
 	

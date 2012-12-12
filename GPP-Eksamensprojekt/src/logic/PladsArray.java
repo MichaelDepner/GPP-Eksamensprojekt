@@ -11,6 +11,8 @@ public class PladsArray {
 	private Database db;
 	private int departureId;
 	private ArrayList<Plads> reservations = new ArrayList<>();
+//	private String rebookingString;
+//	private boolean rebooking;
 	//private int columns;
 	//private int rows;
 	//private Plads[] pladser;
@@ -23,12 +25,12 @@ public class PladsArray {
 	
 	public PladsArray(int departureId) throws SQLException {
 		this.departureId = departureId;
-		//ArrayList<Integer> reservations = findReservations();
-		
-		//overblikArray = new int[getCols()][getRows()];
-		
-		
 	}
+	
+//	public PladsArray(int departureId, String rebookingString) {
+//		this.departureId = departureId;
+//		rebooking = true;
+//	}
 	
 	public void addReservation(Plads p) {
 		reservations.add(p);
@@ -97,6 +99,10 @@ public class PladsArray {
 		}
 		Collections.sort(emptyColumns);
 		return emptyColumns;
+	}
+	
+	public void makeReservationList() {
+		
 	}
 	
 	

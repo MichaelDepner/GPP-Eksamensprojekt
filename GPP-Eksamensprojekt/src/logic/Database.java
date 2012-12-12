@@ -64,7 +64,6 @@ public class Database {
 	
 	public ResultSet queryGetReservedSeats(int departureId) throws SQLException {
 		String query;
-//										System.out.println("finding reserved seats from departureId "+departureId);
 		query = "SELECT " +
 				"Booking.seats " +
 				"FROM " +
@@ -72,12 +71,7 @@ public class Database {
 				"WHERE " +
 				"Booking.departure_id = " + departureId;
 		ResultSet rs = this.execute(query);
-//		System.out.println(query);
-		//while (rs.next()) {
-		//	System.out.println(rs.getString("seats"));
-		//}
-		return rs;
-				
+		return rs;	
 	}
 	
 	public ResultSet queryGetAirplane(int departureId) throws SQLException {
@@ -90,6 +84,20 @@ public class Database {
 				"Departures.id = " + departureId;
 		ResultSet rs = this.execute(query);
 		return rs;
+	}
+	
+	public Person queryGetPassenger(int passengerId) throws SQLException {
+		String query;
+		Person p;
+		query = "SELECT " +
+				"* " +
+				"FROM " +
+				"Person " +
+				"WHERE Person.id = " + passengerId;
+		ResultSet rs = this.execute(query);
+		rs.next();
+		p = new Person(rs.getString("Firstname"), rs.getString("Surname"), rs.getString("Birthday"));
+		return p;
 	}
 	
 	public ResultSet queryGetRows(int departureId) throws SQLException {
@@ -350,14 +358,14 @@ public class Database {
 	}
 
 	public ArrayList<Booking> queryFindBookingsMadeBy(int customerId) throws SQLException {
-		ArrayList<Booking> bookings = new ArrayList();
+		ArrayList<Booking> bookings = new ArrayList<Booking>();
 		String query;
 		query = "SELECT " +
 				"* " +
 				"FROM " +
 				"Booking " +
 				"WHERE " +
-				"Booking.passenger_ids = " + customerId;
+				"Booking.customer_id = " + customerId;
 		ResultSet rs = this.execute(query);
 		 
 		while(rs.next()) {
@@ -366,9 +374,40 @@ public class Database {
 			String seats = rs.getString("seats");
 			String passengers = rs.getString("passenger_ids");
 			
-			Booking b = new Booking(dId, seats, passengers);
+			Booking b = new Booking(dId, seats, passengers, true);
+			b.setId(id);
 			bookings.add(b);
 		}
 		return bookings;
+	}
+	
+	public void queryUpdateCustomer(int id, String firstname, String surname, String address, String city, String postalCode, 
+			String country, String email, String phoneNumber) throws SQLException {
+		String query;
+		query = "UPDATE " +
+				"Customer " +
+				"SET " +
+				"Firstname = '" + firstname +"', " +
+				"Surname = '" + surname + "', " +
+				"Address = '" + address + "', " +
+				"City = '" + city + "', " +
+				"Postal_Code = '" + postalCode + "', " +
+				"Country = '" + country + "', " +
+				"Email = '" + email + "', " +
+				"Phone_Number = '" + phoneNumber + "' " +
+				"WHERE " +
+				"Customer.id = " +id;
+		this.execute(query);
+	}
+	
+	public void queryUpdateBookingSeats(int id, String seats) throws SQLException {
+		String query;
+		query = "UPDATE " +
+				"Booking " +
+				"SET " +
+				"seats = '" + seats +"' " +
+				"WHERE " +
+				"Booking.id = " +id;
+		this.execute(query);
 	}
 }

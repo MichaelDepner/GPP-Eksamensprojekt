@@ -95,7 +95,7 @@ public class Afgangsliste extends JFrame {
     	
 
     	//tilføjer tabs til departures fundet før den valgte dato
-    	addTabsBeforeDate(as, jtp);
+    	//addTabsBeforeDate(as, jtp);
 
     	//Opretter panels
     	jp1Udrejse = new JPanel();
@@ -119,7 +119,7 @@ public class Afgangsliste extends JFrame {
     	jtp.addTab("28/11", jp1Udrejse);
 
     	//tilføjer tabs til departures fundet efter den valgte dato
-    	addTabsAfterDate(as, jtp);
+    	//addTabsAfterDate(as, jtp);
 
     	if(turRetur) {
     		labelHjemrejse = new JLabel();
@@ -224,14 +224,6 @@ public class Afgangsliste extends JFrame {
     		public void moveColumn(int columnIndex, int newIndex) { 
     		}   
     	});  
-
-
-
-    	//    	table.setModel(new DefaultTableModel() {
-    	//    		public boolean isCellEditable(int row, int column){  
-    	//    			return false;  
-    	//    		} 
-    	//    	});
 
     	//Laver columns
     	model.addColumn("Pris"); 
@@ -412,4 +404,4 @@ public class Afgangsliste extends JFrame {
 
     	}
     }
-    }
+}

@@ -102,6 +102,14 @@ public class Plads extends JPanel {
 	}
 	
 	
+	public void mark() {
+		isReserved = false;
+		isMarked = true;
+		addReservation();
+		Color();
+	}
+	
+	
 	private class MouseListener extends MouseAdapter {
 		public void mousePressed(MouseEvent e) {
 			if(!isReserved && !isMarked && !isAisle) {

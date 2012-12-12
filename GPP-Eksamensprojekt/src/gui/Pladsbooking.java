@@ -12,6 +12,8 @@ import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import logic.Booking;
+import logic.Customer;
 import logic.Database;
 import logic.Departure;
 import logic.Plads;
@@ -34,7 +36,9 @@ public class Pladsbooking extends JFrame {
 	private JPanel rightMiddleTopPanel, rightMiddleMiddlePanel;
 	private ArrayList<JPanel> labelList = new ArrayList<>();
 	private JLabel udrejseLabel, hjemrejseLabel;
-	private boolean turRetur;
+	private boolean turRetur, rebooking;
+	private int maxReservations;
+	private Booking b;
 	
 	private Departure d1, d2;
 	
@@ -50,6 +54,41 @@ public class Pladsbooking extends JFrame {
 		} else {
 			makeBookingWindow(true);
 		}
+	}
+
+	//når man hurtigt skal bruge information fra et pladsarray - lige nu bliver pladsarrays kun udfyldt FRA denne gui class. dumt, dumt, dumt!
+	public PladsArray getPladsArray() {
+		return pladsArray1;
+	}
+
+
+	//Hvis vi skal ændre i en allerede eksisterende booking
+	public Pladsbooking(int departureId, Booking b, Customer c) throws SQLException {
+		this.b = b;
+		String oldReservation = b.getSeats();
+		rebooking = true;
+		pladsArray1 = new PladsArray(departureId);
+		emptyColumns1 = pladsArray1.getEmptyCols();
+		turRetur = false;
+		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+		d1 = db.queryGetDeparture(departureId);
+		db.close();
+		makeBookingWindow(false);
+		reservations(panelList1, pladsArray1);
+		
+		//deler oldReservation stringen op i et array
+		ArrayList<Integer> oldReservations = new ArrayList<Integer>();
+		String[] strArray = oldReservation.split(" ");
+		for(int i=0; i<strArray.length; i++) {
+			oldReservations.add(Integer.parseInt(strArray[i]));
+		}
+		//laver de gamle sæder 'markeret' i stedet for reserveret
+		for(int i=0; i<oldReservations.size(); i++) {
+			panelList1.get(oldReservations.get(i)).mark();
+		}
+		maxReservations = oldReservations.size();
+		
+		
 	}
 	
 	public void changePreview(int departureId) throws SQLException {
@@ -105,6 +144,8 @@ public class Pladsbooking extends JFrame {
 		reservations(panelList1, pladsArray1);
 	}
 	
+	
+	
 
 //	private void reservations() throws SQLException {
 //		ArrayList<Integer> reservations = pladsArray1.findReservations();
@@ -135,6 +176,7 @@ public class Pladsbooking extends JFrame {
 			int r = reservations.get(i);
 			panelList.get(r).changeReservation();
 		}
+		
 		
 		int counter = 0;
 		for(int i=0; i<rows; i++) {
@@ -337,6 +379,27 @@ public class Pladsbooking extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					if(turRetur) {
 						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2);
+					} else if(rebooking) {
+						try {
+							
+							String seatNums1 = "";
+							//lav string med id på reserverede pladser ud
+		    				for(int j=0; j<pladsArray1.getReservations().size(); j++) {
+		    					int num = pladsArray1.getReservations().get(j).getSeatNo();
+		    					seatNums1 = num+" "+seatNums1;
+		    				}
+		    				
+		    				
+							Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+							db.queryUpdateBookingSeats(b.getId(), seatNums1);
+							
+							JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning");
+							
+							
+						} catch (SQLException e) {
+							System.out.println("Something went wrong when editing the booking");
+							e.printStackTrace();
+						}
 					} else {
 						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), d1);
 					}
@@ -367,6 +430,10 @@ public class Pladsbooking extends JFrame {
 //		rightMiddlePanel.add(seat);
 //		labelList.add(seat);
 //	}
+	public JFrame returnMe() {
+		return this;
+	}
+	
 	public void addSeatLabel(Plads p, JPanel panel) {
 		JLabel label = new JLabel(p.toString());		
 		panel.add(label);
