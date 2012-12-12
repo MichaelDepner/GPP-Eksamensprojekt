@@ -137,7 +137,7 @@ public class Afgangsliste extends JFrame {
     		//github.com/Mibias/GPP-Eksamensprojekt.git
 
     		//Tilføjer panel jp1Hjemrejse til jtp
-    		jtp2.addTab("hej", jp1Hjemrejse);
+    		jtp2.addTab(d.getDepartureDate(), jp1Hjemrejse);
     	}
 
     	//Laver en next-knap
