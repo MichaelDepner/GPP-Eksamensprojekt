@@ -297,7 +297,8 @@ public class Gennemse extends JFrame{
 		bestil = new JButton("Bestil");
 		panelKnapper.add(bestil);
 
-		addActionListeners();
+		tilbage.addActionListener(new Listener());
+    	bestil.addActionListener(new Listener());
 	}
 	
 	private void knapperRedigering() {
@@ -313,7 +314,9 @@ public class Gennemse extends JFrame{
 		annuller = new JButton("Tilbage");
 		panelKnapper.add(annuller);
 
-		addActionListeners();
+    	slet.addActionListener(new Listener());
+    	gem.addActionListener(new Listener());
+    	annuller.addActionListener(new Listener());
 	}
 	
 	//tilføj pladsers navne
@@ -346,15 +349,6 @@ public class Gennemse extends JFrame{
 		
 	}
     
-    //Tilføjer actionListeners til de to knapper
-    private void addActionListeners(){
-    	tilbage.addActionListener(new Listener());
-    	bestil.addActionListener(new Listener());
-    	slet.addActionListener(new Listener());
-    	gem.addActionListener(new Listener());
-    	annuller.addActionListener(new Listener());
-    }
-    
     private Gennemse getThis() {
     	return this;
     }
@@ -364,6 +358,7 @@ public class Gennemse extends JFrame{
     	public void actionPerformed(ActionEvent event){
     		if(event.getSource() == tilbage) {
     			System.out.println("Going back");
+    			dispose();
     		} else if(event.getSource() == bestil) {
     			System.out.println("Bestiller");
 
