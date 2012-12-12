@@ -27,18 +27,29 @@ public class Plads extends JPanel {
 	 * @param isReserved Pladsens status
 	 * @param isAisle Er pladsen en mellemgang?
 	 */
-	public Plads(int seatNo, boolean isReserved, boolean isAisle, Pladsbooking pb, PladsArray pa, JPanel panel) {
+	public Plads(int seatNo, boolean isReserved, boolean isAisle, Pladsbooking pb, PladsArray pa, JPanel panel, int price) {
 		this.seatNo = seatNo;
 		this.isReserved = isReserved;
 		this.isAisle = isAisle;
 		this.pa = pa;
 		this.pb = pb;
 		this.panel = panel;
+		this.price = price;
 		Color();
-		addMouseListener(new MouseListener());
-		
-		price = 600;
-			
+		addMouseListener(new MouseListener());		
+	}
+	
+	public Plads(int seatNo, Pladsbooking pb) {
+		this.seatNo = seatNo;
+		isReserved = false;
+		isAisle = false;
+		this.pa = pa;
+		this.pb = pb;
+		Color();
+	}
+	
+	public int getSeatNo() {
+		return seatNo;
 	}
 	
 	
@@ -88,6 +99,14 @@ public class Plads extends JPanel {
 	public void removeReservation() {
 		pa.removeReservation(this);
 		pb.addReservationLabels(pa, panel);
+	}
+	
+	
+	public void mark() {
+		isReserved = false;
+		isMarked = true;
+		addReservation();
+		Color();
 	}
 	
 	

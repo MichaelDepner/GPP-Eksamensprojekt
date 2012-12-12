@@ -21,6 +21,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	private JXDatePicker udrejseDate, hjemrejseDate;
 	private JButton searchButton, searchBooking;
 	private JComboBox searchList,searchList1,searchList2;
+	private boolean turReturBool = false;
 	
 	public Forside2(){
 		setTitle("Forside");
@@ -222,30 +223,60 @@ public class Forside2  extends JFrame implements ActionListener{
 		panelSouth.add(searchBooking);
 		searchBooking.addActionListener(this);
 	}
-	
+
 	public void actionPerformed(ActionEvent event) {
-	    Object source = event.getSource();
-	    if(source.equals(searchButton)) {
-	    	try {
-				Afgangsliste afgange = new Afgangsliste(
-						udrejseDate.getDate(),hjemrejseDate.getDate(), 
-						(String)searchList1.getSelectedItem(), 
-						(String)searchList2.getSelectedItem());
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				System.out.println("SQL fejl");
-				e.printStackTrace();
+		Object source = event.getSource();
+		if(source.equals(searchButton)) {
+			if(turReturBool) {
+				try {
+					Afgangsliste afgange = new Afgangsliste(
+							udrejseDate.getDate(),hjemrejseDate.getDate(), 
+							(String)searchList1.getSelectedItem(), 
+							(String)searchList2.getSelectedItem());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					System.out.println("SQL fejl");
+					e.printStackTrace();
+				}
+			} else if (!turReturBool) {
+				try {
+					Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(), (String)searchList1.getSelectedItem(),
+							(String)searchList2.getSelectedItem());
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					System.out.println("SQL fejl");
+					e.printStackTrace();
+				}
 			}
-	    }
-	    else if(source == turRetur)
+		}
+		else if(source == turRetur)
 		{
 			panelRight.setVisible(true);
+			turReturBool = true;
 		}
 	    else if(source == enkelt) {
 	    	panelRight.setVisible(false);
+	    	turReturBool = false;
 	    }
 	    else if(source == searchBooking) {
 	    	System.out.println("Søger bookinger");
+	    	String searchingFor = searchList.getSelectedItem().toString();
+	    	String arg = bookingText.getText();
+	    	System.out.println("Searching for: "+searchingFor+", arg: "+arg);
+	    	
+	    	//'oversætter' til database-relevant søgning:
+	    	if(searchingFor == "Adresse") searchingFor = "Customer.address";
+	    	if(searchingFor == "E-mail") searchingFor = "Customer.email";
+	    	if(searchingFor == "Tlf.nr.") searchingFor = "Customer.phone_number";
+	    	
+	    	try {
+				Bookingliste bl = new Bookingliste(searchingFor, arg);
+			} catch (SQLException e) {
+				System.out.println("SQL problemer ved dannelse af bookingliste!");
+				e.printStackTrace();
+			}
+	    	
+	    	
 	    }
 	    else if(source == bookingText) {
 	    	

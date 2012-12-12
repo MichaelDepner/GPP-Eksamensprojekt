@@ -10,19 +10,19 @@ public class Person {
 		this.birthday = birthday;
 	}
 	
-	public String GetFirstname() {
+	public String getFirstname() {
 		return firstname;
 	}
 	
-	public String GetSurname() {
+	public String getSurname() {
 		return surname;
 	}
 	
-	public String GetBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 	
-	public String GetFullName() {
+	public String getFullName() {
 		return firstname+" "+surname;
 	}
 }

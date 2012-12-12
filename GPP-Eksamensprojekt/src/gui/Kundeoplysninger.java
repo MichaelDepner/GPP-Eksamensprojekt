@@ -5,12 +5,14 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import logic.Customer;
+import logic.Database;
+import logic.Departure;
 import logic.Person;
 import logic.Plads;
-import logic.Reservation;
 
 public class Kundeoplysninger {
 
@@ -29,7 +31,7 @@ public class Kundeoplysninger {
     private JTextField postal, country, birthday;
     private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress;
 	private JLabel labelCity, labelPostal, labelCountry, labelBirthday;
-    private JButton back, next, importerKunde;
+    private JButton back, next, importerKunde, confirm;
     private Container contentPane;
     private JPanel panel1, panel2, panel6, panelNorth;
     private JPanel panel, panelHeader, panelCenter, panelEast;
@@ -40,17 +42,49 @@ public class Kundeoplysninger {
     private ArrayList<JTextField> firstnameList = new ArrayList<>();
     private ArrayList<JTextField> surnameList = new ArrayList<>();
     private ArrayList<JTextField> birthdayList = new ArrayList<>();
-	
-    public Kundeoplysninger(ArrayList<Plads> reservations) {
-    	this.reservations1 = reservations;
-        makeFrame();
-        addActionListeners();
-    }
+    private boolean turRetur;
+    private boolean importingCustomer = false;
+    private boolean changingExistingCustomer = false;
+    Customer importedCustomer;
+    Customer c;
+    Gennemse g;
     
-    public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2) {
+    private Departure d1, d2;
+    
+    private String firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS;
+	
+//    public Kundeoplysninger(ArrayList<Plads> reservations) {
+//    	this.reservations1 = reservations;
+//        makeFrame();
+//        addActionListeners();
+//    }
+    
+    public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2, Departure d1, Departure d2) {
+    	turRetur = true;
     	this.reservations1 = reservations1;
     	this.reservations2 = reservations2;
+    	this.d1 = d1;
+    	this.d2 = d2;
     	makeFrame();
+    	addActionListeners();
+    }
+    
+    public Kundeoplysninger(ArrayList<Plads> reservations1, Departure d1) {
+    	turRetur = false;
+    	this.reservations1 = reservations1;
+    	this.d1 = d1;
+    	makeFrame();
+    	addActionListeners();
+    }
+    
+    //når vi skal ændre i en allerede eksisterende kunde
+    public Kundeoplysninger(Customer c, Gennemse g) {
+    	this.c = c;
+    	this.g = g;
+    	turRetur = false;
+    	changingExistingCustomer = true;
+    	makeFrame();
+    	importCustomer(c);
     	addActionListeners();
     }
     
@@ -83,12 +117,16 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
-        
-        int counter = 0;
-        for(int i=0; i<reservations1.size(); i++) {
-        	counter++;
+
+        if(!changingExistingCustomer) {
+        	int counter = 0;
+        	for(int i=0; i<reservations1.size(); i++) {
+        		counter++;
+        	}
+        	centerPanel(counter);
+        } else {
+        	centerPanel(0);
         }
-        centerPanel(counter);
         
         /**
          //Tilføjer panel1 og panel2 til henholdsvist CENTER og EAST,
@@ -171,13 +209,18 @@ public class Kundeoplysninger {
         panel6 = new JPanel();
         panel.add(panel6, BorderLayout.SOUTH);
         panel6.setLayout(new FlowLayout());
-        
-        //Opretter knapperne, og lægger dem i panel6
-        back = new JButton("Tilbage");
-        next = new JButton("Næste");
-        panel6.add(back);
-        panel6.add(next);
-        
+
+        if(!changingExistingCustomer) {
+        	//Opretter knapperne, og lægger dem i panel6
+        	back = new JButton("Tilbage");
+        	next = new JButton("Næste");
+        	panel6.add(back);
+        	panel6.add(next);
+        } else {
+        	confirm = new JButton("Bekræft ændringer");
+        	panel6.add(confirm);
+        }
+
         
         frame.setVisible(true);
     }
@@ -232,7 +275,10 @@ public class Kundeoplysninger {
         panelCenter.add(flowPanel2);
         JLabel header = new JLabel("Indtast passageroplysninger her");
         header.setFont(new Font("String", Font.BOLD, 14));
-        flowPanel2.add(header);
+
+        if(!changingExistingCustomer) {
+        	flowPanel2.add(header);
+        }
         
         
         
@@ -297,35 +343,40 @@ public class Kundeoplysninger {
             holder.add(textFieldPanel);
             
             //Indsætter TextFields i textFieldPanel
-            inputTextFields();
-            textFieldPanel.add(firstname);
-            textFieldPanel.add(surname);
-            textFieldPanel.add(birthday);
+            //inputTextFields();
+            JTextField nameField = new JTextField("Insert name here");
+            JTextField surnameField = new JTextField("Insert surname here");
+            JTextField birthdayField = new JTextField("Insert birthday here");
+            textFieldPanel.add(nameField);
+            textFieldPanel.add(surnameField);
+            textFieldPanel.add(birthdayField);
             
-            System.out.println("OPRETTER");;
-            
-            firstnameList.add(firstname);
-            surnameList.add(surname);
-            birthdayList.add(birthday);
+            firstnameList.add(nameField);
+            surnameList.add(surnameField);
+            birthdayList.add(birthdayField);
     	}
     }
-    
+
     //Tilføjer actionListeners til de to knapper
     private void addActionListeners(){
-    	back.addActionListener(new Listener());
-    	next.addActionListener(new Listener());
-    	importerKunde.addActionListener(new Listener());
+    	if(!changingExistingCustomer) {
+    		back.addActionListener(new Listener());
+    		next.addActionListener(new Listener());
+    		importerKunde.addActionListener(new Listener());
+    	} else {
+    		confirm.addActionListener(new Listener());
+    	}
     }
-    
+
     private void makeCustomer() {
-    	String firstnameS = firstname.getText();
-    	String surnameS = surname.getText();
-    	String emailS = email.getText();
-    	String phoneS = phoneNumber.getText();
-    	String addressS = address.getText();
-    	String cityS = city.getText();
-    	String postalCodeS = postal.getText();
-    	String countryS = country.getText();
+    	firstnameS = firstname.getText();
+    	surnameS = surname.getText();
+    	emailS = email.getText();
+    	phoneS = phoneNumber.getText();
+    	addressS = address.getText();
+    	cityS = city.getText();
+    	postalCodeS = postal.getText();
+    	countryS = country.getText();
     	
     	customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
     }
@@ -340,6 +391,18 @@ public class Kundeoplysninger {
     	}
     }
     
+    private void importCustomer(Customer c) {
+    	firstname.setText(c.GetFirstname());
+    	surname.setText(c.GetSurname());
+    	email.setText(c.GetEmail());
+    	phoneNumber.setText(c.GetPhone());
+    	address.setText(c.GetAdress());
+    	city.setText(c.GetCity());
+    	postal.setText(c.GetPostalCode());
+    	country.setText(c.GetCountry());
+    }
+    
+    
     //Lytter til knapperne
     private class Listener implements ActionListener {
         public void actionPerformed(ActionEvent event){
@@ -347,14 +410,80 @@ public class Kundeoplysninger {
                 System.out.println("Going back");
             } else if(event.getSource() == next) {
             	
-            	makeCustomer();
+            	if(importingCustomer) {
+            		customer = importedCustomer;
+            	} else {
+            		makeCustomer();
+            	}
+            	
             	makePeople();
             	
-            	System.out.println("Going to the next step");
+            	if(turRetur) {
+            		Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, customer, d1, d2, importingCustomer);
+            	} else {
+            		Gennemse gennemse = new Gennemse(reservations1, d1, passengers, customer, importingCustomer);
+            	}
+            	
             	
             	
             } else if(event.getSource() == importerKunde) {
             	System.out.println("Hent info fra database om eksisterende kunder");
+            	String[] options = {"Telefonnummer","Adresse","Email-adresse" };
+            	int chosenOption = JOptionPane.showOptionDialog(frame, "Vælg hvilken information du vil bruge til at importere kunde", "Quite.", JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "");
+            	String option = options[chosenOption];
+            	String input = JOptionPane.showInputDialog("Indtast eksisterende kundes "+option);
+            	
+            	//laver string om til acceptabelt database input
+            	if(option == "Telefonnummer") option = "Customer.phone_number";
+            	if(option == "Adresse") option = "Customer.address";
+            	if(option == "Email-adresse") option = "Customer.email";
+            	
+            	Database db;
+				try {
+					db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+					importedCustomer = db.queryFindCustomer(option, input);
+	            	db.close();
+	            	importCustomer(importedCustomer);
+	            	
+	            	firstname.setEditable(false);
+	            	surname.setEditable(false);
+	            	email.setEditable(false);
+	            	phoneNumber.setEditable(false);
+	            	address.setEditable(false);
+	            	city.setEditable(false);
+	            	postal.setEditable(false);
+	            	country.setEditable(false);
+	            	
+	            	importingCustomer = true;
+	            	
+				} catch (SQLException e) {
+					System.out.println("Error when contacting SQL server.");
+					e.printStackTrace();
+				}
+            } else if(event.getSource() == confirm) {
+            	
+            	firstnameS = firstname.getText();
+            	surnameS = surname.getText();
+            	emailS = email.getText();
+            	phoneS = phoneNumber.getText();
+            	addressS = address.getText();
+            	cityS = city.getText();
+            	postalCodeS = postal.getText();
+            	countryS = country.getText();
+            	
+            	try {
+            		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+            		db.queryUpdateCustomer(c.getId(), firstnameS, surnameS, addressS, cityS, postalCodeS, countryS, emailS, phoneS);
+            		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+            		g.reload(customer);
+            		frame.dispose();
+            		
+            	} catch (SQLException e) {
+            		System.out.println("Error when updating customer.");
+            		e.printStackTrace();
+            	}
+            	
+            	
             }
         }
     }

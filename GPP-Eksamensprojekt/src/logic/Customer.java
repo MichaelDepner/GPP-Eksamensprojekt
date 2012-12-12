@@ -3,6 +3,7 @@ package logic;
 public class Customer {
 	
 	private String firstname, surname, email, phone, address, city, postalCode, country;
+	private int id;
 	
 	public Customer(String firstname, String surname, String email, String phone, String address, String city,
 			String postalCode, String country) {
@@ -14,6 +15,15 @@ public class Customer {
 		this.city = city;
 		this.postalCode = postalCode;
 		this.country = country;
+		System.out.println("Making customer: "+firstname+" "+surname+" "+email+" "+phone+" "+address+" "+city+" "+postalCode+" "+country);
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	public String GetFirstname() {
