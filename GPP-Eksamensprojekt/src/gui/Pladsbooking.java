@@ -267,6 +267,7 @@ public class Pladsbooking extends JFrame {
 			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
 			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
 			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
+			rightPanel.setSize(new Dimension(500,700));
 			
 			rightPanelTitle = new JLabel("Info");
             rightPanelTitle.setFont(new Font("String", Font.BOLD, 16));
@@ -414,7 +415,7 @@ public class Pladsbooking extends JFrame {
 			}
 			
 			//this.setSize(1200,720);
-			this.setSize(1200,800);
+			this.setSize(1100,700);
 			this.setResizable(false);
 			//this.pack();
 			this.setVisible(true);

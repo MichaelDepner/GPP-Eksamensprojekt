@@ -158,11 +158,12 @@ public class Gennemse extends JFrame{
 		udrejse = new JLabel("Udrejse");
 		udrejse.setFont(new Font("String", Font.BOLD, 16));
 		panelUdrejse.add(udrejse);
-		airport = new JLabel(d1.getDepartureAirportName() + " "+ d1.getDepartureAirportAbbrevation() + " - " + d1.getArrivalAirportName() + " " + d1.getArrivalAirportAbbrevation());
+		airport = new JLabel(d1.getDepartureAirportName() + " "+ d1.getDepartureAirportAbbrevation() 
+				+ " - " + d1.getArrivalAirportName() + " " + d1.getArrivalAirportAbbrevation());
 		panelUdrejse.add(airport);
-		afgang = new JLabel("Afgang: " + d1.getDepartureTime());
+		afgang = new JLabel("Afgang: " + d1.getDepartureDate() + " "+ d1.getDepartureTime());
 		panelUdrejse.add(afgang);
-		ankomst = new JLabel("Ankomst: " + d1.getArrivalTime());
+		ankomst = new JLabel("Ankomst: " + d1.getDepartureDate() + " "  + d1.getArrivalTime());
 		panelUdrejse.add(ankomst);
 		rejsetid = new JLabel("Rejsetid: " + d1.getTravelTime());
 		panelUdrejse.add(rejsetid);
@@ -181,9 +182,9 @@ public class Gennemse extends JFrame{
 			panelHjemrejse.add(hjemrejse);
 			airport = new JLabel(d2.getDepartureAirportName() + " "+ d2.getDepartureAirportAbbrevation() + " - " + d2.getArrivalAirportName() + " " + d2.getArrivalAirportAbbrevation());
 			panelHjemrejse.add(airport);
-			afgang = new JLabel("Afgang: " + d2.getDepartureTime());
+			afgang = new JLabel("Afgang: " + d2.getDepartureDate() + " " + d2.getDepartureTime());
 			panelHjemrejse.add(afgang);
-			ankomst = new JLabel("Ankomst: " + d2.getArrivalTime());
+			ankomst = new JLabel("Ankomst: " + d2.getDepartureDate() + " " + d2.getArrivalTime());
 			panelHjemrejse.add(ankomst);
 			rejsetid = new JLabel("Rejsetid: " + d2.getTravelTime());
 			panelHjemrejse.add(rejsetid);

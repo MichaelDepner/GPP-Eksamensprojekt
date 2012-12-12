@@ -323,7 +323,7 @@ public class Kundeoplysninger {
             flowPanel.add(passengerHeader);
             
             JPanel holder = new JPanel();
-            holder.setLayout(new FlowLayout());
+            holder.setLayout(new FlowLayout(FlowLayout.LEFT));
             panelCenter.add(holder);
             
             JPanel labelPanel = new JPanel();

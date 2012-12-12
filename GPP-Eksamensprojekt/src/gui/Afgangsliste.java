@@ -30,6 +30,7 @@ public class Afgangsliste extends JFrame {
 	private Pladsbooking pb;
 	private JTable departureTable, arrivalTable;
 	private boolean turRetur;
+	private Departure d;
 	
 	//holder styr på popup vinduet
 	private int popupId;
@@ -106,8 +107,9 @@ public class Afgangsliste extends JFrame {
     	
     	//jp1Hjemrejse.setLayout(new BorderLayout());
 
-    	labelUdrejse = new JLabel();
-    	labelUdrejse.setText("Onsdag d. 28. november 2012 " + "Udrejse - Lufthavn");
+    	labelUdrejse = new JLabel("Udrejsedato og lufthavne");
+    	//labelUdrejse.setText(d.getDepartureDate()+ " " + d.getDepartureAirportName() 
+    	//											+ " " + d.getArrivalAirportName());
     	labelUdrejse.setFont(new Font("String", Font.BOLD, 14));
     	jp1Udrejse.add(labelUdrejse);
 
@@ -116,14 +118,15 @@ public class Afgangsliste extends JFrame {
     	//jp1Udrejse.add(departureTable, BorderLayout.CENTER);
     	jp1Udrejse.add(departureTable);
     	//Tilføjer panel jp1Udrejse til jtp
-    	jtp.addTab("28/11", jp1Udrejse);
+    	jtp.addTab(d.getDepartureDate(), jp1Udrejse);
 
     	//tilføjer tabs til departures fundet efter den valgte dato
     	//addTabsAfterDate(as, jtp);
 
     	if(turRetur) {
-    		labelHjemrejse = new JLabel();
-    		labelHjemrejse.setText("Onsdag d. 28. november 2012 " + "Hjemrejse - Lufthavn");
+    		labelHjemrejse = new JLabel("Udrejsedato og lufthavne");
+    		//labelHjemrejse.setText(d.getDepartureDate()+ " " + d.getDepartureAirportName() 
+    		//												+ d.getArrivalAirportName());
     		labelHjemrejse.setFont(new Font("String", Font.BOLD, 14));
     		jp1Hjemrejse.add(labelHjemrejse);
 
@@ -134,7 +137,7 @@ public class Afgangsliste extends JFrame {
     		//github.com/Mibias/GPP-Eksamensprojekt.git
 
     		//Tilføjer panel jp1Hjemrejse til jtp
-    		jtp2.addTab("28/11", jp1Hjemrejse);
+    		jtp2.addTab("hej", jp1Hjemrejse);
     	}
 
     	//Laver en next-knap
@@ -235,7 +238,7 @@ public class Afgangsliste extends JFrame {
 
     	//Tilføjer rejser
     	for(int i=0; i<departures.size(); i++) {
-    		Departure d = dp.get(i);
+    		d = dp.get(i);
     		//TODO mangler at tilføje priser i databasen
     		String price = d.getPrice()+"";
     		String time = d.getDepartureTime()+" - "+d.getArrivalTime();
@@ -245,15 +248,16 @@ public class Afgangsliste extends JFrame {
     		String seats = " ";//d.getSeats();
     		int id = d.getDepartureId();
 
+    		//Har fjernet seats og id+""
     		model.addRow(new Object[]{price,time,travelTime,fromTo,seats,id+""});	
     	}
 
     	//sætter bredden af kolonner
-    	setWidth(table, 0, 120);
+    	setWidth(table, 0, 90);
     	setWidth(table, 1, 120);
-    	setWidth(table, 2, 120);
+    	setWidth(table, 2, 100);
     	setWidth(table, 3, 120);
-    	setWidth(table, 4, 120);
+    	setWidth(table, 4, 90);
 
 
     	//tilføjer actionlistener som åbner rækkens afgang som pladssøgning
@@ -272,7 +276,7 @@ public class Afgangsliste extends JFrame {
     		//					e1.printStackTrace();
     		//				}
     		//    		}
-
+    		
     		public void mouseEntered(MouseEvent e) {
     			int row = table.rowAtPoint(e.getPoint());
     			int id = dp.get(row).getDepartureId()+1;
@@ -321,7 +325,7 @@ public class Afgangsliste extends JFrame {
 
     	//tiføjer mouselistener
     	table.addMouseListener(new MouseAdapter() {
-
+    		
     		public void mouseEntered(MouseEvent e) {
     			int row = table.rowAtPoint(e.getPoint());
     			int id = dp.get(row).getDepartureId()+1;

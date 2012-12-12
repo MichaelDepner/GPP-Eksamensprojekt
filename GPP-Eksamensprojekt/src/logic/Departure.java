@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
 
@@ -53,20 +54,23 @@ public class Departure {
 	
 	public String getDepartureTime() {
 		//DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'klokken' HH:mm:ss");
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		//DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		DateFormat formatter = new SimpleDateFormat("HH:mm");
 		String dateFormatted = formatter.format(departureTime);
 		return dateFormatted;
 	}
 	
 	public String getDepartureDate() {
-		DateFormat formatter = new SimpleDateFormat("dd/MM");
-		String dateFormatted = formatter.format(departureTime);
+		DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+		//String dateFormatted = formatter.format(departureTime);
+		String dateFormatted = formatter.format(departureDate);
 		return dateFormatted;
 	}
 	
 	public String getArrivalTime() {
 		//DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 'klokken' HH:mm:ss");
-		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		//DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		DateFormat formatter = new SimpleDateFormat("HH:mm");
 		String dateFormatted = formatter.format(arrivalTime);
 		return dateFormatted;
 	}
