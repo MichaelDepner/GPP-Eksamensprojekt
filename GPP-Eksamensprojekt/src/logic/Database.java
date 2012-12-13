@@ -381,6 +381,16 @@ public class Database {
 		return bookings;
 	}
 	
+	public void queryDeleteBooking(int id) throws SQLException {
+		String query;
+		query = "DELETE " +
+				"FROM " +
+				"Booking " +
+				"WHERE " +
+				"Booking.id = " + id;
+		this.execute(query);
+	}
+	
 	public void queryUpdateCustomer(int id, String firstname, String surname, String address, String city, String postalCode, 
 			String country, String email, String phoneNumber) throws SQLException {
 		String query;

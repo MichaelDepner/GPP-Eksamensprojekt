@@ -34,9 +34,9 @@ public class AfgangSøgning {
 		
 	    Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 	    //Søger på afgange før og ligger dem i en arraylist, således at datoen tættest på ligger ved index = 0
-	    departuresBeforeDate = db.queryGetDeparturesBeforeDate(formattedDate, departureId, arrivalId);
+	    //departuresBeforeDate = db.queryGetDeparturesBeforeDate(formattedDate, departureId, arrivalId);
 	    //Søger på afgange efter og ligger dem i en arraylist, således at datoen tættest på ligger ved index = 0
-	    departuresAfterDate = db.queryGetDeparturesAfterDate(formattedDate, departureId, arrivalId);
+	    //departuresAfterDate = db.queryGetDeparturesAfterDate(formattedDate, departureId, arrivalId);
 	}
 	
 	public String formatDate(java.util.Date date) {
@@ -46,6 +46,10 @@ public class AfgangSøgning {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		fd = sdf.format(date.getTime());
 		return fd;
+	}
+	
+	public String getFormattedDate() {
+		return formattedDate;
 	}
 	
 	public int getId(String airport) throws SQLException {

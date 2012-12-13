@@ -53,6 +53,7 @@ public class Afgangsliste extends JFrame {
         makeWindow(true);
     }
     
+    
     public Afgangsliste(Date departureDate, String departureAirport, String arrivalAirport) throws SQLException {
     	
     	turRetur = false;
@@ -60,22 +61,35 @@ public class Afgangsliste extends JFrame {
     	as = new AfgangSøgning(departureDate, departureAirport, arrivalAirport);
     	departures = as.getDepartures();
     	
+    	//laver afgangssøgninger 5 dage tilbage
+    	//for()
+    	
     	setTitle("Afgange");
     	makeWindow(false);
+    	
+    	//addTab(jtp, as);
+    }
+    
+    public void addTab(JTabbedPane p, AfgangSøgning as) {
+    	try {
+			JPanel panel = new JPanel();
+	    	p.addTab(as.getFormattedDate(), panel);
+	    	JTable table = departureTable(as.getDepartures());
+	    	panel.add(table.getTableHeader());
+	    	panel.add(table);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(this, "Fejl i kommunikation med serveren. Er internettet nede?");
+			e.printStackTrace();
+		}
     }
 
     public void makeWindow(boolean turRetur) {
-
-
     	//Laver vores fane-vinduer
     	jtp = new JTabbedPane();
     	if(turRetur) {
     		jtp2 = new JTabbedPane();
     	}
     	
-
-
-
     	//Sætter BorderLayout i contentPane, og laver panels indeni
     	getContentPane().setLayout(new BorderLayout());
     	//CENTER
@@ -93,6 +107,7 @@ public class Afgangsliste extends JFrame {
     	if(turRetur) {
     		panelCenter.add(jtp2);
     	}
+    	
     	
 
     	//tilføjer tabs til departures fundet før den valgte dato
@@ -117,8 +132,14 @@ public class Afgangsliste extends JFrame {
     	departureTable = table(jp1Udrejse, departures);
     	//jp1Udrejse.add(departureTable, BorderLayout.CENTER);
     	jp1Udrejse.add(departureTable);
+    	
     	//Tilføjer panel jp1Udrejse til jtp
-    	jtp.addTab(d.getDepartureDate(), jp1Udrejse);
+    	if(d != null) {
+    		jtp.addTab(d.getDepartureDate(), jp1Udrejse);
+    	} else {
+    		jtp.addTab("No flights found", jp1Udrejse);
+    	}
+    	
 
     	//tilføjer tabs til departures fundet efter den valgte dato
     	//addTabsAfterDate(as, jtp);
@@ -137,7 +158,11 @@ public class Afgangsliste extends JFrame {
     		//github.com/Mibias/GPP-Eksamensprojekt.git
 
     		//Tilføjer panel jp1Hjemrejse til jtp
-    		jtp2.addTab(d.getDepartureDate(), jp1Hjemrejse);
+    		if(d != null) {
+    			jtp2.addTab(d.getDepartureDate(), jp1Hjemrejse);
+    		} else {
+    			jtp2.addTab("No flights found", jp1Hjemrejse);
+    		}
     	}
 
     	//Laver en next-knap
@@ -260,90 +285,45 @@ public class Afgangsliste extends JFrame {
     	setWidth(table, 4, 90);
 
 
-    	//tilføjer actionlistener som åbner rækkens afgang som pladssøgning
-    	table.addMouseMotionListener(new MouseMotionAdapter() {
-    		//    		public void mouseClicked(MouseEvent e) {
-    		//    			int row = table.getSelectedRow();
-    		//    			System.out.println("You've clicked on row "+row);
-    		//    			
-    		//    			int id = dp.get(row).getId()+1;
-    		//    			System.out.println("Du har trykket på en afgang med id: "+id);
-    		//    			try {
-    		//					Pladsbooking pb = new Pladsbooking(id-1);
-    		//				} catch (SQLException e1) {
-    		//					// TODO Auto-generated catch block
-    		//					System.out.println("Something sql went wrong.");
-    		//					e1.printStackTrace();
-    		//				}
-    		//    		}
-    		
-    		public void mouseEntered(MouseEvent e) {
-    			int row = table.rowAtPoint(e.getPoint());
-    			int id = dp.get(row).getDepartureId()+1;
-    			try {
-    				pb = new Pladsbooking(id-1, false);
-    				popupId = id-1;
-    			} catch (SQLException e1) {
-    				// TODO Auto-generated catch block
-    				System.out.println("Something sql went wrong.");
-    				e1.printStackTrace();
-    			}
-
-
-    		}
-
-    		public void mouseMoved(MouseEvent e)
-    		{
-    			JTable aTable =  (JTable)e.getSource();
-    			int itsRow = aTable.rowAtPoint(e.getPoint());
-
-    			int id = dp.get(itsRow).getDepartureId();
-
-    			if(id == popupId) {
-
-    			} else if(pb == null) {
-    				mouseEntered(e);
-    			} else {
-    				popupId = id;
-    				try {
-    					pb.makeInvisible();
-    					pb.changePreview(id);
-    					pb.makeVisible();
-    				} catch (SQLException e1) {
-    					// TODO Auto-generated catch block
-    					e1.printStackTrace();
-    				}
-    				//mouseExited(e);
-    				//mouseEntered(e);
-    			}  
-    		}
-
-    		public void mouseExited(MouseEvent e) {
-    			pb.close();
-    		}
-    	});
 
     	//tiføjer mouselistener
     	table.addMouseListener(new MouseAdapter() {
     		
-    		public void mouseEntered(MouseEvent e) {
+    		public void mouseClicked(MouseEvent e) {
     			int row = table.rowAtPoint(e.getPoint());
     			int id = dp.get(row).getDepartureId()+1;
     			try {
-    				pb = new Pladsbooking(id-1, false);
-    				popupId = id-1;
+    				//hvis pb eksisterer, så skift den til andet afgangsid. Ellers, opret nyt preview
+    				if(pb != null) {
+    					pb.changePreview(id);
+    				} else {
+    					pb = new Pladsbooking(id, false);
+        				pb.setLocation(700, 1);
+    				}
     			} catch (SQLException e1) {
-    				// TODO Auto-generated catch block
-    				System.out.println("Something sql went wrong.");
+    				JOptionPane.showMessageDialog(table, "Fejl i kommunikation med serveren. Er internettet nede?");
     				e1.printStackTrace();
     			}
-
-
     		}
+    		
+//    		public void mouseEntered(MouseEvent e) {
+//    			int row = table.rowAtPoint(e.getPoint());
+//    			int id = dp.get(row).getDepartureId()+1;
+//    			try {
+//    				pb = new Pladsbooking(id-1, false);
+//    				popupId = id-1;
+//    			} catch (SQLException e1) {
+//    				// TODO Auto-generated catch block
+//    				System.out.println("Something sql went wrong.");
+//    				e1.printStackTrace();
+//    			}
+//
+//
+//    		}
 
-    		public void mouseExited(MouseEvent e) {
-    			pb.close();
-    		}
+//    		public void mouseExited(MouseEvent e) {
+//    			pb.close();
+//    		}
     	});
 
     	return table;
@@ -355,6 +335,10 @@ public class Afgangsliste extends JFrame {
     	panel.add(table.getTableHeader());
     	panel.add(table);
     	return table;
+    }
+    
+    private Afgangsliste getThis() {
+    	return this;
     }
 
 
@@ -382,9 +366,10 @@ public class Afgangsliste extends JFrame {
     						id2 = Integer.parseInt(id22);
 
     						System.out.println("Making pladsbooking with ID's "+id1+" and "+id2);
-    						Pladsbooking pb = new Pladsbooking(id1, id2);
+    						pb.dispose();
+    						Pladsbooking pb = new Pladsbooking(id1, id2, getThis());
     					} catch (SQLException e) {
-    						System.out.println("Something SQL went wrong!");
+    						JOptionPane.showMessageDialog(departureTable, "Fejl i kommunikation med serveren. Er internettet nede?");
     						e.printStackTrace();
     					}
     				}
@@ -396,9 +381,11 @@ public class Afgangsliste extends JFrame {
     					try {
     						String id11 = (String)departureTable.getValueAt(id1, 5);
     						id1 = Integer.parseInt(id11);
-    						Pladsbooking pb = new Pladsbooking(id1);
+    						//dispose preview-pladsbookingen der allerede er åben
+    						pb.dispose();
+    						Pladsbooking pb = new Pladsbooking(id1, getThis());
     					} catch (SQLException e) {
-    						System.out.println("Something SQL went wrong!");
+    						JOptionPane.showMessageDialog(departureTable, "Fejl i kommunikation med serveren. Er internettet nede?");
     						e.printStackTrace();
     					}
     				}

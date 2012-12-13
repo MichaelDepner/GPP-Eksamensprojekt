@@ -227,25 +227,39 @@ public class Forside2  extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
 		if(source.equals(searchButton)) {
-			if(turReturBool) {
-				try {
-					Afgangsliste afgange = new Afgangsliste(
-							udrejseDate.getDate(),hjemrejseDate.getDate(), 
-							(String)searchList1.getSelectedItem(), 
-							(String)searchList2.getSelectedItem());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					System.out.println("SQL fejl");
-					e.printStackTrace();
-				}
-			} else if (!turReturBool) {
-				try {
-					Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(), (String)searchList1.getSelectedItem(),
-							(String)searchList2.getSelectedItem());
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					System.out.println("SQL fejl");
-					e.printStackTrace();
+			if(searchList1.getSelectedItem() == searchList2.getSelectedItem()) {
+				JOptionPane.showMessageDialog(this, "Du kan ikke vælge samme lufthavn i afgang og ankomst!");
+			} else {
+				if(turReturBool) {
+
+					try {
+						if(udrejseDate.getDate() == null || hjemrejseDate.getDate() == null) {
+							JOptionPane.showMessageDialog(this, "Dato ikke valgt ordentligt.");
+						} else {
+						Afgangsliste afgange = new Afgangsliste(
+								udrejseDate.getDate(),hjemrejseDate.getDate(), 
+								(String)searchList1.getSelectedItem(), 
+								(String)searchList2.getSelectedItem());
+						}
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(this, "Fejl i kommunikation med serveren. Er internettet nede?");
+						e.printStackTrace();
+					}
+				} else if (!turReturBool) {
+					try {
+						//hvis ikke dato er vist ordentligt, vis besked
+						if(udrejseDate.getDate() == null) {
+							JOptionPane.showMessageDialog(this, "Dato ikke valgt ordentligt.");
+						} else {
+							//ellers, opret afgang baseret på de valgte lufthavne og datoer
+							Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(), (String)searchList1.getSelectedItem(),
+									(String)searchList2.getSelectedItem());
+						}
+
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(this, "Fejl i kommunikation med serveren. Er internettet nede?");
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -272,7 +286,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	    	try {
 				Bookingliste bl = new Bookingliste(searchingFor, arg);
 			} catch (SQLException e) {
-				System.out.println("SQL problemer ved dannelse af bookingliste!");
+				JOptionPane.showMessageDialog(this, "Fejl i Database-forbindelse ved oprettelse af bookingliste. Er internettet nede?");
 				e.printStackTrace();
 			}
 	    	

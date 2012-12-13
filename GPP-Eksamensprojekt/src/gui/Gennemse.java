@@ -45,11 +45,12 @@ public class Gennemse extends JFrame{
 	private boolean turRetur;
 	private boolean importingCustomer;
 	private Booking b;
+	private Kundeoplysninger ko;
 	
 	
 	//gennemse tur/retur
 	public Gennemse(ArrayList<Plads> reserved1, ArrayList<Plads> reserved2, ArrayList<Person> passengers, Customer customer,
-			Departure d1, Departure d2, boolean importingCustomer) {
+			Departure d1, Departure d2, boolean importingCustomer, Kundeoplysninger ko) {
 		this.passengers = passengers;
 		this.customer = customer;
 		this.reserved1 = reserved1;
@@ -58,6 +59,7 @@ public class Gennemse extends JFrame{
 		this.d2 = d2;
 		turRetur = true;
 		this.importingCustomer = importingCustomer;
+		this.ko = ko;
 		
 		
 		makeGennemseWindow(true, false);
@@ -65,13 +67,15 @@ public class Gennemse extends JFrame{
 	}
 	
 	//gennemse enkelt rejse
-	public Gennemse(ArrayList<Plads> reserved, Departure d1, ArrayList<Person> passengers, Customer customer, boolean importingCustomer) {
+	public Gennemse(ArrayList<Plads> reserved, Departure d1, ArrayList<Person> passengers, Customer customer, boolean importingCustomer,
+			Kundeoplysninger ko) {
 		this.passengers = passengers;
 		this.customer = customer;
 		this.reserved1 = reserved;
 		this.d1 = d1;
 		turRetur = false;
 		this.importingCustomer = importingCustomer;
+		this.ko = ko;
 		
 		makeGennemseWindow(false, false);
 		knapperGennemse();
@@ -272,9 +276,16 @@ public class Gennemse extends JFrame{
 		labelPris = new JLabel("Pris");
 		labelPris.setFont(new Font("String", Font.BOLD, 16));
 		panelPris.add(labelPris);
-		prisTekst = new JLabel(passengers.size() + " x sæder á " + d1.getPrice());
+		
+		if(turRetur) {
+			prisTekst = new JLabel(passengers.size() + " x sæder á " + d1.getPrice() + " + " + passengers.size() + " x sæder á " + d2.getPrice());
+			total = new JLabel("Total = " + (passengers.size()*d1.getPrice()+passengers.size()*d2.getPrice()));
+		} else {
+			prisTekst = new JLabel(passengers.size() + " x sæder á " + d1.getPrice());
+			total = new JLabel("Total = " + (passengers.size()*d1.getPrice()) + " kr.");
+		}
+		
 		panelPris.add(prisTekst);
-		total = new JLabel("Total = " + (passengers.size()*d1.getPrice()) + " kr.");
 		total.setFont(new Font("String", Font.BOLD, 14));
 		panelPris.add(total);
 
@@ -407,7 +418,9 @@ public class Gennemse extends JFrame{
     					System.out.println("customerId: "+customerId);
     				}
     				
-    			JOptionPane.showMessageDialog(returnMe(), "Bestillingen er gennemført. Du kan lukke vinduerne nu.");
+    			JOptionPane.showMessageDialog(returnMe(), "Bestillingen er gennemført! Vinduerne vil blive lukket.");
+    			ko.removeMe();
+    			dispose();
 					
     			} catch (SQLException e) {
     				System.out.println("Something SQL went wrong when making passengers");
@@ -418,6 +431,14 @@ public class Gennemse extends JFrame{
     		} else if(event.getSource() == annuller) {
     			dispose();
     		} else if(event.getSource() == slet) {
+    			try {
+					Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+					db.queryDeleteBooking(b.getId());
+					JOptionPane.showMessageDialog(returnMe(), "Booking slettet.");
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(returnMe(), "Booking ikke slettet - kan ikke få forbindelse til databasen.");
+					e.printStackTrace();
+				}
     			JOptionPane.showMessageDialog(returnMe(), "Bookingen er slettet.");
     		} else if(event.getSource() == editCustomerButton) {
     			Kundeoplysninger ko = new Kundeoplysninger(customer, getThis());

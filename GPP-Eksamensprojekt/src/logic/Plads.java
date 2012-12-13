@@ -4,6 +4,7 @@ import gui.Pladsbooking;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.*;
 import java.util.ArrayList;
 
@@ -56,6 +57,9 @@ public class Plads extends JPanel {
 	public void SetName(String name) {
 		this.name = name;
 		JLabel nameLabel = new JLabel(name);
+		nameLabel.setFont(new Font("string", Font.BOLD, 10));
+		nameLabel.setVerticalAlignment(SwingConstants.TOP);
+		nameLabel.setVerticalTextPosition(SwingConstants.TOP);
 		this.add(nameLabel);
 	}
 	
