@@ -15,10 +15,11 @@ public class AfgangSøgning {
 	private ArrayList<Departure> departuresBeforeDate, departuresAfterDate;
 	private String departureAirport, arrivalAirport;
 	private int departureId, arrivalId;
-	private String formattedDate;
+	private String formattedDate, formattedDate2;
+	private boolean period;
 	
 	public AfgangSøgning(java.util.Date date, String departureAirport, String arrivalAirport) throws SQLException {
-	
+		period = false;
 		this.departureAirport = departureAirport;
 		this.arrivalAirport = arrivalAirport;
 		
@@ -28,15 +29,21 @@ public class AfgangSøgning {
 	    arrivalId = getId(arrivalAirport);
 	    departureId = getId(departureAirport);
 		
-		//Søger først efter afgange på valgte dato, og ligger dem i en arraylist
-		//afgangeOnDate = getDepartures();
+	    
+	}
+	
+	public AfgangSøgning(java.util.Date periodStartDate, java.util.Date periodEndDate, String departureAirport, String arrivalAirport) throws SQLException {
+		period = true;
+		this.departureAirport = departureAirport;
+		this.arrivalAirport = arrivalAirport;
+		formattedDate = formatDate(periodStartDate);
+		formattedDate2 = formatDate(periodEndDate);
+		
+		//finder ID på lufthavnene
+		arrivalId = getId(arrivalAirport);
+		departureId = getId(departureAirport);
 		
 		
-	    Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-	    //Søger på afgange før og ligger dem i en arraylist, således at datoen tættest på ligger ved index = 0
-	    departuresBeforeDate = db.queryGetDeparturesBeforeDate(formattedDate, departureId, arrivalId);
-	    //Søger på afgange efter og ligger dem i en arraylist, således at datoen tættest på ligger ved index = 0
-	    departuresAfterDate = db.queryGetDeparturesAfterDate(formattedDate, departureId, arrivalId);
 	}
 	
 	public String formatDate(java.util.Date date) {
@@ -46,6 +53,10 @@ public class AfgangSøgning {
 		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
 		fd = sdf.format(date.getTime());
 		return fd;
+	}
+	
+	public String getFormattedDate() {
+		return formattedDate;
 	}
 	
 	public int getId(String airport) throws SQLException {
@@ -60,22 +71,33 @@ public class AfgangSøgning {
 	
 	
 	public ArrayList<Departure> getDepartures() throws SQLException {
-		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-		ResultSet rs = db.queryGetDeparturesOnDate(formattedDate, departureId, arrivalId);
 		
-		ArrayList<Integer> ids = new ArrayList<>();
-		while(rs.next()) {
-			int id = rs.getInt("id");
-			ids.add(id);
+		if(!period) {
+			Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+			ResultSet rs = db.queryGetDeparturesOnDate(formattedDate, departureId, arrivalId);
+			
+			ArrayList<Integer> ids = new ArrayList<>();
+			while(rs.next()) {
+				int id = rs.getInt("id");
+				ids.add(id);
+			}
+			
+			for(int i=0; i<ids.size(); i++) {
+				Departure d = db.queryGetDeparture(ids.get(i));
+				departuresOnDate.add(d);
+			}
+			
+			db.close();
+			return departuresOnDate;
+		} else {
+			Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+			departuresOnDate = db.queryGetDeparturesInPeriod(formattedDate, formattedDate2, departureId, arrivalId);
+			for(int i=0; i<departuresOnDate.size(); i++) {
+				System.out.println(departuresOnDate.get(i).getDepartureId());
+			}
+			return departuresOnDate;
 		}
 		
-		for(int i=0; i<ids.size(); i++) {
-			Departure d = db.queryGetDeparture(ids.get(i));
-			departuresOnDate.add(d);
-		}
-		
-		db.close();
-		return departuresOnDate;
 	}
 	
 	public ArrayList<Departure> getDeparturesBefore() {

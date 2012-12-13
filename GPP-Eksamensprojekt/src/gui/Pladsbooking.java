@@ -39,9 +39,11 @@ public class Pladsbooking extends JFrame {
 	private boolean turRetur, rebooking;
 	private int maxReservations;
 	private Booking b;
+	private Afgangsliste al;
 	
 	private Departure d1, d2;
 	
+	//denne konstruktor kaldes når vi vil lave et preview-vindue.
 	public Pladsbooking(int departureId, Boolean booking) throws SQLException {
 		this.booking = booking;
 		this.departureId = departureId;
@@ -110,8 +112,10 @@ public class Pladsbooking extends JFrame {
 		this.getContentPane().setVisible(true);
 	}
 	
-	public Pladsbooking(int departureId1, int departureId2) throws SQLException {
+	//denne konstruktor kaldes ved tur-retur bookinger
+	public Pladsbooking(int departureId1, int departureId2, Afgangsliste al) throws SQLException {
 		turRetur = true;
+		this.al = al;
 		//finder al information om afgangene og gemmer dem i et Departure objekt
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		d1 = db.queryGetDeparture(departureId1);
@@ -131,7 +135,9 @@ public class Pladsbooking extends JFrame {
 		reservations(panelList2, pladsArray2);
 	}
 	
-	public Pladsbooking(int departureId1) throws SQLException {
+	//denne konstruktor kaldes ved enkelt-bookinger
+	public Pladsbooking(int departureId1, Afgangsliste al) throws SQLException {
+		this.al = al;
 		turRetur = false;
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		d1 = db.queryGetDeparture(departureId1);
@@ -374,13 +380,13 @@ public class Pladsbooking extends JFrame {
 			JLabel logoLabel8 = new JLabel(imageLogo8);
 			middleBottomBottomPanel.add(logoLabel8);
 			
-			JButton next = new JButton("Næste");
+			final JButton next = new JButton("Næste");
 			rightBottomPanel.add(next);
 			next.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if(turRetur) {
-						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2);
+						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2, getThis());
 					} else if(rebooking) {
 						try {
 							
@@ -399,28 +405,38 @@ public class Pladsbooking extends JFrame {
 							
 							
 						} catch (SQLException e) {
+							JOptionPane.showMessageDialog(next, "Fejl i kommunikation med serveren. Er internettet nede?");
 							System.out.println("Something went wrong when editing the booking");
 							e.printStackTrace();
 						}
 					} else {
-						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), d1);
+						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), d1, getThis());
 					}
-					
-					
+
+
 				}
 			});
-			
-			
+
+
 			if(!turRetur) {
 				middlePanel.setVisible(false);
 			}
-			
+
 			//this.setSize(1200,720);
 			this.setSize(1100,700);
 			this.setResizable(false);
 			//this.pack();
 			this.setVisible(true);
-}
+		}
+	}
+
+	public Pladsbooking getThis() {
+		return this;
+	}
+	
+	public void removeMe() {
+		al.dispose();
+		this.dispose();
 	}
 	
 //	public void addSeat(Plads plads) {

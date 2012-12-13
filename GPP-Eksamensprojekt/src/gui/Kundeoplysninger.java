@@ -52,24 +52,27 @@ public class Kundeoplysninger {
     private Departure d1, d2;
     
     private String firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS;
-	
+	private Pladsbooking pb;
+    
 //    public Kundeoplysninger(ArrayList<Plads> reservations) {
 //    	this.reservations1 = reservations;
 //        makeFrame();
 //        addActionListeners();
 //    }
     
-    public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2, Departure d1, Departure d2) {
+    public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2, Departure d1, Departure d2, Pladsbooking pb) {
     	turRetur = true;
     	this.reservations1 = reservations1;
     	this.reservations2 = reservations2;
     	this.d1 = d1;
     	this.d2 = d2;
+    	this.pb = pb;
     	makeFrame();
     	addActionListeners();
     }
     
-    public Kundeoplysninger(ArrayList<Plads> reservations1, Departure d1) {
+    public Kundeoplysninger(ArrayList<Plads> reservations1, Departure d1, Pladsbooking pb) {
+    	this.pb = pb;
     	turRetur = false;
     	this.reservations1 = reservations1;
     	this.d1 = d1;
@@ -89,9 +92,8 @@ public class Kundeoplysninger {
     }
     
     private void makeFrame() {
-    	frame.setTitle("Kundeoplysninger");
-    	
         frame = new JFrame();
+    	frame.setTitle("Kundeoplysninger");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(500, 480);
         frame.setResizable(false);
@@ -291,15 +293,15 @@ public class Kundeoplysninger {
     }
     
     private void inputTextFields() {
-        firstname = new JTextField("Indtast fornavn");
-        surname = new JTextField("Indtast efternavn", 30);
-        email = new JTextField("Indtast e-mail", 25);
-        phoneNumber = new JTextField("Indtast telefonnr.", 11);
-        address = new JTextField("Indtast adresse", 30);
-        city = new JTextField ("Indtast by", 30);
-        postal = new JTextField ("Indtast postnummer", 10);
-        country = new JTextField ("Indtast land");
-        birthday = new JTextField ("Indtast fødselsdag");
+        firstname = new JTextField();
+        surname = new JTextField(30);
+        email = new JTextField(25);
+        phoneNumber = new JTextField(11);
+        address = new JTextField(30);
+        city = new JTextField (30);
+        postal = new JTextField (10);
+        country = new JTextField ();
+        birthday = new JTextField ();
     }
     
     private void labels() {
@@ -346,9 +348,9 @@ public class Kundeoplysninger {
             
             //Indsætter TextFields i textFieldPanel
             //inputTextFields();
-            JTextField nameField = new JTextField("Insert name here");
-            JTextField surnameField = new JTextField("Insert surname here");
-            JTextField birthdayField = new JTextField("Insert birthday here");
+            JTextField nameField = new JTextField(30);
+            JTextField surnameField = new JTextField(30);
+            JTextField birthdayField = new JTextField(30);
             textFieldPanel.add(nameField);
             textFieldPanel.add(surnameField);
             textFieldPanel.add(birthdayField);
@@ -380,7 +382,12 @@ public class Kundeoplysninger {
     	postalCodeS = postal.getText();
     	countryS = country.getText();
     	
-    	customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+    	if(firstnameS != "" && surnameS != "" && emailS != "" && phoneS != ""
+    			&& addressS != "" && cityS != "" && postalCodeS != "" && countryS != "") {
+    		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+    	} else {
+    		JOptionPane.showMessageDialog(frame, "Kan ikke oprette kunde - du mangler at indtaste information!");
+    	}
     }
     
     private void makePeople() {
@@ -388,6 +395,10 @@ public class Kundeoplysninger {
     		String firstname = firstnameList.get(i).getText();
     		String surname = surnameList.get(i).getText();
     		String birthday = birthdayList.get(i).getText();
+    		
+    		if(firstname != "" && surname != "" && birthday != "") {
+    			JOptionPane.showMessageDialog(frame, "Kan ikke oprette passagér - du mangler at indtaste information!");
+    		}
     		
     		passengers.add(new Person(firstname, surname, birthday));
     	}
@@ -404,6 +415,14 @@ public class Kundeoplysninger {
     	country.setText(c.GetCountry());
     }
     
+    public Kundeoplysninger getThis() {
+    	return this;
+    }
+    
+    public void removeMe() {
+    	pb.removeMe();
+    	frame.dispose();
+    }
     
     //Lytter til knapperne
     private class Listener implements ActionListener {
@@ -422,9 +441,9 @@ public class Kundeoplysninger {
             	makePeople();
             	
             	if(turRetur) {
-            		Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, customer, d1, d2, importingCustomer);
+            		Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, customer, d1, d2, importingCustomer, getThis());
             	} else {
-            		Gennemse gennemse = new Gennemse(reservations1, d1, passengers, customer, importingCustomer);
+            		Gennemse gennemse = new Gennemse(reservations1, d1, passengers, customer, importingCustomer, getThis());
             	}
             	
             	

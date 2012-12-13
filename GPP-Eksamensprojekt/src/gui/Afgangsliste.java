@@ -38,21 +38,31 @@ public class Afgangsliste extends JFrame {
 	private AfgangSøgning as, as2;
 	ArrayList<Departure> departures, departures2;
 	
-    public Afgangsliste(Date departureDate, Date arrivalDate, String departureAirport, String arrivalAirport) throws SQLException {
+	//denne konstruktor kaldes ved tur/retur eller periodesøgning enkeltrejse. Boolean 'period' angiver, hvilken.
+    public Afgangsliste(Date departureDate, Date arrivalDate, String departureAirport, String arrivalAirport, boolean period) throws SQLException {
     	
-    	turRetur = true;
-    	//Opretter AfgangSøgning
-    	as = new AfgangSøgning(departureDate, departureAirport, arrivalAirport);
-    	departures = as.getDepartures();
+    	setTitle("Afgange");
+    	if(!period) {
+    		turRetur = true;
+    		//Opretter AfgangSøgning
+        	as = new AfgangSøgning(departureDate, departureAirport, arrivalAirport);
+        	departures = as.getDepartures();
+        	
+        	as2 = new AfgangSøgning(arrivalDate, arrivalAirport, departureAirport);
+        	departures2 = as2.getDepartures();
+        	makeWindow(true);
+    	} else {
+    		turRetur = false;
+    		as = new AfgangSøgning(departureDate, arrivalDate, departureAirport, arrivalAirport);
+    		departures = as.getDepartures();
+    		makeWindow(false);
+    	}
     	
-    	as2 = new AfgangSøgning(arrivalDate, arrivalAirport, departureAirport);
-    	departures2 = as2.getDepartures();
     	
         setTitle("Afgange");
-        
-        makeWindow(true);
     }
     
+    //denne konstruktor kaldes ved enkeltrejser
     public Afgangsliste(Date departureDate, String departureAirport, String arrivalAirport) throws SQLException {
     	
     	turRetur = false;
@@ -60,22 +70,47 @@ public class Afgangsliste extends JFrame {
     	as = new AfgangSøgning(departureDate, departureAirport, arrivalAirport);
     	departures = as.getDepartures();
     	
+    	//laver afgangssøgninger 5 dage tilbage
+    	//for()
+    	
     	setTitle("Afgange");
     	makeWindow(false);
+    	
+    	//addTab(jtp, as);
+    }
+    
+    //denne konstruktor kaldes ved periode-søgning tur-retur
+    public Afgangsliste(Date departureDate, Date departureDate2, Date arrivalDate, Date arrivalDate2,
+    		String departureAirport, String arrivalAirport) throws SQLException {
+    	turRetur = true;
+    	//opretter afgangssøgninger
+    	as = new AfgangSøgning(departureDate, departureDate2, departureAirport, arrivalAirport);
+    	as2 = new AfgangSøgning(arrivalDate, arrivalDate2, arrivalAirport, departureAirport);
+    	departures = as.getDepartures();
+    	departures2 = as2.getDepartures();
+    	makeWindow(true);
+    }
+    
+    public void addTab(JTabbedPane p, AfgangSøgning as) {
+    	try {
+			JPanel panel = new JPanel();
+	    	p.addTab(as.getFormattedDate(), panel);
+	    	JTable table = departureTable(as.getDepartures());
+	    	panel.add(table.getTableHeader());
+	    	panel.add(table);
+		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(this, "Fejl i kommunikation med serveren. Er internettet nede?");
+			e.printStackTrace();
+		}
     }
 
     public void makeWindow(boolean turRetur) {
-
-
     	//Laver vores fane-vinduer
     	jtp = new JTabbedPane();
     	if(turRetur) {
     		jtp2 = new JTabbedPane();
     	}
     	
-
-
-
     	//Sætter BorderLayout i contentPane, og laver panels indeni
     	getContentPane().setLayout(new BorderLayout());
     	//CENTER
@@ -94,6 +129,7 @@ public class Afgangsliste extends JFrame {
     		panelCenter.add(jtp2);
     	}
     	
+    	
 
     	//tilføjer tabs til departures fundet før den valgte dato
     	//addTabsBeforeDate(as, jtp);
@@ -107,27 +143,43 @@ public class Afgangsliste extends JFrame {
     	
     	//jp1Hjemrejse.setLayout(new BorderLayout());
 
-    	labelUdrejse = new JLabel("Udrejsedato og lufthavne");
+    	//labelUdrejse = new JLabel("Udrejsedato og lufthavne");
+    	if(departures.size() != 0) {
+    		labelUdrejse = new JLabel(departures.get(0).getDepartureAirportName()+" - "+departures.get(0).getArrivalAirportName());
+    	} else {
+    		labelUdrejse = new JLabel("Ingen afgange fundet");
+    	}
     	//labelUdrejse.setText(d.getDepartureDate()+ " " + d.getDepartureAirportName() 
     	//											+ " " + d.getArrivalAirportName());
-    	labelUdrejse.setFont(new Font("String", Font.BOLD, 14));
+    	labelUdrejse.setFont(new Font("String", Font.BOLD, 18));
     	jp1Udrejse.add(labelUdrejse);
 
     	//Skal evt. rykkes ned til table-metode
     	departureTable = table(jp1Udrejse, departures);
     	//jp1Udrejse.add(departureTable, BorderLayout.CENTER);
     	jp1Udrejse.add(departureTable);
+    	
     	//Tilføjer panel jp1Udrejse til jtp
-    	jtp.addTab(d.getDepartureDate(), jp1Udrejse);
+    	if(d != null) {
+    		jtp.addTab(departures.get(0).getDepartureDate()+" - "+departures.get(departures.size()-1).getDepartureDate(), jp1Udrejse);
+    	} else {
+    		jtp.addTab("Ingen afgange fundet", jp1Udrejse);
+    	}
+    	
 
     	//tilføjer tabs til departures fundet efter den valgte dato
     	//addTabsAfterDate(as, jtp);
 
     	if(turRetur) {
-    		labelHjemrejse = new JLabel("Udrejsedato og lufthavne");
+    		if(departures2.size() != 0) {
+    			labelHjemrejse = new JLabel(departures2.get(0).getDepartureAirportName()+" - "+departures2.get(0).getArrivalAirportName());
+    		} else {
+    			labelHjemrejse = new JLabel("Ingen afgange fundet");
+    		}
+    		//labelHjemrejse = new JLabel("Udrejsedato og lufthavne");
     		//labelHjemrejse.setText(d.getDepartureDate()+ " " + d.getDepartureAirportName() 
     		//												+ d.getArrivalAirportName());
-    		labelHjemrejse.setFont(new Font("String", Font.BOLD, 14));
+    		labelHjemrejse.setFont(new Font("String", Font.BOLD, 18));
     		jp1Hjemrejse.add(labelHjemrejse);
 
     		//Skal evt. rykkes ned til table-metode
@@ -137,7 +189,11 @@ public class Afgangsliste extends JFrame {
     		//github.com/Mibias/GPP-Eksamensprojekt.git
 
     		//Tilføjer panel jp1Hjemrejse til jtp
-    		jtp2.addTab(d.getDepartureDate(), jp1Hjemrejse);
+    		if(d != null) {
+    			jtp2.addTab(departures2.get(0).getDepartureDate()+" - "+departures2.get(departures2.size()-1).getDepartureDate(), jp1Hjemrejse);
+    		} else {
+    			jtp2.addTab("Ingen afgange fundet", jp1Hjemrejse);
+    		}
     	}
 
     	//Laver en next-knap
@@ -178,28 +234,10 @@ public class Afgangsliste extends JFrame {
         jtp.addTab("30/11", jp3);
         jtp.addTab("01/12", jp4); */
 
-    	setPreferredSize(new Dimension(640, 460));
+    	setPreferredSize(new Dimension(640, 700));
     	setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     	pack();
     	setVisible(true);
-    }
-
-    private void addTabsBeforeDate(AfgangSøgning as, JTabbedPane tp) {
-    	for(int i=5; i>0; i--) {
-    		if(as.getDeparturesBefore().size()>i) {
-    			JPanel panel = new JPanel();
-    			tp.addTab(as.getDeparturesBefore().get(i).getDepartureDate(), panel);
-    		}
-    	}
-    }
-
-    private void addTabsAfterDate(AfgangSøgning as, JTabbedPane tp) {
-    	for(int i=0; i<5; i++) {
-    		if(as.getDeparturesAfter().size()>i) {
-    			JPanel panel = new JPanel();
-    			tp.addTab(as.getDeparturesAfter().get(i).getDepartureDate(), panel);
-    		}
-    	}
     }
 
 
@@ -229,121 +267,76 @@ public class Afgangsliste extends JFrame {
     	});  
 
     	//Laver columns
+    	model.addColumn("Dato");
     	model.addColumn("Pris"); 
     	model.addColumn("Afrejse - Ankomst"); 
     	model.addColumn("Rejsetid");
     	model.addColumn("Lufthavne");
-    	model.addColumn("Ledige pladser");
     	model.addColumn("DepartureId");
 
     	//Tilføjer rejser
     	for(int i=0; i<departures.size(); i++) {
     		d = dp.get(i);
-    		//TODO mangler at tilføje priser i databasen
+    		String date = d.getDepartureDate();
     		String price = d.getPrice()+"";
     		String time = d.getDepartureTime()+" - "+d.getArrivalTime();
     		//TODO tilføj udregning af rejsetid
     		String travelTime = d.getTravelTime();
-    		String fromTo = d.getDepartureAirportName()+" - "+d.getArrivalAirportName();
+    		String fromTo = d.getDepartureAirportAbbrevation()+" - "+d.getArrivalAirportAbbrevation();
     		String seats = " ";//d.getSeats();
     		int id = d.getDepartureId();
 
     		//Har fjernet seats og id+""
-    		model.addRow(new Object[]{price,time,travelTime,fromTo,seats,id+""});	
+    		model.addRow(new Object[]{date,price,time,travelTime,fromTo,id+""});	
     	}
 
     	//sætter bredden af kolonner
-    	setWidth(table, 0, 90);
-    	setWidth(table, 1, 120);
-    	setWidth(table, 2, 100);
-    	setWidth(table, 3, 120);
+    	setWidth(table, 0, 120);
+    	setWidth(table, 1, 90);
+    	setWidth(table, 2, 120);
+    	setWidth(table, 3, 100);
     	setWidth(table, 4, 90);
 
 
-    	//tilføjer actionlistener som åbner rækkens afgang som pladssøgning
-    	table.addMouseMotionListener(new MouseMotionAdapter() {
-    		//    		public void mouseClicked(MouseEvent e) {
-    		//    			int row = table.getSelectedRow();
-    		//    			System.out.println("You've clicked on row "+row);
-    		//    			
-    		//    			int id = dp.get(row).getId()+1;
-    		//    			System.out.println("Du har trykket på en afgang med id: "+id);
-    		//    			try {
-    		//					Pladsbooking pb = new Pladsbooking(id-1);
-    		//				} catch (SQLException e1) {
-    		//					// TODO Auto-generated catch block
-    		//					System.out.println("Something sql went wrong.");
-    		//					e1.printStackTrace();
-    		//				}
-    		//    		}
-    		
-    		public void mouseEntered(MouseEvent e) {
-    			int row = table.rowAtPoint(e.getPoint());
-    			int id = dp.get(row).getDepartureId()+1;
-    			try {
-    				pb = new Pladsbooking(id-1, false);
-    				popupId = id-1;
-    			} catch (SQLException e1) {
-    				// TODO Auto-generated catch block
-    				System.out.println("Something sql went wrong.");
-    				e1.printStackTrace();
-    			}
-
-
-    		}
-
-    		public void mouseMoved(MouseEvent e)
-    		{
-    			JTable aTable =  (JTable)e.getSource();
-    			int itsRow = aTable.rowAtPoint(e.getPoint());
-
-    			int id = dp.get(itsRow).getDepartureId();
-
-    			if(id == popupId) {
-
-    			} else if(pb == null) {
-    				mouseEntered(e);
-    			} else {
-    				popupId = id;
-    				try {
-    					pb.makeInvisible();
-    					pb.changePreview(id);
-    					pb.makeVisible();
-    				} catch (SQLException e1) {
-    					// TODO Auto-generated catch block
-    					e1.printStackTrace();
-    				}
-    				//mouseExited(e);
-    				//mouseEntered(e);
-    			}  
-    		}
-
-    		public void mouseExited(MouseEvent e) {
-    			pb.close();
-    		}
-    	});
 
     	//tiføjer mouselistener
     	table.addMouseListener(new MouseAdapter() {
     		
-    		public void mouseEntered(MouseEvent e) {
+    		public void mouseClicked(MouseEvent e) {
     			int row = table.rowAtPoint(e.getPoint());
     			int id = dp.get(row).getDepartureId()+1;
     			try {
-    				pb = new Pladsbooking(id-1, false);
-    				popupId = id-1;
+    				//hvis pb eksisterer, så skift den til andet afgangsid. Ellers, opret nyt preview
+    				if(pb != null) {
+    					pb.changePreview(id);
+    				} else {
+    					pb = new Pladsbooking(id, false);
+        				pb.setLocation(700, 1);
+    				}
     			} catch (SQLException e1) {
-    				// TODO Auto-generated catch block
-    				System.out.println("Something sql went wrong.");
+    				JOptionPane.showMessageDialog(table, "Fejl i kommunikation med serveren. Er internettet nede?");
     				e1.printStackTrace();
     			}
-
-
     		}
+    		
+//    		public void mouseEntered(MouseEvent e) {
+//    			int row = table.rowAtPoint(e.getPoint());
+//    			int id = dp.get(row).getDepartureId()+1;
+//    			try {
+//    				pb = new Pladsbooking(id-1, false);
+//    				popupId = id-1;
+//    			} catch (SQLException e1) {
+//    				// TODO Auto-generated catch block
+//    				System.out.println("Something sql went wrong.");
+//    				e1.printStackTrace();
+//    			}
+//
+//
+//    		}
 
-    		public void mouseExited(MouseEvent e) {
-    			pb.close();
-    		}
+//    		public void mouseExited(MouseEvent e) {
+//    			pb.close();
+//    		}
     	});
 
     	return table;
@@ -355,6 +348,10 @@ public class Afgangsliste extends JFrame {
     	panel.add(table.getTableHeader());
     	panel.add(table);
     	return table;
+    }
+    
+    private Afgangsliste getThis() {
+    	return this;
     }
 
 
@@ -382,9 +379,10 @@ public class Afgangsliste extends JFrame {
     						id2 = Integer.parseInt(id22);
 
     						System.out.println("Making pladsbooking with ID's "+id1+" and "+id2);
-    						Pladsbooking pb = new Pladsbooking(id1, id2);
+    						pb.dispose();
+    						Pladsbooking pb = new Pladsbooking(id1, id2, getThis());
     					} catch (SQLException e) {
-    						System.out.println("Something SQL went wrong!");
+    						JOptionPane.showMessageDialog(departureTable, "Fejl i kommunikation med serveren. Er internettet nede?");
     						e.printStackTrace();
     					}
     				}
@@ -396,9 +394,11 @@ public class Afgangsliste extends JFrame {
     					try {
     						String id11 = (String)departureTable.getValueAt(id1, 5);
     						id1 = Integer.parseInt(id11);
-    						Pladsbooking pb = new Pladsbooking(id1);
+    						//dispose preview-pladsbookingen der allerede er åben
+    						pb.dispose();
+    						Pladsbooking pb = new Pladsbooking(id1, getThis());
     					} catch (SQLException e) {
-    						System.out.println("Something SQL went wrong!");
+    						JOptionPane.showMessageDialog(departureTable, "Fejl i kommunikation med serveren. Er internettet nede?");
     						e.printStackTrace();
     					}
     				}
