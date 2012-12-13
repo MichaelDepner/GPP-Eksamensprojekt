@@ -27,7 +27,7 @@ public class Gennemse extends JFrame{
 	private JPanel panelPassengers, panelPris, panelKnapper, flowPanel1, flowPanel2;
 	private JPanel flowPanel3;
 	private JLabel name, firstname, surname, address, city, postalCode, cityName;
-	private JLabel  country, phoneNumber, email, kontaktoplysninger, udrejse, hjemrejse;
+	private JLabel country, phoneNumber, email, kontaktoplysninger, udrejse, hjemrejse;
 	private JLabel airport, ap1, ap2, afgang, ankomst, rejsetid, lufthavn1, lufthavn2;
 	private JLabel pladser, labelSeat, labelPassengers, passenger, birthday, header;
 	private JLabel labelPris, total, prisTekst;
@@ -63,6 +63,7 @@ public class Gennemse extends JFrame{
 		
 		
 		makeGennemseWindow(true, false);
+		setTitle("Gennemse");
 		knapperGennemse();
 	}
 	
@@ -78,6 +79,7 @@ public class Gennemse extends JFrame{
 		this.ko = ko;
 		
 		makeGennemseWindow(false, false);
+		setTitle("Gennemse");
 		knapperGennemse();
 	}
 	
@@ -95,6 +97,7 @@ public class Gennemse extends JFrame{
 		}
 		
 		makeGennemseWindow(false, true);
+		setTitle("Bookinginfo");
 		knapperRedigering();
 	}
 	
@@ -104,8 +107,6 @@ public class Gennemse extends JFrame{
 
 
 	public void makeGennemseWindow(boolean turRetur, boolean editing) {
-
-		setTitle("Gennemse");
 
 		panel = new JPanel();
 		getContentPane().add(panel);

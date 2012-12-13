@@ -19,6 +19,8 @@ public class Betaling {
 	private JButton next, back;
 	
 	public Betaling() {
+		frame.setTitle("Betaling");
+		
 		frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(700, 460);

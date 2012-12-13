@@ -37,6 +37,8 @@ public class Bookinginfo {
     }
     
     private void makeFrame() {
+    	frame.setTitle("Bookinginfo");
+    	
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(700, 460);
