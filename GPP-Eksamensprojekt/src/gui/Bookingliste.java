@@ -90,7 +90,7 @@ public class Bookingliste extends JFrame {
     	jp1bookings.setLayout(new FlowLayout());
     	JLabel labelUdrejse = new JLabel();
     	labelUdrejse.setText("Bookinger foretaget af "+c.GetFullName());
-    	labelUdrejse.setFont(new Font("String", Font.BOLD, 14));
+    	labelUdrejse.setFont(new Font("String", Font.BOLD, 18));
     	jp1bookings.add(labelUdrejse);
 
     	//Skal evt. rykkes ned til table-metode
