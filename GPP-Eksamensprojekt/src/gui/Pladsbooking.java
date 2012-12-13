@@ -436,7 +436,7 @@ public class Pladsbooking extends JFrame {
 	}
 	
 	public void addSeatLabel(Plads p, JPanel panel) {
-		JLabel label = new JLabel(p.toString());		
+		JLabel label = new JLabel(p.toString());
 		panel.add(label);
 		panel.validate();
 		panel.repaint();
