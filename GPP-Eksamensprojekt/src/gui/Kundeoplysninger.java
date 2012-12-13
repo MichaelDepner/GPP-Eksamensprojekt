@@ -92,9 +92,8 @@ public class Kundeoplysninger {
     }
     
     private void makeFrame() {
-    	frame.setTitle("Kundeoplysninger");
-    	
         frame = new JFrame();
+    	frame.setTitle("Kundeoplysninger");
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(500, 480);
         frame.setResizable(false);
@@ -383,7 +382,12 @@ public class Kundeoplysninger {
     	postalCodeS = postal.getText();
     	countryS = country.getText();
     	
-    	customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+    	if(firstnameS != "" && surnameS != "" && emailS != "" && phoneS != ""
+    			&& addressS != "" && cityS != "" && postalCodeS != "" && countryS != "") {
+    		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+    	} else {
+    		JOptionPane.showMessageDialog(frame, "Kan ikke oprette kunde - du mangler at indtaste information!");
+    	}
     }
     
     private void makePeople() {
@@ -391,6 +395,10 @@ public class Kundeoplysninger {
     		String firstname = firstnameList.get(i).getText();
     		String surname = surnameList.get(i).getText();
     		String birthday = birthdayList.get(i).getText();
+    		
+    		if(firstname != "" && surname != "" && birthday != "") {
+    			JOptionPane.showMessageDialog(frame, "Kan ikke oprette passagér - du mangler at indtaste information!");
+    		}
     		
     		passengers.add(new Person(firstname, surname, birthday));
     	}

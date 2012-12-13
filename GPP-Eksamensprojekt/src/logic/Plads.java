@@ -56,11 +56,11 @@ public class Plads extends JPanel {
 	
 	public void SetName(String name) {
 		this.name = name;
-		JLabel nameLabel = new JLabel(name);
-		nameLabel.setFont(new Font("string", Font.BOLD, 10));
-		nameLabel.setVerticalAlignment(SwingConstants.TOP);
-		nameLabel.setVerticalTextPosition(SwingConstants.TOP);
-		this.add(nameLabel);
+//		JLabel nameLabel = new JLabel(name);
+//		nameLabel.setFont(new Font("string", Font.BOLD, 10));
+//		nameLabel.setVerticalAlignment(SwingConstants.TOP);
+//		nameLabel.setVerticalTextPosition(SwingConstants.TOP);
+//		this.add(nameLabel);
 	}
 	
 	public String GetName() {

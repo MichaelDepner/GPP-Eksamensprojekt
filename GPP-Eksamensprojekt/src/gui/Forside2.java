@@ -18,10 +18,12 @@ public class Forside2  extends JFrame implements ActionListener{
 	private JLabel udrejse, hjemrejse;
 	private JTextField bookingText;
 	private JRadioButton enkelt, turRetur;
-	private JXDatePicker udrejseDate, hjemrejseDate;
+	private JCheckBox periode;
+	private JXDatePicker udrejseDate, hjemrejseDate, udrejseDate2, hjemrejseDate2;
 	private JButton searchButton, searchBooking;
 	private JComboBox searchList,searchList1,searchList2;
 	private boolean turReturBool = false;
+	private boolean periodBoolean = false;
 	
 	public Forside2(){
 		setTitle("Forside");
@@ -73,6 +75,12 @@ public class Forside2  extends JFrame implements ActionListener{
 	    //tilføjer datepicker
 	    hjemrejseDate = new JXDatePicker();
 	    panelRight.add(hjemrejseDate);
+	    
+	    //tilføjer næste datepicker
+	    hjemrejseDate2 = new JXDatePicker();
+	    hjemrejseDate2.setVisible(false);
+	    panelRight.add(hjemrejseDate2);
+	    
 
 	    panelRight.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 	    
@@ -103,14 +111,19 @@ public class Forside2  extends JFrame implements ActionListener{
 		enkelt.setSelected(true);
 		radioPanel.add(turRetur);
 		
+		//laver box
+		periode = new JCheckBox("Søg i en periode");
+		radioPanel.add(periode);
+		
 		//Grupperer radio buttons
 	    ButtonGroup group = new ButtonGroup();
 	    group.add(enkelt);
 	    group.add(turRetur);
 	    
-	  	//Sætter listeners på radio buttons
+	  	//Sætter listeners på knapper
 	    enkelt.addActionListener(this);
-	    turRetur.addActionListener(this); 
+	    turRetur.addActionListener(this);
+	    periode.addActionListener(this);
 	    
 	    //Skal tilføje actions til knapperne
 	    
@@ -166,6 +179,11 @@ public class Forside2  extends JFrame implements ActionListener{
 	    //Tilføjer  kalender
 	    udrejseDate = new JXDatePicker();
 	    panelLeft.add(udrejseDate);
+	    
+	    udrejseDate2 = new JXDatePicker();
+	    udrejseDate2.setVisible(false);
+	    panelLeft.add(udrejseDate2);
+	    
 	    
 	    //Laver et panel, der sættes ind i panel SOUTH
   		panelSouth = new JPanel();
@@ -236,10 +254,22 @@ public class Forside2  extends JFrame implements ActionListener{
 						if(udrejseDate.getDate() == null || hjemrejseDate.getDate() == null) {
 							JOptionPane.showMessageDialog(this, "Dato ikke valgt ordentligt.");
 						} else {
-						Afgangsliste afgange = new Afgangsliste(
-								udrejseDate.getDate(),hjemrejseDate.getDate(), 
-								(String)searchList1.getSelectedItem(), 
-								(String)searchList2.getSelectedItem());
+							//hvis vi har valgt at søge på en periode, lav afgangsliste i periode. Ellers, lav søgning på den enkelte dato
+							if(periodBoolean) {
+								if(udrejseDate2.getDate() == null || hjemrejseDate2.getDate() == null) {
+									JOptionPane.showMessageDialog(this, "Dato ikke valgt ordentligt.");
+								} else {
+									Afgangsliste afgange = new Afgangsliste(
+											udrejseDate.getDate(), udrejseDate2.getDate(), hjemrejseDate.getDate(),
+											hjemrejseDate2.getDate(), (String)searchList1.getSelectedItem(),
+											(String)searchList2.getSelectedItem());
+								}
+							} else {
+								Afgangsliste afgange = new Afgangsliste(
+										udrejseDate.getDate(),hjemrejseDate.getDate(), 
+										(String)searchList1.getSelectedItem(), 
+										(String)searchList2.getSelectedItem(), false);
+							}
 						}
 					} catch (SQLException e) {
 						JOptionPane.showMessageDialog(this, "Fejl i kommunikation med serveren. Er internettet nede?");
@@ -251,11 +281,19 @@ public class Forside2  extends JFrame implements ActionListener{
 						if(udrejseDate.getDate() == null) {
 							JOptionPane.showMessageDialog(this, "Dato ikke valgt ordentligt.");
 						} else {
-							//ellers, opret afgang baseret på de valgte lufthavne og datoer
-							Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(), (String)searchList1.getSelectedItem(),
-									(String)searchList2.getSelectedItem());
+							if(!periodBoolean) {
+								//ellers, opret afgang baseret på de valgte lufthavne og datoer
+								Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(), (String)searchList1.getSelectedItem(),
+										(String)searchList2.getSelectedItem());
+							} else {
+								if(udrejseDate2.getDate() == null) {
+									JOptionPane.showMessageDialog(this, "Dato ikke valgt ordentligt.");
+								} else {
+									Afgangsliste afgange = new Afgangsliste(udrejseDate.getDate(), udrejseDate2.getDate(),
+											(String)searchList1.getSelectedItem(), (String)searchList2.getSelectedItem(), true);
+								}
+							}
 						}
-
 					} catch (SQLException e) {
 						JOptionPane.showMessageDialog(this, "Fejl i kommunikation med serveren. Er internettet nede?");
 						e.printStackTrace();
@@ -268,15 +306,15 @@ public class Forside2  extends JFrame implements ActionListener{
 			panelRight.setVisible(true);
 			turReturBool = true;
 		}
-	    else if(source == enkelt) {
-	    	panelRight.setVisible(false);
-	    	turReturBool = false;
-	    }
-	    else if(source == searchBooking) {
-	    	System.out.println("Søger bookinger");
-	    	String searchingFor = searchList.getSelectedItem().toString();
-	    	String arg = bookingText.getText();
-	    	System.out.println("Searching for: "+searchingFor+", arg: "+arg);
+		else if(source == enkelt) {
+			panelRight.setVisible(false);
+			turReturBool = false;
+		}
+		else if(source == searchBooking) {
+			System.out.println("Søger bookinger");
+			String searchingFor = searchList.getSelectedItem().toString();
+			String arg = bookingText.getText();
+			System.out.println("Searching for: "+searchingFor+", arg: "+arg);
 	    	
 	    	//'oversætter' til database-relevant søgning:
 	    	if(searchingFor == "Adresse") searchingFor = "Customer.address";
@@ -291,6 +329,17 @@ public class Forside2  extends JFrame implements ActionListener{
 			}
 	    	
 	    	
+	    }
+	    else if(source == periode) {
+	    	if(periode.isSelected()) {
+	    		periodBoolean = true;
+	    		udrejseDate2.setVisible(true);
+	    		hjemrejseDate2.setVisible(true);
+	    	} else {
+	    		periodBoolean = false;
+	    		udrejseDate2.setVisible(false);
+	    		hjemrejseDate2.setVisible(false);
+	    	}
 	    }
 	    else if(source == bookingText) {
 	    	

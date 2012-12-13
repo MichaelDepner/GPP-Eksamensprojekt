@@ -174,7 +174,7 @@ public class Database {
 		return rs;
 	}
 	
-	public ArrayList<Departure> queryGetDeparturesBeforeDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
+	public ArrayList<Departure> queryGetDeparturesInPeriod(String afterDate, String beforeDate, int departureAirport, int arrivalAirport) throws SQLException {
 		ArrayList<Departure> departures = new ArrayList<>();
 		String query;
 		query = "SELECT " +
@@ -182,13 +182,15 @@ public class Database {
 				"FROM " +
 				"Departures " +
 				"WHERE " +
-				"Departures.Departure_date < " + date + " " +
+				"Departures.departure_date >= " + afterDate + " " +
+				"AND " +
+				"Departures.departure_date <= " + beforeDate + " " +
 				"AND " +
 				"Departures.departure_airport_id = " + departureAirport + " " +
 				"AND " +
 				"Departures.arrival_airport_id = " + arrivalAirport + " " +
 				"ORDER BY " +
-				"Departures.Departure_time DESC";
+				"Departures.Departure_date ASC";
 		ResultSet rs = this.execute(query);
 		
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
@@ -197,35 +199,61 @@ public class Database {
 			departures.add(db.queryGetDeparture(id));
 		}
 		db.close();
-		return departures;	
+		return departures;
 	}
 	
+//	public ArrayList<Departure> queryGetDeparturesBeforeDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
+//		ArrayList<Departure> departures = new ArrayList<>();
+//		String query;
+//		query = "SELECT " +
+//				"* " +
+//				"FROM " +
+//				"Departures " +
+//				"WHERE " +
+//				"Departures.Departure_date < " + date + " " +
+//				"AND " +
+//				"Departures.departure_airport_id = " + departureAirport + " " +
+//				"AND " +
+//				"Departures.arrival_airport_id = " + arrivalAirport + " " +
+//				"ORDER BY " +
+//				"Departures.Departure_time DESC";
+//		ResultSet rs = this.execute(query);
+//		
+//		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+//		while(rs.next()) {
+//			int id = rs.getInt("id");
+//			departures.add(db.queryGetDeparture(id));
+//		}
+//		db.close();
+//		return departures;	
+//	}
+	
 	//returner en arraylist af departures før en dato
-	public ArrayList<Departure> queryGetDeparturesAfterDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
-		ArrayList<Departure> departures = new ArrayList<>();
-		String query;
-		query = "SELECT " +
-				"* " +
-				"FROM " +
-				"Departures " +
-				"WHERE " +
-				"Departures.Departure_date > " + date + " " +
-				"AND " +
-				"Departures.departure_airport_id = " + departureAirport + " " +
-				"AND " +
-				"Departures.arrival_airport_id = " + arrivalAirport + " " +
-				"ORDER BY " +
-				"Departures.Departure_time ASC";
-		ResultSet rs = this.execute(query);
-		
-		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-		while(rs.next()) {
-			int id = rs.getInt("id");
-			departures.add(db.queryGetDeparture(id));
-		}
-		db.close();
-		return departures;		
-	}
+//	public ArrayList<Departure> queryGetDeparturesAfterDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
+//		ArrayList<Departure> departures = new ArrayList<>();
+//		String query;
+//		query = "SELECT " +
+//				"* " +
+//				"FROM " +
+//				"Departures " +
+//				"WHERE " +
+//				"Departures.Departure_date > " + date + " " +
+//				"AND " +
+//				"Departures.departure_airport_id = " + departureAirport + " " +
+//				"AND " +
+//				"Departures.arrival_airport_id = " + arrivalAirport + " " +
+//				"ORDER BY " +
+//				"Departures.Departure_time ASC";
+//		ResultSet rs = this.execute(query);
+//		
+//		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+//		while(rs.next()) {
+//			int id = rs.getInt("id");
+//			departures.add(db.queryGetDeparture(id));
+//		}
+//		db.close();
+//		return departures;		
+//	}
 	
 	public Departure queryGetDeparture(int departureId) throws SQLException {
 		//finder departure i sql serveren
