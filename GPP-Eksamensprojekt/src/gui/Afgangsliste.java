@@ -41,7 +41,7 @@ public class Afgangsliste extends JFrame {
 	//denne konstruktor kaldes ved tur/retur eller periodesøgning enkeltrejse. Boolean 'period' angiver, hvilken.
     public Afgangsliste(Date departureDate, Date arrivalDate, String departureAirport, String arrivalAirport, boolean period) throws SQLException {
     	
-    	setTitle("Afgange");
+    	
     	if(!period) {
     		turRetur = true;
     		//Opretter AfgangSøgning
@@ -240,9 +240,8 @@ public class Afgangsliste extends JFrame {
     	setVisible(true);
     }
 
-
+    //Sætter bredden for det angivne table
     private void setWidth(JTable table, int i, int j) {
-    	//column = table.getColumnModel().getColumn(i);
     	column = table.getColumnModel().getColumn(i);
 
     	column.setMinWidth(j);
@@ -250,6 +249,7 @@ public class Afgangsliste extends JFrame {
     	column.setPreferredWidth(j);
     }
 
+    //Laver table for afgange
     private JTable departureTable(ArrayList<Departure> departures) {
     	final ArrayList<Departure> dp = departures;
     	DefaultTableModel model = new DefaultTableModel() {
@@ -283,10 +283,10 @@ public class Afgangsliste extends JFrame {
     		//TODO tilføj udregning af rejsetid
     		String travelTime = d.getTravelTime();
     		String fromTo = d.getDepartureAirportAbbrevation()+" - "+d.getArrivalAirportAbbrevation();
-    		String seats = " ";//d.getSeats();
+    		//String seats = " ";//d.getSeats();
     		int id = d.getDepartureId();
 
-    		//Har fjernet seats og id+""
+    		//Har fjernet seats
     		model.addRow(new Object[]{date,price,time,travelTime,fromTo,id+""});	
     	}
 
