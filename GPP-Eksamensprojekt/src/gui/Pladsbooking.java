@@ -402,6 +402,7 @@ public class Pladsbooking extends JFrame {
 							db.queryUpdateBookingSeats(b.getId(), seatNums1);
 							
 							JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning.");
+							dispose();
 							
 							
 						} catch (SQLException e) {
