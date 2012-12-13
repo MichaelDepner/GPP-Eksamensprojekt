@@ -89,6 +89,8 @@ public class Kundeoplysninger {
     }
     
     private void makeFrame() {
+    	frame.setTitle("Kundeoplysninger");
+    	
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(500, 480);
@@ -408,6 +410,7 @@ public class Kundeoplysninger {
         public void actionPerformed(ActionEvent event){
             if(event.getSource() == back) {
                 System.out.println("Going back");
+                frame.dispose();
             } else if(event.getSource() == next) {
             	
             	if(importingCustomer) {

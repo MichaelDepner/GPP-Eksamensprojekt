@@ -106,6 +106,7 @@ public class Pladsbooking extends JFrame {
 		this.getContentPane().setVisible(false);
 	}
 	public void makeVisible() {
+		setTitle("Pladsbooking");
 		this.getContentPane().setVisible(true);
 	}
 	

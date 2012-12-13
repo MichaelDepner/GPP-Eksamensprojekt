@@ -54,6 +54,9 @@ public class Bookingliste extends JFrame {
 	}
 	
 	private void makeWindow() {
+		
+		setTitle("Bookingliste");
+		
         getContentPane().setLayout(new BorderLayout());
         
       //Laver vores fane-vinduer
@@ -71,7 +74,7 @@ public class Bookingliste extends JFrame {
     	getContentPane().add(panelSouth, BorderLayout.SOUTH);
     	panelSouth.setLayout(new FlowLayout());
     	
-    	next = new JButton("Next");
+    	next = new JButton("Næste");
     	next.addActionListener(new Listener());
     	panelSouth.add(next);
 
@@ -86,7 +89,7 @@ public class Bookingliste extends JFrame {
     	//jp1bookings.setLayout(new BoxLayout(jp1bookings, BoxLayout.Y_AXIS));
     	jp1bookings.setLayout(new FlowLayout());
     	JLabel labelUdrejse = new JLabel();
-    	labelUdrejse.setText("Bookings foretaget af "+c.GetFullName());
+    	labelUdrejse.setText("Bookinger foretaget af "+c.GetFullName());
     	labelUdrejse.setFont(new Font("String", Font.BOLD, 14));
     	jp1bookings.add(labelUdrejse);
 
