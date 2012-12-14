@@ -340,7 +340,7 @@ public class Pladsbooking extends JFrame {
 			middlePanel.setLayout(new BorderLayout());
 			middlePanel.setSize(300, 720);
 			if(turRetur) {
-				middleBottomPanel = addPlane(d2, pladsArray2, panelList2, rightMiddleMiddlePanel);
+				Panel = addPlane(d2, pladsArray2, panelList2, rightMiddleMiddlePanel);
 				middlePanel.add(middleBottomPanel, BorderLayout.CENTER);
 			}
 

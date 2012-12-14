@@ -250,7 +250,7 @@ public class Afgangsliste extends JFrame {
     	model.addColumn("Afrejse - Ankomst"); 
     	model.addColumn("Rejsetid");
     	model.addColumn("Lufthavne");
-    	model.addColumn("DepartureId");
+    	model.addColumn("DepartureID");
 
     	//Tilføjer rejser
     	for(int i=0; i<departures.size(); i++) {
