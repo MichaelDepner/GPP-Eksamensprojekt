@@ -41,7 +41,7 @@ public class Afgangsliste extends JFrame {
 	//denne konstruktor kaldes ved tur/retur eller periodesøgning enkeltrejse. Boolean 'period' angiver, hvilken.
     public Afgangsliste(Date departureDate, Date arrivalDate, String departureAirport, String arrivalAirport, boolean period) throws SQLException {
     	
-    	setTitle("Afgange");
+    	
     	if(!period) {
     		turRetur = true;
     		//Opretter AfgangSøgning
@@ -91,11 +91,14 @@ public class Afgangsliste extends JFrame {
     	makeWindow(true);
     }
     
+    //Opretter en fane, og indsætter panel og table
     public void addTab(JTabbedPane p, AfgangSøgning as) {
     	try {
 			JPanel panel = new JPanel();
+			//Tilføjer en fane til den angivne JTabbedPane, sætter dato og indsætter panel
 	    	p.addTab(as.getFormattedDate(), panel);
 	    	JTable table = departureTable(as.getDepartures());
+	    	//Tilføjer table til panel
 	    	panel.add(table.getTableHeader());
 	    	panel.add(table);
 		} catch (SQLException e) {
@@ -104,6 +107,7 @@ public class Afgangsliste extends JFrame {
 		}
     }
 
+    //Opretter vinduet
     public void makeWindow(boolean turRetur) {
     	//Laver vores fane-vinduer
     	jtp = new JTabbedPane();
@@ -208,32 +212,6 @@ public class Afgangsliste extends JFrame {
         JScrollPane scrollHjemrejse = new JScrollPane(jp1Hjemrejse);
         jtp2.add(scrollHjemrejse);*/
 
-    	//Har tilføjet scrollPane og layouts til jp1Udrejse og -hjemrejse.
-    	//Nu vil den ikke vise navne i fanerne
-    	//Evt. ryk overskifterne over fanerne
-    	/**
-        jp2 = new JPanel();
-        jp3 = new JPanel();
-        jp4 = new JPanel();
-
-		/**
-        label2 = new JLabel();
-        label2.setText("Torsdag d. 29. november 2012");
-        label3 = new JLabel();
-        label3.setText("Fredag d. 30. november 2012");
-        label4 = new JLabel();
-        label4.setText("Lørdag d. 1. december 2012");
-
-        jp2.add(label2);
-        jp3.add(label3);
-        jp4.add(label4);
-
-        // Her tilføjes titlerne til fanerne
-        jtp.addTab("28/11", jp1);
-        jtp.addTab("29/11", jp2);
-        jtp.addTab("30/11", jp3);
-        jtp.addTab("01/12", jp4); */
-
     	setPreferredSize(new Dimension(640, 700));
     	setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     	pack();
@@ -247,9 +225,8 @@ public class Afgangsliste extends JFrame {
     	super.dispose();
     }
 
-
+    //Sætter bredden for det angivne table
     private void setWidth(JTable table, int i, int j) {
-    	//column = table.getColumnModel().getColumn(i);
     	column = table.getColumnModel().getColumn(i);
 
     	column.setMinWidth(j);
@@ -257,13 +234,14 @@ public class Afgangsliste extends JFrame {
     	column.setPreferredWidth(j);
     }
 
+    //Laver table for afgange
     private JTable departureTable(ArrayList<Departure> departures) {
     	final ArrayList<Departure> dp = departures;
     	DefaultTableModel model = new DefaultTableModel() {
     		public boolean isCellEditable(int row, int column) {
     			return false;
     		}
-    	}; 
+    	};  
     	final JTable table = new JTable(model); 
 
 
@@ -279,7 +257,7 @@ public class Afgangsliste extends JFrame {
     	model.addColumn("Afrejse - Ankomst"); 
     	model.addColumn("Rejsetid");
     	model.addColumn("Lufthavne");
-    	model.addColumn("DepartureId");
+    	model.addColumn("DepartureID");
 
     	//Tilføjer rejser
     	for(int i=0; i<departures.size(); i++) {
@@ -290,10 +268,10 @@ public class Afgangsliste extends JFrame {
     		//TODO tilføj udregning af rejsetid
     		String travelTime = d.getTravelTime();
     		String fromTo = d.getDepartureAirportAbbrevation()+" - "+d.getArrivalAirportAbbrevation();
-    		String seats = " ";//d.getSeats();
+    		//String seats = " ";//d.getSeats();
     		int id = d.getDepartureId();
 
-    		//Har fjernet seats og id+""
+    		//Har fjernet seats
     		model.addRow(new Object[]{date,price,time,travelTime,fromTo,id+""});	
     	}
 
@@ -355,7 +333,7 @@ public class Afgangsliste extends JFrame {
     	panel.add(table.getTableHeader());
     	panel.add(table);
     	return table;
-    }
+    }	
     
     private Afgangsliste getThis() {
     	return this;

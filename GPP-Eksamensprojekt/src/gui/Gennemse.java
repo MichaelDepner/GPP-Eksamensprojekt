@@ -327,15 +327,12 @@ public class Gennemse extends JFrame{
 		panel.add(panelKnapper);
 		panelKnapper.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 10));
 
-		slet = new JButton("Slet");
+		slet = new JButton("Slet booking");
 		panelKnapper.add(slet);
-		gem = new JButton("Gem");
-		panelKnapper.add(gem);
-		annuller = new JButton("Tilbage");
+		annuller = new JButton("Luk");
 		panelKnapper.add(annuller);
 
     	slet.addActionListener(new Listener());
-    	gem.addActionListener(new Listener());
     	annuller.addActionListener(new Listener());
 	}
 	

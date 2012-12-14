@@ -396,7 +396,6 @@ public class Pladsbooking extends JFrame {
 						
 					} else if(rebooking) {
 						try {
-
 							if(oldReservations.size() != pladsArray1.getReservations().size()) {
 								JOptionPane.showMessageDialog(middleRightPanel, "Du skal vælge "+oldReservations.size()+" pladser i alt!");
 							} else {
@@ -414,6 +413,22 @@ public class Pladsbooking extends JFrame {
 								JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning.");
 								dispose();
 							}
+							
+							String seatNums1 = "";
+							//lav string med id på reserverede pladser ud
+		    				for(int j=0; j<pladsArray1.getReservations().size(); j++) {
+		    					int num = pladsArray1.getReservations().get(j).getSeatNo();
+		    					seatNums1 = num+" "+seatNums1;
+		    				}
+		    				
+		    				
+							Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+							db.queryUpdateBookingSeats(b.getId(), seatNums1);
+							
+							JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning.");
+							dispose();
+							
+							
 						} catch (SQLException e) {
 							JOptionPane.showMessageDialog(next, "Fejl i kommunikation med serveren. Er internettet nede?");
 							System.out.println("Something went wrong when editing the booking");
