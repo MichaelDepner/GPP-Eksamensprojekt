@@ -193,7 +193,7 @@ public class Afgangsliste extends JFrame {
     		//github.com/Mibias/GPP-Eksamensprojekt.git
 
     		//Tilføjer panel jp1Hjemrejse til jtp
-    		if(d != null) {
+    		if(departures2.size() > 0) {
     			jtp2.addTab(departures2.get(0).getDepartureDate()+" - "+departures2.get(departures2.size()-1).getDepartureDate(), jp1Hjemrejse);
     		} else {
     			jtp2.addTab("Ingen afgange fundet", jp1Hjemrejse);
