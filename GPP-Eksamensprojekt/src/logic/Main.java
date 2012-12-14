@@ -23,7 +23,7 @@ public class Main {
 //		new Bookinginfo();
 		//new gui.Betaling();
 		//new gui.Kundeoplysninger();
-		//new gui.Kvittering();
+		new gui.Kvittering();
 		
 		//new gui.Bookinginfo();
 //<<<<<<< HEAD

@@ -211,10 +211,10 @@ public class Forside2  extends JFrame implements ActionListener{
         labelNorth.setFont(new Font("String", Font.BOLD, 14));
 		
 		//Combo box til panelNorth
-		String[] searchStrings = {"Bookingnr.", "Adresse", "E-mail", "Tlf.nr."};
+		String[] searchStrings = {"Adresse", "E-mail", "Tlf.nr."};
 		searchList = new JComboBox(searchStrings);
 		panelNorth.add(searchList);
-		searchList.setSelectedIndex(3);
+		searchList.setSelectedIndex(2);
         searchList.setFont(new Font("String", Font.BOLD, 13));
 		searchList.addActionListener(this);
 		
