@@ -239,6 +239,13 @@ public class Afgangsliste extends JFrame {
     	pack();
     	setVisible(true);
     }
+    
+    public void dispose() {
+    	if(pb != null) {
+    		pb.dispose();
+    	}
+    	super.dispose();
+    }
 
 
     private void setWidth(JTable table, int i, int j) {

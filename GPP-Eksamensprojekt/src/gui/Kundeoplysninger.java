@@ -36,8 +36,9 @@ public class Kundeoplysninger {
     private JPanel panel1, panel2, panel6, panelNorth;
     private JPanel panel, panelHeader, panelCenter, panelEast;
     private ArrayList<Plads> reservations1, reservations2;
+    private ArrayList<Person> existingPassengers;
     private ArrayList<Person> passengers = new ArrayList<>();
-    private ArrayList<JPanel> passengerPanels = new ArrayList<>();
+//    private ArrayList<JPanel> passengerPanels = new ArrayList<>();
     private Customer customer;
     private ArrayList<JTextField> firstnameList = new ArrayList<>();
     private ArrayList<JTextField> surnameList = new ArrayList<>();
@@ -45,6 +46,7 @@ public class Kundeoplysninger {
     private boolean turRetur;
     private boolean importingCustomer = false;
     private boolean changingExistingCustomer = false;
+    private boolean changingExistingPassengers = false;
     Customer importedCustomer;
     Customer c;
     Gennemse g;
@@ -91,6 +93,16 @@ public class Kundeoplysninger {
     	addActionListeners();
     }
     
+    //når vi skal ændre i allerede eksisterende passagerer
+    public Kundeoplysninger(ArrayList<Person> passengers, Gennemse g) {
+    	this.g= g;
+    	turRetur = false;
+    	changingExistingPassengers = true;
+    	existingPassengers = passengers;
+    	makeFrame();
+    	addActionListeners();
+    }
+    
     private void makeFrame() {
         frame = new JFrame();
     	frame.setTitle("Kundeoplysninger");
@@ -121,15 +133,23 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
+      
+        
 
-        if(!changingExistingCustomer) {
+        if(!changingExistingCustomer && !changingExistingPassengers) {
         	int counter = 0;
         	for(int i=0; i<reservations1.size(); i++) {
         		counter++;
         	}
         	centerPanel(counter);
-        } else {
+        } else if (changingExistingCustomer) {
         	centerPanel(0);
+        } else if (changingExistingPassengers) {
+        	int counter = 0;
+        	for(int i=0; i<existingPassengers.size(); i++) {
+        		counter++;
+        	}
+        	centerPanel(counter);
         }
         
         /**
@@ -214,7 +234,9 @@ public class Kundeoplysninger {
         panel.add(panel6, BorderLayout.SOUTH);
         panel6.setLayout(new FlowLayout());
 
-        if(!changingExistingCustomer) {
+        //hvis vi er ved at indtaste friske oplysninger, lav tilbage og næste knapper.
+        //ellers, lav en enkelt 'confirm' knap.
+        if(!changingExistingCustomer && !changingExistingPassengers) {
         	//Opretter knapperne, og lægger dem i panel6
         	back = new JButton("Tilbage");
         	next = new JButton("Næste");
@@ -251,6 +273,13 @@ public class Kundeoplysninger {
         flowPanel1.add(panel2);
 	    //panel2.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 20));
         panel2.setLayout(new GridLayout(8,1,10,10));
+        
+        //hvis vi er ved at ændre i passengers, sæt customer-panel usynligt
+        if(changingExistingPassengers) {
+        	panelNorth.setVisible(false);
+        	panel1.setVisible(false);
+            panel2.setVisible(false);
+        }
         
         //Indsætter labels i vores JPanel panel1
         labels();
@@ -313,16 +342,16 @@ public class Kundeoplysninger {
         labelCity = new JLabel ("By");
         labelPostal = new JLabel ("Postnummer");
         labelCountry = new JLabel ("Land");
-        labelBirthday = new JLabel ("Fødselsdag");
+        labelBirthday = new JLabel ("Fødselsdag \"dd-mm-åååå\"");
     }
     
     private void passengers(int antalPassagerer) {
-    	for(int i = 1; i < antalPassagerer+1; i++) {
+    	for(int i = 0; i < antalPassagerer; i++) {
     		//Laver passagerer        
             JPanel flowPanel = new JPanel();
             flowPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
             panelCenter.add(flowPanel);
-            JLabel passengerHeader = new JLabel("Passager " + i);
+            JLabel passengerHeader = new JLabel("Passager " + (i+1));
             passengerHeader.setFont(new Font("String", Font.BOLD, 13));
             flowPanel.add(passengerHeader);
             
@@ -358,12 +387,19 @@ public class Kundeoplysninger {
             firstnameList.add(nameField);
             surnameList.add(surnameField);
             birthdayList.add(birthdayField);
+            
+            if(changingExistingPassengers) {
+            	Person p = existingPassengers.get(i);
+            	nameField.setText(p.getFirstname());
+            	surnameField.setText(p.getSurname());
+            	birthdayField.setText(p.getBirthday());
+            }
     	}
     }
 
     //Tilføjer actionListeners til de to knapper
     private void addActionListeners(){
-    	if(!changingExistingCustomer) {
+    	if(!changingExistingCustomer && !changingExistingPassengers) {
     		back.addActionListener(new Listener());
     		next.addActionListener(new Listener());
     		importerKunde.addActionListener(new Listener());
@@ -382,6 +418,7 @@ public class Kundeoplysninger {
     	postalCodeS = postal.getText();
     	countryS = country.getText();
     	
+    	//tjek, at der er indtastet noget i alle felter, og opret kunden
     	if(firstnameS != "" && surnameS != "" && emailS != "" && phoneS != ""
     			&& addressS != "" && cityS != "" && postalCodeS != "" && countryS != "") {
     		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
@@ -396,11 +433,20 @@ public class Kundeoplysninger {
     		String surname = surnameList.get(i).getText();
     		String birthday = birthdayList.get(i).getText();
     		
+    		
     		if(firstname != "" && surname != "" && birthday != "") {
+    			Person p = new Person(firstname, surname, birthday);
+        		
+        		//hvis vi ændrer i eksisterende passagerer, sæt den 'nyoprettede' passagér til det korrekte id så vi kan gemme i databasen
+        		if(changingExistingPassengers) {
+        			p.setId(existingPassengers.get(i).getId());
+        		}
+        		passengers.add(p);
+    		} else {
     			JOptionPane.showMessageDialog(frame, "Kan ikke oprette passagér - du mangler at indtaste information!");
+    			passengers.clear();
     		}
     		
-    		passengers.add(new Person(firstname, surname, birthday));
     	}
     }
     
@@ -484,26 +530,45 @@ public class Kundeoplysninger {
 				}
             } else if(event.getSource() == confirm) {
             	
-            	firstnameS = firstname.getText();
-            	surnameS = surname.getText();
-            	emailS = email.getText();
-            	phoneS = phoneNumber.getText();
-            	addressS = address.getText();
-            	cityS = city.getText();
-            	postalCodeS = postal.getText();
-            	countryS = country.getText();
-            	
-            	try {
-            		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-            		db.queryUpdateCustomer(c.getId(), firstnameS, surnameS, addressS, cityS, postalCodeS, countryS, emailS, phoneS);
-            		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
-            		g.reload(customer);
-            		frame.dispose();
+            	if(changingExistingCustomer) {
+            		firstnameS = firstname.getText();
+                	surnameS = surname.getText();
+                	emailS = email.getText();
+                	phoneS = phoneNumber.getText();
+                	addressS = address.getText();
+                	cityS = city.getText();
+                	postalCodeS = postal.getText();
+                	countryS = country.getText();
+                	
+                	try {
+                		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+                		db.queryUpdateCustomer(c.getId(), firstnameS, surnameS, addressS, cityS, postalCodeS, countryS, emailS, phoneS);
+                		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+                		g.reload(customer);
+                		frame.dispose();
+                		
+                	} catch (SQLException e) {
+                		System.out.println("Error when updating customer.");
+                		e.printStackTrace();
+                	}
+            	} else if(changingExistingPassengers) {
+            		makePeople();
             		
-            	} catch (SQLException e) {
-            		System.out.println("Error when updating customer.");
-            		e.printStackTrace();
+            		try {
+            			Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+            			for(int i=0; i<passengers.size(); i++) {
+            				Person p = passengers.get(i);
+            				db.queryUpdatePassenger(p.getId(), p.getFirstname(), p.getSurname(), p.getBirthday());
+            			}
+            			JOptionPane.showMessageDialog(panel, "Passagerer opdateret");
+            			g.dispose();
+            			frame.dispose();
+            		} catch (SQLException e) {
+            			JOptionPane.showMessageDialog(panel, "Fejl i opdatering af passagerer. Er internettet nede?");
+            			e.printStackTrace();
+            		}
             	}
+            	
             	
             	
             }

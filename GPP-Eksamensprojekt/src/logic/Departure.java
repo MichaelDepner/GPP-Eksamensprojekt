@@ -1,6 +1,7 @@
 package logic;
 
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -35,6 +36,7 @@ public class Departure {
 	public int getDepartureId() {
 		return departureId;
 	}
+	
 	
 	public String getArrivalAirportName() {
 		return arrivalName;

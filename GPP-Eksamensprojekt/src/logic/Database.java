@@ -97,6 +97,7 @@ public class Database {
 		ResultSet rs = this.execute(query);
 		rs.next();
 		p = new Person(rs.getString("Firstname"), rs.getString("Surname"), rs.getString("Birthday"));
+		p.setId(rs.getInt("id"));
 		return p;
 	}
 	
@@ -308,12 +309,37 @@ public class Database {
 		return d;
 	}
 
-	public void queryMakeBooking(int departureId, int customerId, String seats, String passengerIds) throws SQLException {
+	//skaber en booking, og finder den herefter igen, denne gang med et database-skabt id tilknyttet. Bruges i kvitteringen.
+	public Booking queryMakeBooking(int departureId, int customerId, String seats, String passengerIds) throws SQLException {
 		String query = "INSERT INTO Booking (departure_id, customer_id, seats, passenger_ids) " +
 				"VALUES ('" + departureId + "', '" + customerId + "', '" + seats + "', '" + passengerIds + "'); ";
 		System.out.println(query);
 		this.execute(query);
+		String query2 = "SELECT " +
+				"* " +
+				"FROM " +
+				"Booking " +
+				"WHERE " +
+				"Departure_id = '" +departureId+"' " +
+				"AND " +
+				"Customer_id = '" + customerId +"' " +
+				"AND " +
+				"seats = '"+seats+"' " +
+				"AND " +
+				"passenger_Ids = '"+passengerIds+"'";
+		ResultSet rs = this.execute(query2);
+		rs.next();
+		int id = rs.getInt("id");
+		int departureId2 = rs.getInt("departure_id");
+		int customerId2 = rs.getInt("Customer_id");
+		String seats2 = rs.getString("seats");
+		String passengerIds2 = rs.getString("Passenger_ids");
+		
+		Booking b = new Booking(departureId2, seats2, passengerIds2, false);
+		b.setId(id);
+		return b;
 	}
+	
 	
 	public int queryMakeCustomer(Customer c) throws SQLException {
 		//indsæt customer i databasen
@@ -435,6 +461,19 @@ public class Database {
 				"Phone_Number = '" + phoneNumber + "' " +
 				"WHERE " +
 				"Customer.id = " +id;
+		this.execute(query);
+	}
+	
+	public void queryUpdatePassenger(int id, String firstname, String surname, String birthday) throws SQLException {
+		String query;
+		query = "UPDATE " +
+				"Person " +
+				"SET " +
+				"Firstname = '" + firstname + "', " +
+				"Surname = '" + surname + "', " +
+				"Birthday = '" + birthday + "' " +
+				"WHERE " +
+				"Person.id = " +id;
 		this.execute(query);
 	}
 	

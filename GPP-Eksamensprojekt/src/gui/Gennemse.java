@@ -31,7 +31,7 @@ public class Gennemse extends JFrame{
 	private JLabel airport, ap1, ap2, afgang, ankomst, rejsetid, lufthavn1, lufthavn2;
 	private JLabel pladser, labelSeat, labelPassengers, passenger, birthday, header;
 	private JLabel labelPris, total, prisTekst;
-	private JButton editCustomerButton, editReservation;
+	private JButton editCustomerButton, editReservation, editPassengers;
 	//private int antalPassagerer;
 	
 	private JButton tilbage, bestil, slet, gem, annuller;
@@ -262,6 +262,14 @@ public class Gennemse extends JFrame{
 		labelPassengers.setFont(new Font("String", Font.BOLD, 16));
 		panelPassengers.add(labelPassengers);
 
+		//skaber knap til at ændre i passagerer, hvis vi er i gang med at rette i eksisterende booking
+		if(editing) {
+			editPassengers = new JButton("Redigér passagerer");
+			editPassengers.addActionListener(new Listener());
+			panelPassengers.add(editPassengers);
+		}
+		
+		
 		//skaber passagerer
 		passengers(passengers.size());
 
@@ -356,79 +364,89 @@ public class Gennemse extends JFrame{
 	
 	//opdaterer information ved at lave et nyt vindue og fjerne det gamle
 	public void reload(Customer c) {
-		Gennemse g = new Gennemse(reserved1, d1, b, customer);
+		Gennemse g = new Gennemse(reserved1, d1, b, c);
 		dispose();
-		
 	}
     
     private Gennemse getThis() {
     	return this;
+    }
+    
+    public void removeMe() {
+    	ko.removeMe();
+    	dispose();
     }
 
     //Lytter til knapperne
     private class Listener implements ActionListener {
     	public void actionPerformed(ActionEvent event){
     		if(event.getSource() == tilbage) {
-    			System.out.println("Going back");
     			dispose();
     		} else if(event.getSource() == bestil) {
-    			System.out.println("Bestiller");
-
-    			//opretter passagerer
-    			String passengerString = "";
-    			int customerId = 0;
-    			String seatNums1 = "";
-    			String seatNums2 = "";
-
-    			try {
-    				Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-    				
-    				//skab passagér og gem passengerId
-    				for(int i=0; i<passengers.size(); i++) {
-    					int passengerId = db.queryMakePassenger(passengers.get(i));
-    					passengerString = passengerId + " " + passengerString;
-    				}
-
-    				//skab customer og gem customerId
-    				if(importingCustomer) {
-    					customerId = customer.getId();
-    				} else {
-    					customerId = db.queryMakeCustomer(customer);
-    				}
-    				
-    				//lav string med id på reserverede pladser ud
-    				for(int j=0; j<reserved1.size(); j++) {
-    					int num = reserved1.get(j).getSeatNo();
-    					seatNums1 = num+" "+seatNums1;
-    				}
-    				//skab booking for udrejse
-    				db.queryMakeBooking(d1.getDepartureId(), customerId, seatNums1, passengerString);
-
-
-    				if(turRetur) {
-    					//lav string med id på reserverede pladser hjem
-    					for(int j=0; j<reserved2.size(); j++) {
-    						int num = reserved2.get(j).getSeatNo();
-    						seatNums2 = num+" "+seatNums2;
-    					}
-    					//skab booking for hjemrejse
-    					db.queryMakeBooking(d2.getDepartureId(), customerId, seatNums2, passengerString);
-
-
-    					System.out.println("passengerString: "+passengerString);
-    					System.out.println("customerId: "+customerId);
-    				}
-    				
-    			JOptionPane.showMessageDialog(returnMe(), "Bestillingen er gennemført! Vinduerne vil blive lukket.");
-    			ko.removeMe();
-    			dispose();
-					
-    			} catch (SQLException e) {
-    				System.out.println("Something SQL went wrong when making passengers");
-    				e.printStackTrace();
+    			if(turRetur) {
+    				Betaling betaling = new Betaling(reserved1, reserved2, passengers, customer, d1, d2, getThis());
+    			} else if (!turRetur) {
+    				Betaling betaling = new Betaling(reserved1, d1, passengers, customer, getThis());
     			}
+//    			System.out.println("Bestiller");												SLET IKKE. AAAAAAAAAAAAAAAAAAAAAAA!!!
+//
+//    			//opretter passagerer
+//    			String passengerString = "";
+//    			int customerId = 0;
+//    			String seatNums1 = "";
+//    			String seatNums2 = "";
+//
+//    			try {
+//    				Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+//    				
+//    				//skab passagér og gem passengerId
+//    				for(int i=0; i<passengers.size(); i++) {
+//    					int passengerId = db.queryMakePassenger(passengers.get(i));
+//    					passengerString = passengerId + " " + passengerString;
+//    				}
+//
+//    				//skab customer og gem customerId
+//    				if(importingCustomer) {
+//    					customerId = customer.getId();
+//    				} else {
+//    					customerId = db.queryMakeCustomer(customer);
+//    				}
+//    				
+//    				//lav string med id på reserverede pladser ud
+//    				for(int j=0; j<reserved1.size(); j++) {
+//    					int num = reserved1.get(j).getSeatNo();
+//    					seatNums1 = num+" "+seatNums1;
+//    				}
+//    				//skab booking for udrejse
+//    				db.queryMakeBooking(d1.getDepartureId(), customerId, seatNums1, passengerString);
+//
+//
+//    				if(turRetur) {
+//    					//lav string med id på reserverede pladser hjem
+//    					for(int j=0; j<reserved2.size(); j++) {
+//    						int num = reserved2.get(j).getSeatNo();
+//    						seatNums2 = num+" "+seatNums2;
+//    					}
+//    					//skab booking for hjemrejse
+//    					db.queryMakeBooking(d2.getDepartureId(), customerId, seatNums2, passengerString);
+//
+//
+//    					System.out.println("passengerString: "+passengerString);
+//    					System.out.println("customerId: "+customerId);
+//    				}
+//    				
+//    			JOptionPane.showMessageDialog(returnMe(), "Bestillingen er gennemført! Vinduerne vil blive lukket.");
+//    			ko.removeMe();
+//    			dispose();
+//					
+//    			} catch (SQLException e) {
+//    				System.out.println("Something SQL went wrong when making passengers");
+//    				e.printStackTrace();
+//    			}
     		} else if(event.getSource() == gem) {
     			JOptionPane.showMessageDialog(returnMe(), "Ændringerne er gemt.");
+    			ko.removeMe();
+    			dispose();
     		} else if(event.getSource() == annuller) {
     			dispose();
     		} else if(event.getSource() == slet) {
@@ -450,8 +468,9 @@ public class Gennemse extends JFrame{
 					System.out.println("Something went wrong when opening the pladsBooking");
 					e.printStackTrace();
 				}
+    		} else if(event.getSource() == editPassengers) {
+    			Kundeoplysninger k = new Kundeoplysninger(passengers, getThis());
     		}
-
     	}
     }
 }

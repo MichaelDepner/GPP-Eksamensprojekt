@@ -32,6 +32,7 @@ public class Pladsbooking extends JFrame {
 	private ArrayList<Plads> panelList2 = new ArrayList<>();
 	private ArrayList<Plads> newReservations1 = new ArrayList<>();
 	private ArrayList<Plads> newReservations2 = new ArrayList<>();
+	private ArrayList<Integer> oldReservations;
 	private Boolean booking, multipleDepartures;
 	private JPanel rightMiddleTopPanel, rightMiddleMiddlePanel;
 	private ArrayList<JPanel> labelList = new ArrayList<>();
@@ -58,7 +59,8 @@ public class Pladsbooking extends JFrame {
 		}
 	}
 
-	//når man hurtigt skal bruge information fra et pladsarray - lige nu bliver pladsarrays kun udfyldt FRA denne gui class. dumt, dumt, dumt!
+	//når man hurtigt skal bruge information fra et pladsarray - uheldigvis bliver en del af logikken udført i denne klasse
+	//så den skal kaldes hvis man vil udfylde et pladsarray ordentligt. Klart en forbedringsmulighed.
 	public PladsArray getPladsArray() {
 		return pladsArray1;
 	}
@@ -79,7 +81,7 @@ public class Pladsbooking extends JFrame {
 		reservations(panelList1, pladsArray1);
 		
 		//deler oldReservation stringen op i et array
-		ArrayList<Integer> oldReservations = new ArrayList<Integer>();
+		oldReservations = new ArrayList<Integer>();
 		String[] strArray = oldReservation.split(" ");
 		for(int i=0; i<strArray.length; i++) {
 			oldReservations.add(Integer.parseInt(strArray[i]));
@@ -359,7 +361,7 @@ public class Pladsbooking extends JFrame {
 			middleLeftPanel.add(logoLabel5);
 			
 			//Højre flyvinge
-			JPanel middleRightPanel = new JPanel();
+			final JPanel middleRightPanel = new JPanel();
 			middlePanel.add(middleRightPanel, BorderLayout.EAST);
 			ImageIcon imageLogo6 = new ImageIcon(getClass().getResource("png/vinge_right3.jpg"));
 			JLabel logoLabel6 = new JLabel(imageLogo6);
@@ -386,37 +388,46 @@ public class Pladsbooking extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					if(turRetur) {
-						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2, getThis());
+						if(pladsArray1.getReservations().size() > 0 && pladsArray2.getReservations().size() == pladsArray1.getReservations().size()) {
+							Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), pladsArray2.getReservations(), d1, d2, getThis());
+						} else {
+							JOptionPane.showMessageDialog(middleRightPanel, "Du skal vælge mindst 1 plads, og samme antal i begge fly!");
+						}
+						
 					} else if(rebooking) {
 						try {
-							
-							String seatNums1 = "";
-							//lav string med id på reserverede pladser ud
-		    				for(int j=0; j<pladsArray1.getReservations().size(); j++) {
-		    					int num = pladsArray1.getReservations().get(j).getSeatNo();
-		    					seatNums1 = num+" "+seatNums1;
-		    				}
-		    				
-		    				
-							Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-							db.queryUpdateBookingSeats(b.getId(), seatNums1);
-							
-							JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning.");
-							
-							
+
+							if(oldReservations.size() != pladsArray1.getReservations().size()) {
+								JOptionPane.showMessageDialog(middleRightPanel, "Du skal vælge "+oldReservations.size()+" pladser i alt!");
+							} else {
+								String seatNums1 = "";
+								//lav string med id på reserverede pladser ud
+								for(int j=0; j<pladsArray1.getReservations().size(); j++) {
+									int num = pladsArray1.getReservations().get(j).getSeatNo();
+									seatNums1 = num+" "+seatNums1;
+								}
+
+
+								Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+								db.queryUpdateBookingSeats(b.getId(), seatNums1);
+
+								JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. For at se data bliver du nødt til at lave en ny søgning.");
+								dispose();
+							}
 						} catch (SQLException e) {
 							JOptionPane.showMessageDialog(next, "Fejl i kommunikation med serveren. Er internettet nede?");
 							System.out.println("Something went wrong when editing the booking");
 							e.printStackTrace();
 						}
 					} else {
-						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), d1, getThis());
+						if(pladsArray1.getReservations().size() > 0) {
+							Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(), d1, getThis());
+						} else {
+							JOptionPane.showMessageDialog(middleRightPanel, "Du skal vælge mindst 1 plads!");
+						}
 					}
-
-
 				}
 			});
-
 
 			if(!turRetur) {
 				middlePanel.setVisible(false);
@@ -500,7 +511,6 @@ public class Pladsbooking extends JFrame {
 				
 				Plads p = new Plads(counting, false, false, this, pladsArray, labelPanel, d.getPrice());
 				counting++;
-																				//p.addMouseListener(new MouseListener());
 				panel.add(p);
 				panelList.add(p);
 			}

@@ -90,7 +90,7 @@ public class Bookingliste extends JFrame {
     	jp1bookings.setLayout(new FlowLayout());
     	JLabel labelUdrejse = new JLabel();
     	labelUdrejse.setText("Bookinger foretaget af "+c.GetFullName());
-    	labelUdrejse.setFont(new Font("String", Font.BOLD, 14));
+    	labelUdrejse.setFont(new Font("String", Font.BOLD, 18));
     	jp1bookings.add(labelUdrejse);
 
     	//Skal evt. rykkes ned til table-metode
@@ -102,7 +102,11 @@ public class Bookingliste extends JFrame {
 	
 	private JTable bookingTable(ArrayList<Booking> bookings) {
     	final ArrayList<Booking> bk = bookings;
-    	DefaultTableModel model = new DefaultTableModel(); 
+    	DefaultTableModel model = new DefaultTableModel() {
+    		public boolean isCellEditable(int row, int column) {
+    			return false;
+    		}
+    	}; 
     	final JTable table = new JTable(model); 
     	
     	//overskriver metoden moveColumn, så man ikke længere kan rykke rundt på dem.
@@ -116,10 +120,11 @@ public class Bookingliste extends JFrame {
 //    	model.addColumn("Bookingnummer");
 
     	//model.addColumn("Pris"); 
+    	model.addColumn("Dato");
     	model.addColumn("Afrejse - Ankomst"); 
     	model.addColumn("Rejsetid");
     	model.addColumn("Lufthavne");
-    	model.addColumn("Ledige pladser");
+//    	model.addColumn("Ledige pladser");
     	model.addColumn("DepartureId");
 
     	//Tilføjer rejser
@@ -128,14 +133,15 @@ public class Bookingliste extends JFrame {
     		Departure d = b.getDeparture();
     		//TODO mangler at tilføje priser i databasen
     		//String price = d.getPrice()+"";
+    		String date = d.getDepartureDate();
     		String time = d.getDepartureTime()+" - "+d.getArrivalTime();
     		//TODO tilføj udregning af rejsetid
     		String travelTime = d.getTravelTime();
     		String fromTo = d.getDepartureAirportName()+" - "+d.getArrivalAirportName();
-    		String seats = " ";//d.getSeats();
+    		//String seats = " ";//d.getSeats();
     		int id = d.getDepartureId();
 
-    		model.addRow(new Object[]{time,travelTime,fromTo,seats,id+""});	
+    		model.addRow(new Object[]{date,time,travelTime,fromTo,id+""});	
     	}
     	
     	
