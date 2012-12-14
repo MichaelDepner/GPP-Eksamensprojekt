@@ -254,7 +254,7 @@ public class Kvittering extends JFrame {
 			setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			pack();
 			setVisible(true);
-			setResizable(false);
+			setResizable(true);
 
 		}
 		
