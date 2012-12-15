@@ -1,6 +1,5 @@
 package logic;
 
-import gui.Bookinginfo;
 import gui.Kundeoplysninger;
 import gui.Pladsbooking;
 import gui.Afgangsliste;

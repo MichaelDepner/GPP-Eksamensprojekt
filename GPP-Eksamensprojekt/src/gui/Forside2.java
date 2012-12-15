@@ -35,7 +35,6 @@ public class Forside2  extends JFrame implements ActionListener{
 		getContentPane().add(panel);
 		
 		//Indlæs swan.jpg, gemmer det i en JLabel, og lægger den øverst i vinduet
-		//Billedet skal gøres mindre!
 		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan5.jpg"));
 		logoLabel = new JLabel(imageLogo);
 		panel.add(logoLabel, BorderLayout.NORTH);
