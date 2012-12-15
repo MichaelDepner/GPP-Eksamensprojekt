@@ -45,22 +45,20 @@ public class Database {
 	}
 	
 	//finder alle airports, hvor der er tilknyttet en departure og returnerer dem i alfabetisk rækkefølge
-	public ResultSet queryGetAirports() throws SQLException {
-		String query;
-		query = "SELECT " +
-				"Airports.id, Airports.name " +
-				"FROM " +
-				"Airports, Departures " +
-				"WHERE " +
-				"Departures.departure_airport_id = Airports.id OR Departures.arrival_airport_id = Airports.id " +
-				//"GROUP BY " +
-				//"Airports.id " +
-				"ORDER BY " +
-				"Airports.name ASC";
-		ResultSet rs = this.execute(query);
-//		System.out.println(query);
-		return rs;
-	}
+//	public ResultSet queryGetAirports() throws SQLException {
+//		String query;
+//		query = "SELECT " +
+//				"Airports.id, Airports.name " +
+//				"FROM " +
+//				"Airports, Departures " +
+//				"WHERE " +
+//				"Departures.departure_airport_id = Airports.id OR Departures.arrival_airport_id = Airports.id " +
+//				"ORDER BY " +
+//				"Airports.name ASC";
+//		ResultSet rs = this.execute(query);
+////		System.out.println(query);
+//		return rs;
+//	}
 	
 	public ResultSet queryGetReservedSeats(int departureId) throws SQLException {
 		String query;
@@ -154,7 +152,6 @@ public class Database {
 				"Airports " +
 				"WHERE " +
 				"Airports.name = \"" + airport+"\"";
-//		System.out.println(query);
 		ResultSet rs = this.execute(query);
 		return rs;
 	}

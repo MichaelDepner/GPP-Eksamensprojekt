@@ -419,11 +419,11 @@ public class Kundeoplysninger {
     	countryS = country.getText();
     	
     	//tjek, at der er indtastet noget i alle felter, og opret kunden
-    	if(firstnameS != "" && surnameS != "" && emailS != "" && phoneS != ""
-    			&& addressS != "" && cityS != "" && postalCodeS != "" && countryS != "") {
-    		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
-    	} else {
+    	if(firstnameS.equals("") || surnameS.equals("") || emailS.equals("") || phoneS.equals("")
+    			|| addressS.equals("") || cityS.equals("") || postalCodeS.equals("") || countryS.equals("")) {
     		JOptionPane.showMessageDialog(frame, "Kan ikke oprette kunde - du mangler at indtaste information!");
+    	} else {
+    		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
     	}
     }
     
@@ -433,20 +433,20 @@ public class Kundeoplysninger {
     		String surname = surnameList.get(i).getText();
     		String birthday = birthdayList.get(i).getText();
     		
-    		
-    		if(firstname != "" && surname != "" && birthday != "") {
-    			Person p = new Person(firstname, surname, birthday);
-        		
-        		//hvis vi ændrer i eksisterende passagerer, sæt den 'nyoprettede' passagér til det korrekte id så vi kan gemme i databasen
-        		if(changingExistingPassengers) {
-        			p.setId(existingPassengers.get(i).getId());
-        		}
-        		passengers.add(p);
-    		} else {
+    		System.out.println(firstname+", "+surname+", "+birthday);
+    		if(firstname.equals("") || surname.equals("") || birthday.equals("")) {
     			JOptionPane.showMessageDialog(frame, "Kan ikke oprette passagér - du mangler at indtaste information!");
     			passengers.clear();
+    		} else {
+    			Person p = new Person(firstname, surname, birthday);
+
+    			//hvis vi ændrer i eksisterende passagerer, sæt den 'nyoprettede' passagér til det korrekte id så vi kan gemme i databasen
+    			if(changingExistingPassengers) {
+    				p.setId(existingPassengers.get(i).getId());
+    			}
+    			passengers.add(p);
     		}
-    		
+
     	}
     }
     
