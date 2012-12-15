@@ -371,11 +371,6 @@ public class Pladsbooking extends JFrame {
 			rightBottomPanel = new JPanel();
 			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
 			
-			//Til rightMiddlePanel
-			JPanel rightMiddleBottomPanel = new JPanel();
-			rightMiddleBottomPanel.setLayout(new BoxLayout(rightMiddleBottomPanel, BoxLayout.Y_AXIS));
-			rightMiddlePanel.add(rightMiddleBottomPanel);
-			
 			//'Næste'-knappen
 			final JButton next = new JButton("Næste");
 			rightBottomPanel.add(next);
