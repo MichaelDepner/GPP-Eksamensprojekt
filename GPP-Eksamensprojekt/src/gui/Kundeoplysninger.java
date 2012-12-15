@@ -320,7 +320,7 @@ public class Kundeoplysninger {
     		confirm.addActionListener(new Listener());
     	}
     }
-    
+
     //Laver kunden
     private void makeCustomer() {
     	firstnameS = firstname.getText();
@@ -335,15 +335,11 @@ public class Kundeoplysninger {
     	//tjek, at der er indtastet noget i alle felter, og opret kunden
     	if(firstnameS.equals("") || surnameS.equals("") || emailS.equals("") || phoneS.equals("")
     			|| addressS.equals("") || cityS.equals("") || postalCodeS.equals("") || countryS.equals("")) {
-    		//Tjek, at der er indtastet noget i alle felter, og opret kunden
-    		if(firstnameS != "" && surnameS != "" && emailS != "" && phoneS != ""
-    				&& addressS != "" && cityS != "" && postalCodeS != "" && countryS != "") {
-    			customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
-    		} else {
-    			JOptionPane.showMessageDialog(frame, "Kan ikke oprette kunde - du mangler at indtaste information!");
-    		}
-
+    		JOptionPane.showMessageDialog(frame, "Kan ikke oprette kunde - du mangler at indtaste information!");
+    	} else {
+    		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
     	}
+
     }
 
     //Laver passagererne
