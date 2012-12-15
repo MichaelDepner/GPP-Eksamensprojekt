@@ -14,8 +14,9 @@ public class Forside2  extends JFrame implements ActionListener{
 	private JTabbedPane searchPane;
 	private JPanel panel, panelRejser, panelNorth, radioPanel, tilFraPanel, panelSouth;
 	private JPanel panelBooking, panelCenter, panelLeft, panelRight, tilPanel, fraPanel;
+	private JPanel panelLeft1, panelLeft2, panelRight1, panelRight2;
 	private JLabel logoLabel, fraLabel, tilLabel;
-	private JLabel udrejse, hjemrejse;
+	private JLabel udrejse, hjemrejse, udrejse2, hjemrejse2;
 	private JTextField bookingText;
 	private JRadioButton enkelt, turRetur;
 	private JCheckBox periode;
@@ -56,7 +57,7 @@ public class Forside2  extends JFrame implements ActionListener{
 		addHjemrejse();
 		searchBookinger();
 		
-		panel.setPreferredSize(new Dimension(700, 550));
+		panel.setPreferredSize(new Dimension(700, 570));
 		//setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
@@ -67,18 +68,31 @@ public class Forside2  extends JFrame implements ActionListener{
 		panelRight = new JPanel();
 	    panelCenter.add(panelRight);
 	    
+	    panelRight1 = new JPanel();
+	    panelRight1.setLayout(new FlowLayout());
+	    panelRight.add(panelRight1);
+	    
+	    panelRight2 = new JPanel();
+	    panelRight2.setLayout(new FlowLayout());
+	    panelRight.add(panelRight2);
+	    
 	    //indhold til panelRight
 	    hjemrejse = new JLabel("Hjemrejse");
-	    panelRight.add(hjemrejse);
+	    panelRight1.add(hjemrejse);
 	    
 	    //tilføjer datepicker
 	    hjemrejseDate = new JXDatePicker();
-	    panelRight.add(hjemrejseDate);
+	    panelRight1.add(hjemrejseDate);
+	    
+	    //Tilføjer label til næste datePicker
+	    hjemrejse2 = new JLabel("Hjemrejse til  ");
+	    panelRight2.add(hjemrejse2);
+	    hjemrejse2.setVisible(false);
 	    
 	    //tilføjer næste datepicker
 	    hjemrejseDate2 = new JXDatePicker();
 	    hjemrejseDate2.setVisible(false);
-	    panelRight.add(hjemrejseDate2);
+	    panelRight2.add(hjemrejseDate2);
 	    
 
 	    panelRight.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -149,13 +163,13 @@ public class Forside2  extends JFrame implements ActionListener{
 	    
 	    //Combo box til panelNorth
   		String[] searchAfgange = {"København", "Billund", "Rønne", 
-  					"Timbuktu", "Athen", "London", "Paris", "Tokyo", "Atlanta"};
+  					"Timbuktu", "Athen", "London", "Paris"};
   		searchList1 = new JComboBox(searchAfgange);
   		searchList2 = new JComboBox(searchAfgange);
   		fraPanel.add(searchList1);
   		tilPanel.add(searchList2);
-  		searchList1.setSelectedIndex(8);
-  		searchList2.setSelectedIndex(8);
+  		searchList1.setSelectedIndex(6);
+  		searchList2.setSelectedIndex(6);
   		searchList1.addActionListener(this);
   		searchList2.addActionListener(this);
 	    
@@ -167,21 +181,36 @@ public class Forside2  extends JFrame implements ActionListener{
 	    //Laver og tilføjer panels til panelCenter
 	    panelLeft = new JPanel();
 	    panelCenter.add(panelLeft);
+	    //panelLeft.setLayout(new GridLayout(2,1));
 	    panelLeft.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 	    //panelLeft.setSize(new Dimension(200, 100));
 	    //panelLeft.setSize(200, 100);
 	    
+	    panelLeft1 = new JPanel();
+	    panelLeft1.setLayout(new FlowLayout());
+	    panelLeft.add(panelLeft1);
+	    
+	    panelLeft2 = new JPanel();
+	    panelLeft2.setLayout(new FlowLayout());
+	    panelLeft.add(panelLeft2);
+	    
 	    //Laver indhold til panelLeft
 	    udrejse = new JLabel("Udrejse");
-	    panelLeft.add(udrejse);
+	    panelLeft1.add(udrejse);
 	    
 	    //Tilføjer  kalender
 	    udrejseDate = new JXDatePicker();
-	    panelLeft.add(udrejseDate);
+	    panelLeft1.add(udrejseDate);
 	    
+	    //Tilføjer label til anden DatePicker
+	    udrejse2 = new JLabel("Udrejse til  ");
+	    panelLeft2.add(udrejse2);
+	    udrejse2.setVisible(false);
+	    
+	    //DatePicker2
 	    udrejseDate2 = new JXDatePicker();
 	    udrejseDate2.setVisible(false);
-	    panelLeft.add(udrejseDate2);
+	    panelLeft2.add(udrejseDate2);
 	    
 	    
 	    //Laver et panel, der sættes ind i panel SOUTH
@@ -323,7 +352,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	    	try {
 				Bookingliste bl = new Bookingliste(searchingFor, arg);
 			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(this, "Fejl i Database-forbindelse ved oprettelse af bookingliste. Er internettet nede?");
+				JOptionPane.showMessageDialog(this, "Database-fejl ved oprettelse af booking-liste. Har du stavet rigtigt?");
 				e.printStackTrace();
 			}
 	    	
@@ -334,10 +363,27 @@ public class Forside2  extends JFrame implements ActionListener{
 	    		periodBoolean = true;
 	    		udrejseDate2.setVisible(true);
 	    		hjemrejseDate2.setVisible(true);
+	    		udrejse2.setVisible(true);
+	    		hjemrejse2.setVisible(true);
+	    		
+	    		//Ændrer label i panelLeft
+	    	    udrejse.setText("Udrejse fra");
+	    	    
+	    	    //Ændrer label i panelRight
+	    	    hjemrejse.setText("Hjemrejse fra");
+	    	    
 	    	} else {
 	    		periodBoolean = false;
 	    		udrejseDate2.setVisible(false);
 	    		hjemrejseDate2.setVisible(false);
+	    		udrejse2.setVisible(false);
+	    		hjemrejse2.setVisible(false);
+	    		
+	    		//Ændrer label i panelLeft
+	    	    udrejse.setText("Udrejse");
+	    	    
+	    	    //Ændrer label i panelRight
+	    	    hjemrejse.setText("Hjemrejse");
 	    	}
 	    }
 	    else if(source == bookingText) {

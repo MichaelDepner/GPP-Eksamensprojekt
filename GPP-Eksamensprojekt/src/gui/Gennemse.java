@@ -455,7 +455,7 @@ public class Gennemse extends JFrame{
 					JOptionPane.showMessageDialog(returnMe(), "Booking ikke slettet - kan ikke få forbindelse til databasen.");
 					e.printStackTrace();
 				}
-    			JOptionPane.showMessageDialog(returnMe(), "Bookingen er slettet.");
+    			//JOptionPane.showMessageDialog(returnMe(), "Bookingen er slettet.");
     		} else if(event.getSource() == editCustomerButton) {
     			Kundeoplysninger ko = new Kundeoplysninger(customer, getThis());
     		} else if(event.getSource() == editReservation) {

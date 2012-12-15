@@ -30,15 +30,14 @@ public class Pladsbooking extends JFrame {
 	ArrayList<Integer> emptyColumns2 = new ArrayList<>();
 	private ArrayList<Plads> panelList1 = new ArrayList<>();
 	private ArrayList<Plads> panelList2 = new ArrayList<>();
-	private ArrayList<Plads> newReservations1 = new ArrayList<>();
-	private ArrayList<Plads> newReservations2 = new ArrayList<>();
+//	private ArrayList<Plads> newReservations1 = new ArrayList<>();
+//	private ArrayList<Plads> newReservations2 = new ArrayList<>();
 	private ArrayList<Integer> oldReservations;
 	private Boolean booking, multipleDepartures;
 	private JPanel rightMiddleTopPanel, rightMiddleMiddlePanel;
 	private ArrayList<JPanel> labelList = new ArrayList<>();
 	private JLabel udrejseLabel, hjemrejseLabel;
 	private boolean turRetur, rebooking;
-	private int maxReservations;
 	private Booking b;
 	private Afgangsliste al;
 	
@@ -90,7 +89,6 @@ public class Pladsbooking extends JFrame {
 		for(int i=0; i<oldReservations.size(); i++) {
 			panelList1.get(oldReservations.get(i)).mark();
 		}
-		maxReservations = oldReservations.size();
 		
 		
 	}
