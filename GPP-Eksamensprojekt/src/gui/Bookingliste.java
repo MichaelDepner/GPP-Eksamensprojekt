@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableColumnModel;
@@ -28,17 +27,22 @@ import logic.Database;
 import logic.Departure;
 import logic.PladsArray;
 
+/**
+ * Søgelisten skal vise navn, bookingnummer, og en vis-knap
+ * Laves som afgangsliste, med dynamisk table
+ * 
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
+
 public class Bookingliste extends JFrame {
-	//Søgelisten skal vise navn, bookingnummer, og en vis-knap
-	
-	//Laves som afgangsliste, med dynamisk table
-	
 	private TableColumn column;
 	private ArrayList<Booking> bookings;
 	private Customer c;
 	private JTable bookingTable;
 	private JButton next;
-	
+
+	//Constructor
 	public Bookingliste(String searchingFor, String arg) throws SQLException {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		c = db.queryFindCustomer(searchingFor, arg);
@@ -58,9 +62,6 @@ public class Bookingliste extends JFrame {
 		setTitle("Bookingliste");
 		
         getContentPane().setLayout(new BorderLayout());
-        
-      //Laver vores fane-vinduer
-    	//JTabbedPane jtp = new JTabbedPane();
     	
     	//Sætter BorderLayout i contentPane, og laver panels indeni
     	getContentPane().setLayout(new BorderLayout());
@@ -74,26 +75,21 @@ public class Bookingliste extends JFrame {
     	getContentPane().add(panelSouth, BorderLayout.SOUTH);
     	panelSouth.setLayout(new FlowLayout());
     	
+    	//Knap
     	next = new JButton("Næste");
     	next.addActionListener(new Listener());
     	panelSouth.add(next);
-
-    	//Sætter fane-vinduerne ind i layouts'ene
-    	//panelCenter.add(jtp);
     	
     	//Opretter panels
     	JPanel jp1bookings = new JPanel();
-    	
-    	//jp1Hjemrejse.setLayout(new BorderLayout());
-
-    	//jp1bookings.setLayout(new BoxLayout(jp1bookings, BoxLayout.Y_AXIS));
     	jp1bookings.setLayout(new FlowLayout());
+    	
     	JLabel labelUdrejse = new JLabel();
     	labelUdrejse.setText("Bookinger foretaget af "+c.GetFullName());
     	labelUdrejse.setFont(new Font("String", Font.BOLD, 18));
     	jp1bookings.add(labelUdrejse);
 
-    	//Skal evt. rykkes ned til table-metode
+    	//Sætter table og table header ind i jp1bookings
     	bookingTable = bookingTable(bookings);
     	jp1bookings.add(bookingTable.getTableHeader());
     	jp1bookings.add(bookingTable);
@@ -109,63 +105,47 @@ public class Bookingliste extends JFrame {
     	}; 
     	final JTable table = new JTable(model); 
     	
-    	//overskriver metoden moveColumn, så man ikke længere kan rykke rundt på dem.
+    	//Overskriver metoden moveColumn, så man ikke længere kan rykke rundt på dem.
     	table.setColumnModel(new DefaultTableColumnModel() {  
     		public void moveColumn(int columnIndex, int newIndex) { 
     		}  
-    		});  
-
-    	//Laver columns
-//    	model.addColumn("Navn"); 
-//    	model.addColumn("Bookingnummer");
-
-    	//model.addColumn("Pris"); 
+    		});
+    	
+    	//Tilføjer navne til header i table
     	model.addColumn("Dato");
     	model.addColumn("Afrejse - Ankomst"); 
     	model.addColumn("Rejsetid");
     	model.addColumn("Lufthavne");
-//    	model.addColumn("Ledige pladser");
     	model.addColumn("DepartureId");
 
-    	//Tilføjer rejser
+    	//Indhold til table
     	for(int i=0; i<bookings.size(); i++) {
     		Booking b = bookings.get(i);
     		Departure d = b.getDeparture();
-    		//TODO mangler at tilføje priser i databasen
-    		//String price = d.getPrice()+"";
     		String date = d.getDepartureDate();
     		String time = d.getDepartureTime()+" - "+d.getArrivalTime();
-    		//TODO tilføj udregning af rejsetid
     		String travelTime = d.getTravelTime();
     		String fromTo = d.getDepartureAirportName()+" - "+d.getArrivalAirportName();
-    		//String seats = " ";//d.getSeats();
     		int id = d.getDepartureId();
 
     		model.addRow(new Object[]{date,time,travelTime,fromTo,id+""});	
     	}
     	
-    	
-    	
-    	
     	//Tilføjer rejser
     	for(int i=0; i<bookings.size(); i++) {
     		Booking b = bk.get(i);
-    		//String name = b.getFistName() + " " + b.getLastName();
-    		//String bookingNumber = b.getBookingNumber();
-    		
-    		//model.addRow(new Object[]{name, bookingNumber});
     	}
     	
-    	//sætter bredden af kolonner
+    	//Sætter bredden af kolonner
     	setWidth(table, 0, 130);
     	setWidth(table, 1, 100);
     	setWidth(table, 2, 160);
     	setWidth(table, 3, 150);
     	
-    	
     	return table;
     }
 	
+	//mMetode for at sætte bredden af kolonner
 	private void setWidth(JTable table, int i, int j) {
     	column = table.getColumnModel().getColumn(i);
     	
@@ -174,6 +154,7 @@ public class Bookingliste extends JFrame {
 		column.setPreferredWidth(j);
     }
 	
+	 //Lytter til 'Næste'-knappen
 	 private class Listener implements ActionListener {
 	    	public void actionPerformed(ActionEvent event){
 	    		if(event.getSource() == next) {
@@ -203,9 +184,6 @@ public class Bookingliste extends JFrame {
 	    					}
 	    				}
 	    			}
-	    		
-
-
 	    	}
 	    }
 }
