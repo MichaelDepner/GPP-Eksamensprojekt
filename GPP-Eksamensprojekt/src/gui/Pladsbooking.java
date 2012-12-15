@@ -175,7 +175,7 @@ public class Pladsbooking extends JFrame {
 		}
 	}
 	
-	//Lave preview vindue
+	//Laver preview vindue
 	private void makePreviewWindow(PladsArray pa) throws SQLException {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
@@ -211,7 +211,6 @@ public class Pladsbooking extends JFrame {
 		JLabel leftPanelTitle, centerPanelTitle, rightPanelTitle;
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		Container contentPane = this.getContentPane();
-		
 		
 		multipleDepartures = true;
 		if(multipleDepartures) {
