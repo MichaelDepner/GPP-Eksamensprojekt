@@ -3,14 +3,18 @@ package logic;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Booking {
+/**
+ * 
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
 
+public class Booking {
 	private int departureId, id;
-	String seats, passengerIds;
+	private String seats, passengerIds;
 	public Departure d;
-	ArrayList<Plads> reserved;
-	ArrayList<Person> passengers = new ArrayList<Person>();
-	
+	private ArrayList<Plads> reserved;
+	private ArrayList<Person> passengers = new ArrayList<Person>();
 	
 	public Booking(int departureId, String seats, String passengerIds, boolean importing) throws SQLException {
 		this.departureId = departureId;
@@ -18,7 +22,7 @@ public class Booking {
 		this.passengerIds = passengerIds;
 		findPassengers();
 		
-		//henter information fra databasen om afgangen, hvis vi er ved at importere
+		//Henter information fra databasen om afgangen, hvis vi er ved at importere
 		if(importing) {
 			Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 			d = db.queryGetDeparture(departureId);
@@ -33,9 +37,11 @@ public class Booking {
 		return id;
 	}
 	
+	//Finder en passager via. ID
 	public void findPassengers() throws SQLException {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-		//deler passengerId strengen ind i små bidder, og finder passagerernes id. Herefter findes personernes informationer i databasen ud fra id'et.
+		//Deler passengerId strengen ind i små bidder, og finder passagerernes id. 
+		//Herefter findes personernes informationer i databasen ud fra id'et.
 		System.out.println(passengerIds);
 		String[] strArray = passengerIds.split(" ");
 		

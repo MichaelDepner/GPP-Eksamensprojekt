@@ -3,6 +3,12 @@ package logic;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
+
 public class Database {
 	private final Connection connection;
 	private final Statement dbStatement;
@@ -27,7 +33,7 @@ public class Database {
 		
 	}
 	
-	//sender en string til databasen, og returnerer det resultset, der kommer tilbage
+	//Sender en string til databasen, og returnerer det resultset, der kommer tilbage
 	public ResultSet execute(String cmd) throws SQLException {
 		boolean ok;
 			ok = dbStatement.execute(cmd);
@@ -38,13 +44,14 @@ public class Database {
 		}
 	}
 	
-	//lukker forbindelsen til databasen
+	//Lukker forbindelsen til databasen
 	public void close() throws SQLException {
 		connection.close();
 		System.out.println("Database connection closed");
 	}
 	
-	//finder alle airports, hvor der er tilknyttet en departure og returnerer dem i alfabetisk rækkefølge
+	//Finder alle airports, hvor der er tilknyttet en departure og returnerer
+	//dem i alfabetisk rækkefølge
 	public ResultSet queryGetAirports() throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -53,15 +60,13 @@ public class Database {
 				"Airports, Departures " +
 				"WHERE " +
 				"Departures.departure_airport_id = Airports.id OR Departures.arrival_airport_id = Airports.id " +
-				//"GROUP BY " +
-				//"Airports.id " +
 				"ORDER BY " +
 				"Airports.name ASC";
 		ResultSet rs = this.execute(query);
-//		System.out.println(query);
 		return rs;
 	}
 	
+	//Henter reserverede sæder på den angivne afgang
 	public ResultSet queryGetReservedSeats(int departureId) throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -74,6 +79,7 @@ public class Database {
 		return rs;	
 	}
 	
+	//Finder det flyet for en bestemt afgang
 	public ResultSet queryGetAirplane(int departureId) throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -86,6 +92,7 @@ public class Database {
 		return rs;
 	}
 	
+	//Finder en passager ud fra ID'et
 	public Person queryGetPassenger(int passengerId) throws SQLException {
 		String query;
 		Person p;
@@ -101,6 +108,7 @@ public class Database {
 		return p;
 	}
 	
+	//Henter antal rækker på et fly
 	public ResultSet queryGetRows(int departureId) throws SQLException {
 		ResultSet airId = queryGetAirplane(departureId);
 		airId.next();
@@ -116,6 +124,7 @@ public class Database {
 		return rs;
 	}
 	
+	//Antal kolonner på et fly
 	public ResultSet queryGetCols(int departureId) throws SQLException {
 		ResultSet airId = queryGetAirplane(departureId);
 		airId.next();
@@ -131,6 +140,7 @@ public class Database {
 		return rs;
 	}
 	
+	//Henter tomme kolonner fra et fly, dvs. mellemgangene
 	public ResultSet queryGetEmptyCols(int departureId) throws SQLException {
 		ResultSet airId = queryGetAirplane(departureId);
 		airId.next();
@@ -146,6 +156,7 @@ public class Database {
 		return rs;
 	}
 	
+	//Henter lufthavnens ID
 	public ResultSet queryGetAirportId(String airport) throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -154,11 +165,11 @@ public class Database {
 				"Airports " +
 				"WHERE " +
 				"Airports.name = \"" + airport+"\"";
-//		System.out.println(query);
 		ResultSet rs = this.execute(query);
 		return rs;
 	}
 	
+	//Henter afgange på den angivne dato, for de angivne lufthavne
 	public ResultSet queryGetDeparturesOnDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -175,6 +186,7 @@ public class Database {
 		return rs;
 	}
 	
+	//
 	public ArrayList<Departure> queryGetDeparturesInPeriod(String afterDate, String beforeDate, int departureAirport, int arrivalAirport) throws SQLException {
 		ArrayList<Departure> departures = new ArrayList<>();
 		String query;
