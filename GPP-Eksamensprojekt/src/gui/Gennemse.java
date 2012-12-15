@@ -31,6 +31,7 @@ public class Gennemse extends JFrame{
 	private JPanel panelPladser, panelPladserUdrejse, panelPladserHjemrejse;
 	private JPanel panelPassengers, panelPris, panelKnapper, flowPanel1, flowPanel2;
 	private JPanel flowPanel3;
+	private JLabel firstname, surname, postalCode, cityName;
 	private JLabel name, address, city;
 	private JLabel country, phoneNumber, email, kontaktoplysninger, udrejse, hjemrejse;
 	private JLabel airport, afgang, ankomst, rejsetid;
@@ -133,7 +134,7 @@ public class Gennemse extends JFrame{
 		kontaktoplysninger = new JLabel("Kontaktoplysninger");
 		kontaktoplysninger.setFont(new Font("String", Font.BOLD, 16));
 		panelKontaktoplysninger.add(kontaktoplysninger);
-		name = new JLabel(customer.GetFirstname() + " " + customer.GetSurname());
+ 
 		panelKontaktoplysninger.add(name);
 		address = new JLabel(customer.GetAdress());
 		panelKontaktoplysninger.add(address);

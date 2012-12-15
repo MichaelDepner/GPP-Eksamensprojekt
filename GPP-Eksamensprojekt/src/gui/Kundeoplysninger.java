@@ -32,7 +32,7 @@ import logic.Plads;
 public class Kundeoplysninger {
 	private JFrame frame;
     private JTextField firstname, surname, email, phoneNumber, address, city;
-    private JTextField postal, country;
+    private JTextField postal, country, birthday;
     private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress;
 	private JLabel labelCity, labelPostal, labelCountry, labelBirthday;
     private JButton back, next, importerKunde, confirm;
@@ -50,9 +50,10 @@ public class Kundeoplysninger {
     private boolean importingCustomer = false;
     private boolean changingExistingCustomer = false;
     private boolean changingExistingPassengers = false;
-    private Customer importedCustomer;
-    private Customer c;
-    private Gennemse g;
+    
+    Customer importedCustomer;
+    Customer c;
+    Gennemse g;
     
     private Departure d1, d2;
     
@@ -243,6 +244,7 @@ public class Kundeoplysninger {
         city = new JTextField (30);
         postal = new JTextField (10);
         country = new JTextField ();
+        birthday = new JTextField();
     }
     
     //Labels til kontaktoplysninger
