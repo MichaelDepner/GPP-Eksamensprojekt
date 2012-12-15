@@ -416,14 +416,7 @@ public class Pladsbooking extends JFrame {
 		    				for(int j=0; j<pladsArray1.getReservations().size(); j++) {
 		    					int num = pladsArray1.getReservations().get(j).getSeatNo();
 		    					seatNums1 = num+" "+seatNums1;
-		    				}		    				
-		    				
-							Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-							db.queryUpdateBookingSeats(b.getId(), seatNums1);
-							
-							JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. " +
-											"For at se data bliver du nødt til at lave en ny søgning.");
-							dispose();
+		    				}	
 							
 							
 						} catch (SQLException e) {
