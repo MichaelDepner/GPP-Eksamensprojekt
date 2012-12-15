@@ -145,7 +145,7 @@ public class Bookingliste extends JFrame {
     	return table;
     }
 	
-	//mMetode for at sætte bredden af kolonner
+	//Metode for at sætte bredden af kolonner
 	private void setWidth(JTable table, int i, int j) {
     	column = table.getColumnModel().getColumn(i);
     	
