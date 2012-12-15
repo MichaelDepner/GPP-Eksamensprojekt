@@ -44,7 +44,6 @@ public class Plads extends JPanel {
 		this.seatNo = seatNo;
 		isReserved = false;
 		isAisle = false;
-		this.pa = pa;
 		this.pb = pb;
 		Color();
 	}

@@ -36,7 +36,6 @@ public class Forside2  extends JFrame implements ActionListener{
 		getContentPane().add(panel);
 		
 		//Indlæs swan.jpg, gemmer det i en JLabel, og lægger den øverst i vinduet
-		//Billedet skal gøres mindre!
 		ImageIcon imageLogo = new ImageIcon(getClass().getResource("png/swan5.jpg"));
 		logoLabel = new JLabel(imageLogo);
 		panel.add(logoLabel, BorderLayout.NORTH);
@@ -353,7 +352,7 @@ public class Forside2  extends JFrame implements ActionListener{
 	    	try {
 				Bookingliste bl = new Bookingliste(searchingFor, arg);
 			} catch (SQLException e) {
-				JOptionPane.showMessageDialog(this, "Fejl i Database-forbindelse ved oprettelse af bookingliste. Er internettet nede?");
+				JOptionPane.showMessageDialog(this, "Database-fejl ved oprettelse af booking-liste. Har du stavet rigtigt?");
 				e.printStackTrace();
 			}
 	    	

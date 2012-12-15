@@ -1,7 +1,5 @@
 package logic;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,11 +24,6 @@ public class PladsArray {
 	public PladsArray(int departureId) throws SQLException {
 		this.departureId = departureId;
 	}
-	
-//	public PladsArray(int departureId, String rebookingString) {
-//		this.departureId = departureId;
-//		rebooking = true;
-//	}
 	
 	public void addReservation(Plads p) {
 		reservations.add(p);
