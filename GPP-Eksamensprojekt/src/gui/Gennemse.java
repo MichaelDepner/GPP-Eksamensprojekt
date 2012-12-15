@@ -135,6 +135,7 @@ public class Gennemse extends JFrame{
 		kontaktoplysninger.setFont(new Font("String", Font.BOLD, 16));
 		panelKontaktoplysninger.add(kontaktoplysninger);
  
+		name = new JLabel(customer.GetFirstname() + " " + customer.GetSurname());
 		panelKontaktoplysninger.add(name);
 		address = new JLabel(customer.GetAdress());
 		panelKontaktoplysninger.add(address);

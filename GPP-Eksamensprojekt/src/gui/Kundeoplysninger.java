@@ -292,9 +292,9 @@ public class Kundeoplysninger {
             holder.add(textFieldPanel);
             
             //Indsætter TextFields i textFieldPanel
-            JTextField nameField = new JTextField(30);
-            JTextField surnameField = new JTextField(30);
-            JTextField birthdayField = new JTextField(30);
+            JTextField nameField = new JTextField(21);
+            JTextField surnameField = new JTextField(21);
+            JTextField birthdayField = new JTextField(21);
             textFieldPanel.add(nameField);
             textFieldPanel.add(surnameField);
             textFieldPanel.add(birthdayField);
