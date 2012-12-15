@@ -52,14 +52,8 @@ public class Plads extends JPanel {
 		return seatNo;
 	}
 	
-	
 	public void SetName(String name) {
 		this.name = name;
-//		JLabel nameLabel = new JLabel(name);
-//		nameLabel.setFont(new Font("string", Font.BOLD, 10));
-//		nameLabel.setVerticalAlignment(SwingConstants.TOP);
-//		nameLabel.setVerticalTextPosition(SwingConstants.TOP);
-//		this.add(nameLabel);
 	}
 	
 	public String GetName() {
@@ -68,38 +62,19 @@ public class Plads extends JPanel {
 	
 	public int GetPrice() {
 		return price;
-	}
-	
-	public boolean getIsMarked() {
-//		System.out.println("Somebody asked me if I was marked and I told them "+isMarked);
-		return isMarked;
-		
-	}
-	
-	public boolean hasJLabel() {
-		return hasJLabel;
-	}
-	
-	public void setHasJLabel() {
-		hasJLabel = true;
-	}
-	
-	public void removeHasJLabel() {
-		hasJLabel = false;
-	}
-	
+	}	
 	
 	public String toString() {
 		String s = GetName()+"    -    "+GetPrice()+"kr.";
 		return s;
 	}
 	
-	public void addReservation() {
+	private void addReservation() {
 		pa.addReservation(this);
 		pb.addReservationLabels(pa, panel);
 	}
 	
-	public void removeReservation() {
+	private void removeReservation() {
 		pa.removeReservation(this);
 		pb.addReservationLabels(pa, panel);
 	}
@@ -131,7 +106,7 @@ public class Plads extends JPanel {
 	}
 	
 	//giver pladsen den rette farve
-	public void Color() {
+	private void Color() {
 		if(isAisle) {
 			this.setBackground(Color.GRAY);
 		} else if(isReserved) {

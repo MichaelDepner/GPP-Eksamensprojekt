@@ -298,7 +298,7 @@ public class Afgangsliste extends JFrame {
     				int id2 = arrivalTable.getSelectedRow();
 
     				if (id1<0 ||  id2<0) {
-    					System.out.println("Rows not selected properly!");
+    					JOptionPane.showMessageDialog(getThis(), "Du skal vælge én afgang per liste");
     				} else {
     					try {
     						String id11 = (String)departureTable.getValueAt(id1, 5);

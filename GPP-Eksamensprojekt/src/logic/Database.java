@@ -50,6 +50,21 @@ public class Database {
 		System.out.println("Database connection closed");
 	}
 	
+	//finder alle airports, hvor der er tilknyttet en departure og returnerer dem i alfabetisk rækkefølge
+//	public ResultSet queryGetAirports() throws SQLException {
+//		String query;
+//		query = "SELECT " +
+//				"Airports.id, Airports.name " +
+//				"FROM " +
+//				"Airports, Departures " +
+//				"WHERE " +
+//				"Departures.departure_airport_id = Airports.id OR Departures.arrival_airport_id = Airports.id " +
+//				"ORDER BY " +
+//				"Airports.name ASC";
+//		ResultSet rs = this.execute(query);
+////		System.out.println(query);
+//		return rs;
+//	}
 	//Finder alle airports, hvor der er tilknyttet en departure og returnerer
 	//dem i alfabetisk rækkefølge
 	public ResultSet queryGetAirports() throws SQLException {

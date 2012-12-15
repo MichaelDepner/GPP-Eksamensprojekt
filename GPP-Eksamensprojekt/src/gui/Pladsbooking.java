@@ -215,6 +215,9 @@ public class Pladsbooking extends JFrame {
 		
 		multipleDepartures = true;
 		if(multipleDepartures) {
+			rightMiddleTopPanel = new JPanel();
+			rightMiddleMiddlePanel = new JPanel();
+			
 			//Opretter centerPanel, hvori vi lægger left-, middle- og rightPanel
 			centerPanel = new JPanel();
 			centerPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
@@ -348,13 +351,13 @@ public class Pladsbooking extends JFrame {
 			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
 			
 			//Til rightMiddlePanel
-			rightMiddleTopPanel = new JPanel();
+//			rightMiddleTopPanel = new JPanel();
 			rightMiddleTopPanel.setLayout(new BoxLayout(rightMiddleTopPanel, BoxLayout.Y_AXIS));
 			rightMiddleTopPanel.add(udrejseLabel);
 			rightMiddlePanel.add(rightMiddleTopPanel);
 			
 			//Til rightMiddlePanel
-			rightMiddleMiddlePanel = new JPanel();
+//			rightMiddleMiddlePanel = new JPanel();
 			rightMiddleMiddlePanel.setLayout(new BoxLayout(rightMiddleMiddlePanel, BoxLayout.Y_AXIS));
 			rightMiddlePanel.add(rightMiddleMiddlePanel);
 			
