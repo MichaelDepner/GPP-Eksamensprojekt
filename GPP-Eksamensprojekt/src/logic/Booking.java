@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * 
+ * Denne class bruges til at holde på relevante informationer om en booking.
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
@@ -13,7 +13,6 @@ public class Booking {
 	private int departureId, id;
 	private String seats, passengerIds;
 	public Departure d;
-	private ArrayList<Plads> reserved;
 	private ArrayList<Person> passengers = new ArrayList<Person>();
 	
 	public Booking(int departureId, String seats, String passengerIds, boolean importing) throws SQLException {
@@ -22,13 +21,14 @@ public class Booking {
 		this.passengerIds = passengerIds;
 		findPassengers();
 		
-		//Henter information fra databasen om afgangen, hvis vi er ved at importere
+		//Henter information fra databasen om afgangen, hvis vi er ved at importere en eksisterende
 		if(importing) {
 			Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 			d = db.queryGetDeparture(departureId);
 		}
 	}
 	
+	//SetId bliver kaldt når bookingen hentes ned fra databasen, og derfor har et tilknyttet id
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -38,7 +38,7 @@ public class Booking {
 	}
 	
 	//Finder en passager via. ID
-	public void findPassengers() throws SQLException {
+	private void findPassengers() throws SQLException {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		//Deler passengerId strengen ind i små bidder, og finder passagerernes id. 
 		//Herefter findes personernes informationer i databasen ud fra id'et.

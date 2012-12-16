@@ -7,16 +7,26 @@ import java.sql.Timestamp;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Denne class bruges til at teste, at Departure returnerer korrekte værdier
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
+
 public class DepartureTest {
 
 	Departure d;
 	
 	@Before
+	//Finder en specifik departure i databasn
 	public void setUp() throws Exception {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		d = db.queryGetDeparture(1);
+		db.close();
 	}
 
+	//Følgende tests sikrer, at al information er trukket korrekt fra databasen, og kan 'gettes' fra departure klassen
+	
 	@Test
 	public void testGetDepartureId() {
 		int id = d.getDepartureId();

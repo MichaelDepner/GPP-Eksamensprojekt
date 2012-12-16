@@ -16,11 +16,8 @@ import logic.Person;
 import logic.Plads;
 
 /**
- * Alle oplysninger
- * 
- * Antal pladser, pris, personoplysninger...
- * 
- * Tilbage- og til betaling-knap
+ * Her kan man gennemgå alle de informationer, man har indtastet under en booking
+ * Når klassen kaldes fra en bookings-søgning, kan man også ændre i eksisterende bookinger fra denne klasse
  * 
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
@@ -38,6 +35,7 @@ public class Gennemse extends JFrame{
 	private JLabel labelPris, total, prisTekst;
 	private JButton editCustomerButton, editReservation, editPassengers;
 	private JButton tilbage, bestil, slet, gem, annuller;
+	private boolean importingCustomer;
 	
 	//Ting, der skal sendes til databasen
 	private ArrayList<Person> passengers;
@@ -45,12 +43,11 @@ public class Gennemse extends JFrame{
 	private ArrayList<Plads> reserved1, reserved2;
 	private Departure d1, d2;
 	private boolean turRetur;
-	private boolean importingCustomer;
 	private Booking b;
 	private Kundeoplysninger ko;
 	
 	
-	//Gennemse constructor tur/retur
+	//Constructor som kaldes ved almindelig tur/retur booking
 	public Gennemse(ArrayList<Plads> reserved1, ArrayList<Plads> reserved2, ArrayList<Person> passengers, 
 			Customer customer, Departure d1, Departure d2, boolean importingCustomer, Kundeoplysninger ko) {
 		this.passengers = passengers;
@@ -62,13 +59,13 @@ public class Gennemse extends JFrame{
 		turRetur = true;
 		this.importingCustomer = importingCustomer;
 		this.ko = ko;
-		
+
 		makeGennemseWindow(true, false);
 		setTitle("Gennemse");
 		knapperGennemse();
 	}
-	
-	//Gennemse constructor enkelt rejse
+
+	//Constructor som kaldes ved Enkeltrejse booking
 	public Gennemse(ArrayList<Plads> reserved, Departure d1, ArrayList<Person> passengers, 
 			Customer customer, boolean importingCustomer, Kundeoplysninger ko) {
 		this.passengers = passengers;
@@ -78,13 +75,13 @@ public class Gennemse extends JFrame{
 		turRetur = false;
 		this.importingCustomer = importingCustomer;
 		this.ko = ko;
-		
+
 		makeGennemseWindow(false, false);
 		setTitle("Gennemse");
 		knapperGennemse();
 	}
-	
-	//Gennemse constructor og ændre eksisterende booking
+
+	//Constructor som kaldes, når man skal gennemse en eksisterende booking og have mulighed for at ændre den
 	public Gennemse(ArrayList<Plads> reserved, Departure d1, Booking b, Customer customer) {
 		this.b = b;
 		passengers = b.getPassengers();
@@ -92,18 +89,14 @@ public class Gennemse extends JFrame{
 		this.reserved1 = reserved;
 		this.d1 = d1;
 		turRetur = false;
-		
+
 		for(int i=0; i<reserved.size(); i++) {
 			System.out.println(reserved.get(i).toString());
 		}
-		
+
 		makeGennemseWindow(false, true);
 		setTitle("Bookinginfo");
 		knapperRedigering();
-	}
-	
-	public JFrame returnMe() {
-		return this;
 	}
 
 	//Laver vinduet
@@ -145,14 +138,14 @@ public class Gennemse extends JFrame{
 		panelKontaktoplysninger.add(phoneNumber);
 		email = new JLabel(customer.GetEmail());
 		panelKontaktoplysninger.add(email);
-		
+
 		//Tilføjer knap til redigering
 		if(editing) {
 			editCustomerButton = new JButton("Redigér kundeoplysninger");
 			editCustomerButton.addActionListener(new Listener());
 			panelKontaktoplysninger.add(editCustomerButton);
 		}
-		
+
 		//Panel til rejse-info
 		panelRejse = new JPanel();
 		panel.add(panelRejse);
@@ -265,7 +258,7 @@ public class Gennemse extends JFrame{
 			editPassengers.addActionListener(new Listener());
 			panelPassengers.add(editPassengers);
 		}
-		
+
 		//Skaber passagerer
 		passengers(passengers.size());
 
@@ -281,7 +274,7 @@ public class Gennemse extends JFrame{
 		labelPris = new JLabel("Pris");
 		labelPris.setFont(new Font("String", Font.BOLD, 16));
 		panelPris.add(labelPris);
-		
+
 		if(turRetur) {
 			prisTekst = new JLabel(passengers.size() + " x sæder á " + d1.getPrice() + " + " + passengers.size() + " x sæder á " + d2.getPrice());
 			total = new JLabel("Total = " + (passengers.size()*d1.getPrice()+passengers.size()*d2.getPrice()));
@@ -289,7 +282,7 @@ public class Gennemse extends JFrame{
 			prisTekst = new JLabel(passengers.size() + " x sæder á " + d1.getPrice());
 			total = new JLabel("Total = " + (passengers.size()*d1.getPrice()) + " kr.");
 		}
-		
+
 		panelPris.add(prisTekst);
 		total.setFont(new Font("String", Font.BOLD, 14));
 		panelPris.add(total);
@@ -301,7 +294,7 @@ public class Gennemse extends JFrame{
 		setResizable(false);
 
 	}
-	
+
 	//Knapper til Gennemse
 	private void knapperGennemse() {
 		//Knapper
@@ -315,9 +308,9 @@ public class Gennemse extends JFrame{
 		panelKnapper.add(bestil);
 
 		tilbage.addActionListener(new Listener());
-    	bestil.addActionListener(new Listener());
+		bestil.addActionListener(new Listener());
 	}
-	
+
 	//Knapper til redigering
 	private void knapperRedigering() {
 		//Knapper
@@ -330,10 +323,10 @@ public class Gennemse extends JFrame{
 		annuller = new JButton("Luk");
 		panelKnapper.add(annuller);
 
-    	slet.addActionListener(new Listener());
-    	annuller.addActionListener(new Listener());
+		slet.addActionListener(new Listener());
+		annuller.addActionListener(new Listener());
 	}
-	
+
 	//Tilføj pladsers navne
 	private void antalPladser(ArrayList<Plads> reservedSeats, JPanel panel) {
 		for(int i = 0; i < reservedSeats.size(); i++) {
@@ -341,12 +334,12 @@ public class Gennemse extends JFrame{
 			panel.add(labelSeat);
 		}
 	}
-	
+
 	//Viser passager-info
 	private void passengers(int antalPassagerer) {
 		for(int i = 0; i < antalPassagerer; i++) {
 			header = new JLabel("Passager " + (i+1));
-	        header.setFont(new Font("String", Font.BOLD, 14));
+			header.setFont(new Font("String", Font.BOLD, 14));
 			panelPassengers.add(header);
 			passenger = new JLabel(passengers.get(i).getFirstname() + " " + passengers.get(i).getSurname());
 			panelPassengers.add(passenger);
@@ -356,57 +349,67 @@ public class Gennemse extends JFrame{
 			panelPassengers.add(emptyLabel);
 		}
 	}
-	
+
 	//Opdaterer information ved at lave et nyt vindue og fjerne det gamle
 	public void reload(Customer c) {
 		Gennemse g = new Gennemse(reserved1, d1, b, c);
 		dispose();
 	}
-    
-    private Gennemse getThis() {
-    	return this;
-    }
-    
-    public void removeMe() {
-    	ko.removeMe();
-    	dispose();
-    }
 
-    //Lytter til knapperne
-    private class Listener implements ActionListener {
-    	public void actionPerformed(ActionEvent event){
-    		if(event.getSource() == tilbage) {
-    			dispose();
-    		} else if(event.getSource() == bestil) {
-    			if(turRetur) {
-    				Betaling betaling = new Betaling(reserved1, reserved2, passengers, customer, d1, d2, getThis());
+	private Gennemse getThis() {
+		return this;
+	}
+
+	public void removeMe() {
+		ko.removeMe();
+		dispose();
+	}
+
+	private JFrame getFrame() {
+		return this;
+	}
+
+	//Lytter til knapperne
+	private class Listener implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			if(event.getSource() == tilbage) {
+				dispose();
+			} else if(event.getSource() == bestil) {
+				if(turRetur) {
+					Betaling betaling = new Betaling(reserved1, reserved2, passengers, customer, d1, d2, getThis());
     			} else if (!turRetur) {
     				Betaling betaling = new Betaling(reserved1, d1, passengers, customer, getThis());
     			}
     		} else if(event.getSource() == gem) {
-    			JOptionPane.showMessageDialog(returnMe(), "Ændringerne er gemt.");
+    			//Placebo. I virkeligheden bliver data gemt når man ændrer dem i de tilhørende vinduer. Denne knap gør bare at folk føler sig sikrere.
+    			JOptionPane.showMessageDialog(getThis(), "Ændringerne er gemt.");
     			ko.removeMe();
     			dispose();
     		} else if(event.getSource() == annuller) {
+    			//Anullér knappen gør ikke andet end at lukke vinduet
     			dispose();
     		} else if(event.getSource() == slet) {
+    			//Sletter booking fra databasen.
     			try {
-					Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-					db.queryDeleteBooking(b.getId());
-					JOptionPane.showMessageDialog(returnMe(), "Booking slettet.");
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(returnMe(), "Booking ikke slettet - kan ikke få forbindelse til databasen.");
-					e.printStackTrace();
-				}
+    				Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+    				db.queryDeleteBooking(b.getId());
+    				JOptionPane.showMessageDialog(getFrame(), "Booking slettet.");
+    			} catch (SQLException e) {
+    				JOptionPane.showMessageDialog(getFrame(), "Booking ikke slettet - kan ikke få forbindelse til databasen.");
+    				e.printStackTrace();
+    			}
     		} else if(event.getSource() == editCustomerButton) {
+    			//Hvis der klikkes på edit passengers, åbn en Kundeoplysninger, med den nuværende kunde, så den kan ændres
     			Kundeoplysninger ko = new Kundeoplysninger(customer, getThis());
     		} else if(event.getSource() == editReservation) {
+    			//Hvis man ønsker at ændre i de reserverede sæder, åbn en Pladsbooking med informationerne fra bookingen
     			try {
-					Pladsbooking pb = new Pladsbooking(b.getdepartureId(), b, customer);
-				} catch (SQLException e) {
-					System.out.println("Something went wrong when opening the pladsBooking");
-					e.printStackTrace();
-				}
+    				Pladsbooking pb = new Pladsbooking(b.getdepartureId(), b, customer);
+    			} catch (SQLException e) {
+    				JOptionPane.showMessageDialog(getFrame(), "Fejl i kommunikation med serveren - prøv igen");
+    				e.printStackTrace();
+    			}
+    			//Hvis der klikkes på edit passengers, åbn en Kundeoplysninger, med de nuværende passagerer, så de kan ændres
     		} else if(event.getSource() == editPassengers) {
     			Kundeoplysninger k = new Kundeoplysninger(passengers, getThis());
     		}

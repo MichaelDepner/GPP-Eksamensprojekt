@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 
 import logic.Booking;
 import logic.Customer;
@@ -18,7 +17,8 @@ import logic.Plads;
 import logic.PladsArray;
 
 /**
- * 
+ * Opretter et vindue hvor ledige pladser til en afgang er grafisk repræsenteret.
+ * Man kan klikke på pladserne for at vælge dem, og gå videre i systemet.
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
@@ -26,27 +26,20 @@ import logic.PladsArray;
 public class Pladsbooking extends JFrame {
 	private PladsArray pladsArray1, pladsArray2;
 	private int departureId, departureId2;
-	private ArrayList<Integer> emptyColumns1;
-	private ArrayList<Integer> emptyColumns2 = new ArrayList<>();
 	private ArrayList<Plads> panelList1 = new ArrayList<>();
 	private ArrayList<Plads> panelList2 = new ArrayList<>();
 	private ArrayList<Integer> oldReservations;
-	private Boolean booking, multipleDepartures;
 	private JPanel rightMiddleTopPanel, rightMiddleMiddlePanel;
-	private ArrayList<JPanel> labelList = new ArrayList<>();
 	private JLabel udrejseLabel, hjemrejseLabel;
 	private boolean turRetur, rebooking;
 	private Booking b;
 	private Afgangsliste al;
-	
 	private Departure d1, d2;
 	
 	//Denne constructor kaldes når vi vil lave et preview-vindue.
 	public Pladsbooking(int departureId, Boolean booking) throws SQLException {
-		this.booking = booking;
 		this.departureId = departureId;
 		pladsArray1 = new PladsArray(departureId);
-		emptyColumns1 = pladsArray1.getEmptyCols();
 		
 		if(!booking) {
 			makePreviewWindow(pladsArray1);
@@ -62,7 +55,6 @@ public class Pladsbooking extends JFrame {
 		String oldReservation = b.getSeats();
 		rebooking = true;
 		pladsArray1 = new PladsArray(departureId);
-		emptyColumns1 = pladsArray1.getEmptyCols();
 		turRetur = false;
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		d1 = db.queryGetDeparture(departureId);
@@ -93,13 +85,10 @@ public class Pladsbooking extends JFrame {
 		d2 = db.queryGetDeparture(departureId2);
 		db.close();
 		
-		booking = true;
 		this.departureId = departureId1;
 		this.departureId2 = departureId2;
 		pladsArray1 = new PladsArray(departureId1);
 		pladsArray2 = new PladsArray(departureId2);
-		emptyColumns1 = pladsArray1.getEmptyCols();
-		emptyColumns2 = pladsArray2.getEmptyCols();
 		
 		makeBookingWindow(true);
 		reservations(panelList1, pladsArray1);
@@ -113,11 +102,8 @@ public class Pladsbooking extends JFrame {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		d1 = db.queryGetDeparture(departureId1);
 		db.close();
-		
-		booking = true;
 		this.departureId = departureId1;
 		pladsArray1 = new PladsArray(departureId1);
-		emptyColumns1 = pladsArray1.getEmptyCols();
 		makeBookingWindow(false);
 		reservations(panelList1, pladsArray1);
 	}
@@ -135,35 +121,25 @@ public class Pladsbooking extends JFrame {
 		this.getContentPane().setVisible(false);
 		this.departureId = departureId;
 		pladsArray1 = new PladsArray(departureId);
-		emptyColumns1 = pladsArray1.getEmptyCols();
+		//emptyColumns1 = pladsArray1.getEmptyCols();
 		makePreviewWindow(pladsArray1);
 		reservations(panelList1, pladsArray1);
 		this.getContentPane().setVisible(true);
 	}
-	
-	public void makeInvisible() {
-		this.getContentPane().setVisible(false);
-	}
-	
-	public void makeVisible() {
-		setTitle("Pladsbooking");
-		this.getContentPane().setVisible(true);
-	}
-	
-	//
+
+	//Løber vores liste af Pladser igennem sammen med vores liste af eksisterende reservationer.
+	//Ændrer status på pladsen til reserveret, hvis den er på listen, og til mellemgang, hvis den er i en EmptyColumn
 	private void reservations(ArrayList<Plads> panelList, PladsArray pladsArray) throws SQLException {
 		ArrayList<Integer> reservations = pladsArray.findReservations();
 		int rows = pladsArray.getRows();
 		int cols = pladsArray.getCols();
 		ArrayList<Integer> emptyColumns = pladsArray.getEmptyCols();
-		
-		//
+
 		for(int i=0; i<reservations.size(); i++) {
 			int r = reservations.get(i);
 			panelList.get(r).changeReservation();
 		}
-		
-		//
+
 		int counter = 0;
 		for(int i=0; i<rows; i++) {
 			for(int j=0; j<cols; j++) {
@@ -174,8 +150,8 @@ public class Pladsbooking extends JFrame {
 			}
 		}
 	}
-	
-	//Lave preview vindue
+
+	//Laver preview vindue (det der bruges i Afgangslisten for at danne overblik)
 	private void makePreviewWindow(PladsArray pa) throws SQLException {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		
@@ -192,7 +168,6 @@ public class Pladsbooking extends JFrame {
 			for(int j = 0; j<cols; j++) {
 				counting++;
 				Plads p = new Plads(counting, this);
-				//Plads p = new Plads(counting, false, false, this);
 				contentPane.add(p);
 				panelList1.add(p);
 			}
@@ -204,271 +179,264 @@ public class Pladsbooking extends JFrame {
 		this.setVisible(true);
 	}
 	
-	//Laver vinduet
-	public void makeBookingWindow(final boolean turRetur) throws SQLException {
+	//Laver booking vindue, med 1 eller 2 afgange
+	private void makeBookingWindow(final boolean turRetur) throws SQLException {
 		JPanel leftPanel, middlePanel, centerPanel, rightPanel;
 		JPanel leftBottomPanel, leftTopPanel, middleBottomPanel, middleTopPanel, rightTopPanel, rightBottomPanel;
 		JLabel leftPanelTitle, centerPanelTitle, rightPanelTitle;
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		Container contentPane = this.getContentPane();
-		
-		
-		multipleDepartures = true;
-		if(multipleDepartures) {
-			rightMiddleTopPanel = new JPanel();
-			rightMiddleMiddlePanel = new JPanel();
-			
-			//Opretter centerPanel, hvori vi lægger left-, middle- og rightPanel
-			centerPanel = new JPanel();
-			centerPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-			centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-			contentPane.add(centerPanel);
-			
-			//LeftPanel
-			leftPanel = new JPanel();
-			leftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-			leftPanel.setLayout(new BorderLayout());
-			centerPanel.add(leftPanel);
-			
-			//Tilføjer flypladserne i midten af leftPanel
-			leftBottomPanel = addPlane(d1, pladsArray1, panelList1, rightMiddleTopPanel);
-			leftPanel.add(leftBottomPanel, BorderLayout.CENTER);
-			
-			//Panel til leftPanel NORTH
-			leftTopPanel = new JPanel();
-			leftTopPanel.setLayout(new BoxLayout(leftTopPanel, BoxLayout.Y_AXIS));
-			leftPanel.add(leftTopPanel, BorderLayout.NORTH);
-			
-			//Tilføjer titel til leftTopPanel
-			leftPanelTitle = new JLabel("Udrejse");
-            leftPanelTitle.setFont(new Font("String", Font.BOLD, 16));
-			leftTopPanel.add(leftPanelTitle);
-			
-			//Flyfront til leftTopPanel
-			JPanel leftTop2Panel = new JPanel();
-			leftTop2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-			leftTopPanel.add(leftTop2Panel);
-			ImageIcon imageLogo3 = new ImageIcon(getClass().getResource("png/fly_front4.jpg"));
-			JLabel logoLabel3 = new JLabel(imageLogo3);
-			leftTop2Panel.add(logoLabel3);
-			
-			//Indsætter venstre flyvinge
-			JPanel leftLeftPanel = new JPanel();
-			leftPanel.add(leftLeftPanel, BorderLayout.WEST);
-			ImageIcon imageLogo1 = new ImageIcon(getClass().getResource("png/venstreFlyvinge3.jpg"));
-			JLabel logoLabel1 = new JLabel(imageLogo1);
-			leftLeftPanel.add(logoLabel1);
-			
-			//Højre flyvinge
-			JPanel leftRightPanel = new JPanel();
-			leftPanel.add(leftRightPanel, BorderLayout.EAST);
-			ImageIcon imageLogo2 = new ImageIcon(getClass().getResource("png/vinge_right3.jpg"));
-			JLabel logoLabel2 = new JLabel(imageLogo2);
-			leftRightPanel.add(logoLabel2);
-			
-			//Fly bagende
-			JPanel leftBottomBottomPanel = new JPanel();
-			leftPanel.add(leftBottomBottomPanel, BorderLayout.SOUTH);
-			ImageIcon imageLogo4 = new ImageIcon(getClass().getResource("png/fly_bag3.jpg"));
-			JLabel logoLabel4 = new JLabel(imageLogo4);
-			leftBottomBottomPanel.add(logoLabel4);
-			
-			//MiddlePanel
-			middlePanel = new JPanel();
-			middlePanel.setLayout(new BorderLayout());
-			middlePanel.setSize(300, 720);
-			centerPanel.add(middlePanel);
-			
-			//Tilføjer flyets pladser i middlePanel CENTER, hvis det er tur/retur
-			if(turRetur) {
-				middleBottomPanel = addPlane(d2, pladsArray2, panelList2, rightMiddleMiddlePanel);
-				middlePanel.add(middleBottomPanel, BorderLayout.CENTER);
-			}
 
-			//Panel til middlePanel NORTH
-			middleTopPanel = new JPanel();
-			middleTopPanel.setLayout(new BoxLayout(middleTopPanel, BoxLayout.PAGE_AXIS));
-			middlePanel.add(middleTopPanel, BorderLayout.NORTH);
-			
-			//Titel til middlePanel
-			centerPanelTitle = new JLabel("Hjemrejse");
-            centerPanelTitle.setFont(new Font("String", Font.BOLD, 16));
-			middleTopPanel.add(centerPanelTitle);
-			
-			//Indsætter venstre flyvinge
-			JPanel middleLeftPanel = new JPanel();
-			middlePanel.add(middleLeftPanel, BorderLayout.WEST);
-			ImageIcon imageLogo5 = new ImageIcon(getClass().getResource("png/venstreFlyvinge3.jpg"));
-			JLabel logoLabel5 = new JLabel(imageLogo5);
-			middleLeftPanel.add(logoLabel5);
-			
-			//Højre flyvinge
-			final JPanel middleRightPanel = new JPanel();
-			middlePanel.add(middleRightPanel, BorderLayout.EAST);
-			ImageIcon imageLogo6 = new ImageIcon(getClass().getResource("png/vinge_right3.jpg"));
-			JLabel logoLabel6 = new JLabel(imageLogo6);
-			middleRightPanel.add(logoLabel6);
-			
-			//Flyfront
-			JPanel middleTop2Panel = new JPanel();
-			middleTop2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
-			middleTopPanel.add(middleTop2Panel);
-			ImageIcon imageLogo7 = new ImageIcon(getClass().getResource("png/fly_front4.jpg"));
-			JLabel logoLabel7 = new JLabel(imageLogo7);
-			middleTop2Panel.add(logoLabel7);
-			
-			//Fly bagende
-			JPanel middleBottomBottomPanel = new JPanel();
-			middlePanel.add(middleBottomBottomPanel, BorderLayout.SOUTH);
-			ImageIcon imageLogo8 = new ImageIcon(getClass().getResource("png/fly_bag3.jpg"));
-			JLabel logoLabel8 = new JLabel(imageLogo8);
-			middleBottomBottomPanel.add(logoLabel8);
-			
-			//RightPanel
-			rightPanel = new JPanel();
-			rightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-			rightPanel.setLayout(new BorderLayout());
-			rightPanel.setSize(300, 720);
-			centerPanel.add(rightPanel);
-			
-			//Label til rightPanel
-			JLabel udrejseLabel = new JLabel("Udrejse");
-            udrejseLabel.setFont(new Font("String", Font.BOLD, 14));
-            rightPanel.add(udrejseLabel);
-			
-			//RightTopPanel til rightPanel
-			rightTopPanel = new JPanel();
-			rightPanel.add(rightTopPanel, BorderLayout.NORTH);
-			
-			//Titel til rightTopPanel
-			rightPanelTitle = new JLabel("Info");
-            rightPanelTitle.setFont(new Font("String", Font.BOLD, 16));
-            rightTopPanel.add(rightPanelTitle);
-			
-			//RightMiddlePanel til rightPanel
-			JPanel rightMiddlePanel = new JPanel();
-			rightMiddlePanel.setLayout(new GridLayout(3, 1, 5, 5));
-			rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
-			
-			//Til rightMiddlePanel
-//			rightMiddleTopPanel = new JPanel();
-			rightMiddleTopPanel.setLayout(new BoxLayout(rightMiddleTopPanel, BoxLayout.Y_AXIS));
-			rightMiddleTopPanel.add(udrejseLabel);
-			rightMiddlePanel.add(rightMiddleTopPanel);
-			
-			//Til rightMiddlePanel
-//			rightMiddleMiddlePanel = new JPanel();
-			rightMiddleMiddlePanel.setLayout(new BoxLayout(rightMiddleMiddlePanel, BoxLayout.Y_AXIS));
-			rightMiddlePanel.add(rightMiddleMiddlePanel);
-			
-			//Hjemrejse-label
-			JLabel hjemrejseLabel = new JLabel("Hjemrejse");
-            hjemrejseLabel.setFont(new Font("String", Font.BOLD, 14));
-			rightMiddleMiddlePanel.add(hjemrejseLabel);
-			
-			if(!turRetur) {
-				rightMiddleMiddlePanel.setVisible(false);
-			}
-			
-			//Til rightPanel
-			rightBottomPanel = new JPanel();
-			rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
-			
-			//'Næste'-knappen
-			final JButton next = new JButton("Næste");
-			rightBottomPanel.add(next);
-			next.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					if(turRetur) {
-						if(pladsArray1.getReservations().size() > 0 && 
-												pladsArray2.getReservations().size() == 
-												pladsArray1.getReservations().size()) {
-							Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(),
-												pladsArray2.getReservations(), d1, d2, getThis());
-						} else {
-							JOptionPane.showMessageDialog(middleRightPanel, 
-											"Du skal vælge mindst 1 plads, og samme antal i begge fly!");
-						}
-						
-					} else if(rebooking) {
-						try {
-							if(oldReservations.size() != pladsArray1.getReservations().size()) {
-								JOptionPane.showMessageDialog(middleRightPanel, 
-											"Du skal vælge "+oldReservations.size()+" pladser i alt!");
-							} else {
-								String seatNums1 = "";
-								//lav string med id på reserverede pladser ud
-								for(int j=0; j<pladsArray1.getReservations().size(); j++) {
-									int num = pladsArray1.getReservations().get(j).getSeatNo();
-									seatNums1 = num+" "+seatNums1;
-								}
+		//Opretter disse panels tidligt, da de skal bruges når vi definerer pladser
+		rightMiddleTopPanel = new JPanel();
+		rightMiddleMiddlePanel = new JPanel();
 
-								Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-								db.queryUpdateBookingSeats(b.getId(), seatNums1);
+		//Opretter centerPanel, hvori vi lægger left-, middle- og rightPanel
+		centerPanel = new JPanel();
+		centerPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+		contentPane.add(centerPanel);
 
-								JOptionPane.showMessageDialog(returnMe(), "Opdatering udført. " +
-												"For at se data bliver du nødt til at lave en ny søgning.");
-								dispose();
-							}
-							
-							String seatNums1 = "";
-							//lav string med id på reserverede pladser ud
-		    				for(int j=0; j<pladsArray1.getReservations().size(); j++) {
-		    					int num = pladsArray1.getReservations().get(j).getSeatNo();
-		    					seatNums1 = num+" "+seatNums1;
-		    				}	
-							
-							
-						} catch (SQLException e) {
-							JOptionPane.showMessageDialog(next, "Fejl i kommunikation med serveren. " +
-											"Er internettet nede?");
-							System.out.println("Something went wrong when editing the booking");
-							e.printStackTrace();
-						}
+		//LeftPanel
+		leftPanel = new JPanel();
+		leftPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		leftPanel.setLayout(new BorderLayout());
+		centerPanel.add(leftPanel);
+
+		//Tilføjer flypladserne i midten af leftPanel
+		leftBottomPanel = addPlane(d1, pladsArray1, panelList1, rightMiddleTopPanel);
+		leftPanel.add(leftBottomPanel, BorderLayout.CENTER);
+
+		//Panel til leftPanel NORTH
+		leftTopPanel = new JPanel();
+		leftTopPanel.setLayout(new BoxLayout(leftTopPanel, BoxLayout.Y_AXIS));
+		leftPanel.add(leftTopPanel, BorderLayout.NORTH);
+
+		//Tilføjer titel til leftTopPanel
+		leftPanelTitle = new JLabel("Udrejse");
+		leftPanelTitle.setFont(new Font("String", Font.BOLD, 16));
+		leftTopPanel.add(leftPanelTitle);
+
+		//Flyfront til leftTopPanel
+		JPanel leftTop2Panel = new JPanel();
+		leftTop2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		leftTopPanel.add(leftTop2Panel);
+		ImageIcon imageLogo3 = new ImageIcon(getClass().getResource("png/fly_front4.jpg"));
+		JLabel logoLabel3 = new JLabel(imageLogo3);
+		leftTop2Panel.add(logoLabel3);
+
+		//Indsætter venstre flyvinge
+		JPanel leftLeftPanel = new JPanel();
+		leftPanel.add(leftLeftPanel, BorderLayout.WEST);
+		ImageIcon imageLogo1 = new ImageIcon(getClass().getResource("png/venstreFlyvinge3.jpg"));
+		JLabel logoLabel1 = new JLabel(imageLogo1);
+		leftLeftPanel.add(logoLabel1);
+
+		//Højre flyvinge
+		JPanel leftRightPanel = new JPanel();
+		leftPanel.add(leftRightPanel, BorderLayout.EAST);
+		ImageIcon imageLogo2 = new ImageIcon(getClass().getResource("png/vinge_right3.jpg"));
+		JLabel logoLabel2 = new JLabel(imageLogo2);
+		leftRightPanel.add(logoLabel2);
+
+		//Fly bagende
+		JPanel leftBottomBottomPanel = new JPanel();
+		leftPanel.add(leftBottomBottomPanel, BorderLayout.SOUTH);
+		ImageIcon imageLogo4 = new ImageIcon(getClass().getResource("png/fly_bag3.jpg"));
+		JLabel logoLabel4 = new JLabel(imageLogo4);
+		leftBottomBottomPanel.add(logoLabel4);
+
+		//MiddlePanel
+		middlePanel = new JPanel();
+		middlePanel.setLayout(new BorderLayout());
+		middlePanel.setSize(300, 720);
+		centerPanel.add(middlePanel);
+
+		//Tilføjer flyets pladser i middlePanel CENTER, hvis det er tur/retur
+		if(turRetur) {
+			middleBottomPanel = addPlane(d2, pladsArray2, panelList2, rightMiddleMiddlePanel);
+			middlePanel.add(middleBottomPanel, BorderLayout.CENTER);
+		}
+
+		//Panel til middlePanel NORTH
+		middleTopPanel = new JPanel();
+		middleTopPanel.setLayout(new BoxLayout(middleTopPanel, BoxLayout.PAGE_AXIS));
+		middlePanel.add(middleTopPanel, BorderLayout.NORTH);
+
+		//Titel til middlePanel
+		centerPanelTitle = new JLabel("Hjemrejse");
+		centerPanelTitle.setFont(new Font("String", Font.BOLD, 16));
+		middleTopPanel.add(centerPanelTitle);
+
+		//Indsætter venstre flyvinge
+		JPanel middleLeftPanel = new JPanel();
+		middlePanel.add(middleLeftPanel, BorderLayout.WEST);
+		ImageIcon imageLogo5 = new ImageIcon(getClass().getResource("png/venstreFlyvinge3.jpg"));
+		JLabel logoLabel5 = new JLabel(imageLogo5);
+		middleLeftPanel.add(logoLabel5);
+
+		//Højre flyvinge
+		final JPanel middleRightPanel = new JPanel();
+		middlePanel.add(middleRightPanel, BorderLayout.EAST);
+		ImageIcon imageLogo6 = new ImageIcon(getClass().getResource("png/vinge_right3.jpg"));
+		JLabel logoLabel6 = new JLabel(imageLogo6);
+		middleRightPanel.add(logoLabel6);
+
+		//Flyfront
+		JPanel middleTop2Panel = new JPanel();
+		middleTop2Panel.setLayout(new FlowLayout(FlowLayout.CENTER));
+		middleTopPanel.add(middleTop2Panel);
+		ImageIcon imageLogo7 = new ImageIcon(getClass().getResource("png/fly_front4.jpg"));
+		JLabel logoLabel7 = new JLabel(imageLogo7);
+		middleTop2Panel.add(logoLabel7);
+
+		//Fly bagende
+		JPanel middleBottomBottomPanel = new JPanel();
+		middlePanel.add(middleBottomBottomPanel, BorderLayout.SOUTH);
+		ImageIcon imageLogo8 = new ImageIcon(getClass().getResource("png/fly_bag3.jpg"));
+		JLabel logoLabel8 = new JLabel(imageLogo8);
+		middleBottomBottomPanel.add(logoLabel8);
+
+		//RightPanel
+		rightPanel = new JPanel();
+		rightPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		rightPanel.setLayout(new BorderLayout());
+		rightPanel.setSize(300, 720);
+		centerPanel.add(rightPanel);
+
+		//Label til rightPanel
+		JLabel udrejseLabel = new JLabel("Udrejse");
+		udrejseLabel.setFont(new Font("String", Font.BOLD, 14));
+		rightPanel.add(udrejseLabel);
+
+		//RightTopPanel til rightPanel
+		rightTopPanel = new JPanel();
+		rightPanel.add(rightTopPanel, BorderLayout.NORTH);
+
+		//Titel til rightTopPanel
+		rightPanelTitle = new JLabel("Info");
+		rightPanelTitle.setFont(new Font("String", Font.BOLD, 16));
+		rightTopPanel.add(rightPanelTitle);
+
+		//RightMiddlePanel til rightPanel
+		JPanel rightMiddlePanel = new JPanel();
+		rightMiddlePanel.setLayout(new GridLayout(3, 1, 5, 5));
+		rightPanel.add(rightMiddlePanel, BorderLayout.CENTER);
+
+		//Til rightMiddlePanel
+		rightMiddleTopPanel.setLayout(new BoxLayout(rightMiddleTopPanel, BoxLayout.Y_AXIS));
+		rightMiddleTopPanel.add(udrejseLabel);
+		rightMiddlePanel.add(rightMiddleTopPanel);
+
+		//Til rightMiddlePanel
+		rightMiddleMiddlePanel.setLayout(new BoxLayout(rightMiddleMiddlePanel, BoxLayout.Y_AXIS));
+		rightMiddlePanel.add(rightMiddleMiddlePanel);
+
+		//Hjemrejse-label
+		JLabel hjemrejseLabel = new JLabel("Hjemrejse");
+		hjemrejseLabel.setFont(new Font("String", Font.BOLD, 14));
+		rightMiddleMiddlePanel.add(hjemrejseLabel);
+
+		//Hvis vi kun skal se ét fly
+		if(!turRetur) {
+			rightMiddleMiddlePanel.setVisible(false);
+		}
+
+		//Til rightPanel
+		rightBottomPanel = new JPanel();
+		rightPanel.add(rightBottomPanel, BorderLayout.SOUTH);
+
+		//'Næste'-knappen
+		final JButton next = new JButton("Næste");
+		rightBottomPanel.add(next);
+		next.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//Hvis vi booker tur/retur, fortsæt med informationer fra begge fly
+				if(turRetur) {
+					if(pladsArray1.getReservations().size() > 0 && 
+							pladsArray2.getReservations().size() == 
+							pladsArray1.getReservations().size()) {
+						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(),
+								pladsArray2.getReservations(), d1, d2, getThis());
 					} else {
-						if(pladsArray1.getReservations().size() > 0) {
-							Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(),
-																					d1, getThis());
+						JOptionPane.showMessageDialog(middleRightPanel, 
+								"Du skal vælge mindst 1 plads, og samme antal i begge fly!");
+					}
+
+				} else if(rebooking) {
+					try {
+						if(oldReservations.size() != pladsArray1.getReservations().size()) {
+							JOptionPane.showMessageDialog(middleRightPanel, 
+									"Du skal vælge "+oldReservations.size()+" pladser i alt!");
 						} else {
-							JOptionPane.showMessageDialog(middleRightPanel, "Du skal vælge mindst 1 plads!");
+							String seatNums1 = "";
+							//Lav string med id på reserverede pladser i udrejsen
+							for(int j=0; j<pladsArray1.getReservations().size(); j++) {
+								int num = pladsArray1.getReservations().get(j).getSeatNo();
+								seatNums1 = num+" "+seatNums1;
+							}
+
+							//Opdater de reserverede sæder i databasen
+							Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+							db.queryUpdateBookingSeats(b.getId(), seatNums1);
+
+							JOptionPane.showMessageDialog(getFrame(), "Opdatering udført. " +
+									"For at se data bliver du nødt til at lave en ny søgning.");
+							dispose();
 						}
+
+
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(next, "Fejl i kommunikation med serveren. " +
+								"Er internettet nede?");
+						System.out.println("Something went wrong when editing the booking");
+						e.printStackTrace();
+					}
+				} else {
+					//Hvis vi booker en enkeltrejse, fortsæt med informationer om valgte pladser.
+					if(pladsArray1.getReservations().size() > 0) {
+						Kundeoplysninger ko = new Kundeoplysninger(pladsArray1.getReservations(),
+								d1, getThis());
+					} else {
+						JOptionPane.showMessageDialog(middleRightPanel, "Du skal vælge mindst 1 plads!");
 					}
 				}
-			});
-
-			if(!turRetur) {
-				middlePanel.setVisible(false);
 			}
+		});
 
-			
-			this.setSize(1100,700);
-			this.setResizable(false);
-			this.setVisible(true);
+		//Som en sidste ting i initialiseringen: Hvis vi booker enkeltrejse, gør midterste panel usynligt
+		if(!turRetur) {
+			middlePanel.setVisible(false);
 		}
+
+
+		this.setSize(1100,700);
+		this.setResizable(false);
+		this.setVisible(true);
 	}
 
-	public Pladsbooking getThis() {
+	private Pladsbooking getThis() {
 		return this;
 	}
-	
+
 	public void removeMe() {
 		al.dispose();
 		this.dispose();
 	}
-	
-	public JFrame returnMe() {
+
+	private JFrame getFrame() {
 		return this;
 	}
-	
+
 	//Tildeler labels til sæderne
-	public void addSeatLabel(Plads p, JPanel panel) {
+	private void addSeatLabel(Plads p, JPanel panel) {
 		JLabel label = new JLabel(p.toString());
 		panel.add(label);
 		panel.validate();
 		panel.repaint();
 	}
-	
-	//Tilføjer oversigt over valgte pladser til rightPanel
+
+	//Tilføjer oversigt over valgte pladser til rightPanel for enkeltrejse
 	public void addReservationLabels(PladsArray pa, JPanel labelPanel) {
 		labelPanel.removeAll();
 		repaint();
@@ -489,25 +457,16 @@ public class Pladsbooking extends JFrame {
 		}
 	}
 	
-	//
-	public void addReservationLabels(PladsArray pa, PladsArray pa2, JPanel labelPanel) {
-		labelPanel.removeAll();
-		repaint();
-		for(int i=0; i<pa.getReservations().size(); i++) {
-			addSeatLabel(pa.getReservations().get(i), labelPanel);
-		}
-		for(int i=0; i<pa2.getReservations().size(); i++) {
-			addSeatLabel(pa2.getReservations().get(i), labelPanel);
-		}
-	}
-	
 	//Oprettelse af flyets sæder
-	public JPanel addPlane(Departure d, PladsArray pladsArray, ArrayList<Plads> panelList, JPanel labelPanel) throws SQLException {	
+	private JPanel addPlane(Departure d, PladsArray pladsArray, ArrayList<Plads> panelList, JPanel labelPanel) throws SQLException {	
+		//finder rækker, kolonner og mellemgange
 		int rows = pladsArray.getRows();
 		int cols = pladsArray.getCols();
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(rows, cols, 2, 2));
 		int counting=0;
+		
+		//for hver plads i GridLayoutet oprettes en Plads, som samtidig tilføjes til en ArrayList af pladser
 		for(int i = 0; i<rows; i++) {
 			for(int j = 0; j<cols; j++) {
 				
@@ -517,6 +476,7 @@ public class Pladsbooking extends JFrame {
 				panelList.add(p);
 			}
 		}
+		//Pladsernes navne tilføjes
 		setNames(panelList, pladsArray);
 		
 		return panel;
@@ -535,7 +495,7 @@ public class Pladsbooking extends JFrame {
 		int rows = pladsArray.getRows();
 		int cols = pladsArray.getCols();
 		ArrayList<Integer> emptyCols = pladsArray.getEmptyCols();
-		HashMap nameMap = new HashMap<>();
+		HashMap<Integer, Object> nameMap = new HashMap<>();
 		
 		//Løber igennem kolonner, og tildeler dem et bogstav hvis ikke de er tomme (mellemgange)
 		int counter = 0;
@@ -548,6 +508,7 @@ public class Pladsbooking extends JFrame {
 			}	
 		}
 		
+		//Sætter navne på sæderne
 		counter = 0;
 		for(int i=0; i<rows; i++) {
 			for(int j=0; j<cols; j++) {
@@ -562,7 +523,7 @@ public class Pladsbooking extends JFrame {
 	}
 	
 	//Bogstaverne og rækkefølgen der skal tilføjes til rækkerne. Der kan ikke være mere
-	//end 25 rækker i flyet - hvilket nok heller ikke kommer til at ske irl
+	//end 25 rækker i flyet - hvilket nok heller ikke kommer til at ske.
 	private String getCharForNumber(int i) {
 	    char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 	    if (i > 25) {

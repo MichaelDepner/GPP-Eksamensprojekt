@@ -1,7 +1,7 @@
 package logic;
 
 /**
- * 
+ * Denne class holder på relevante informationer om en Customer
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
@@ -21,10 +21,10 @@ public class Customer {
 		this.city = city;
 		this.postalCode = postalCode;
 		this.country = country;
-		System.out.println("Making customer: "+firstname+" "+surname+" "+email+" "+phone+" "+
-											address+" "+city+" "+postalCode+" "+country);
 	}
 	
+	//Denne metode kaldes når Customeren importeres fra databasen, 
+	//og derved har et givent id
 	public void setId(int id) {
 		this.id = id;
 	}

@@ -15,21 +15,16 @@ import logic.Person;
 import logic.Plads;
 
 /**
- * Skal have lavet et vindue, med kontaktperson øverst, og alle passagerer nederst.
- * Start med at lave antal personer som int, vi laver den dynamisk senere.
- * 
- * Kontaktperson: Titel, fornavn, efternavn, adresse, e-mail. tlf, fødselsdato.
- * Øvrige passagerer: Titel, fornavn, efternavn, fødselsdato
- * 
- * fortsæt-knap til betaling
- * 
- * Skal have en importer-kunde-knap (øverst)
+ * Denne klasse skaber et vindue, hvor kundeoplysninger indtastes og gemmes.
+ * Der angives ved hjælp af et array af reserverede pladser, hvor mange passagerer der skal med.
  * 
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
 
 public class Kundeoplysninger {
+	
+	//GUI
 	private JFrame frame;
     private JTextField firstname, surname, email, phoneNumber, address, city;
     private JTextField postal, country;
@@ -39,25 +34,29 @@ public class Kundeoplysninger {
     private Container contentPane;
     private JPanel panel1, panel2, panel6, panelNorth;
     private JPanel panel, panelCenter;
+    
+    //Data når der oprettes kunde og passagerer
+    private Customer c;
+    private String firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS;
     private ArrayList<Plads> reservations1, reservations2;
-    private ArrayList<Person> existingPassengers;
-    private ArrayList<Person> passengers = new ArrayList<>();
     private Customer customer;
     private ArrayList<JTextField> firstnameList = new ArrayList<>();
     private ArrayList<JTextField> surnameList = new ArrayList<>();
     private ArrayList<JTextField> birthdayList = new ArrayList<>();
     private boolean turRetur;
+    private ArrayList<Person> passengers = new ArrayList<>();
+    
+    //Data når der redigeres i eksisterende kunde eller passager
+    private ArrayList<Person> existingPassengers;
     private boolean importingCustomer = false;
     private boolean changingExistingCustomer = false;
     private boolean changingExistingPassengers = false;
     private Customer importedCustomer;
-    private Customer c;
     private Gennemse g;
     
+    //Data, der videregives til Gennemse, når kundeoplysninger er oprettet
     private Departure d1, d2;
-    
-    private String firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS;
-	private Pladsbooking pb;
+    private Pladsbooking pb;
 	
 	//Constructor for tur/retur
     public Kundeoplysninger(ArrayList<Plads> reservations1, ArrayList<Plads> reservations2, Departure d1, Departure d2, Pladsbooking pb) {
@@ -132,7 +131,7 @@ public class Kundeoplysninger {
         panelNorth.add(labelUp, BorderLayout.NORTH);
         panelNorth.add(importerKunde, BorderLayout.NORTH);
         
-        //
+        //Hvis vi er ved at oprette kunde og passagerer, lav tomme felter til samme antal passagerer som der er reserveret sæder
         if(!changingExistingCustomer && !changingExistingPassengers) {
         	int counter = 0;
         	for(int i=0; i<reservations1.size(); i++) {
@@ -140,8 +139,10 @@ public class Kundeoplysninger {
         	}
         	centerPanel(counter);
         } else if (changingExistingCustomer) {
+        	//Hvis vi er ved at ændre i customer, lav ikke nogle passager input-bokse
         	centerPanel(0);
         } else if (changingExistingPassengers) {
+        	//Hvis vi er ved at ændre i passagerer, lav paneler til alle passagerer i det givne array
         	int counter = 0;
         	for(int i=0; i<existingPassengers.size(); i++) {
         		counter++;
@@ -287,26 +288,27 @@ public class Kundeoplysninger {
             JPanel textFieldPanel = new JPanel();
             textFieldPanel.setLayout(new GridLayout(3,1,10,10));
     	    textFieldPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 30));
-            holder.add(textFieldPanel);
-            
-            //Indsætter TextFields i textFieldPanel
-            JTextField nameField = new JTextField(30);
-            JTextField surnameField = new JTextField(30);
-            JTextField birthdayField = new JTextField(30);
-            textFieldPanel.add(nameField);
-            textFieldPanel.add(surnameField);
-            textFieldPanel.add(birthdayField);
-            
-            firstnameList.add(nameField);
-            surnameList.add(surnameField);
-            birthdayList.add(birthdayField);
-            
-            if(changingExistingPassengers) {
-            	Person p = existingPassengers.get(i);
-            	nameField.setText(p.getFirstname());
-            	surnameField.setText(p.getSurname());
-            	birthdayField.setText(p.getBirthday());
-            }
+    	    holder.add(textFieldPanel);
+
+    	    //Indsætter TextFields i textFieldPanel
+    	    JTextField nameField = new JTextField(30);
+    	    JTextField surnameField = new JTextField(30);
+    	    JTextField birthdayField = new JTextField(30);
+    	    textFieldPanel.add(nameField);
+    	    textFieldPanel.add(surnameField);
+    	    textFieldPanel.add(birthdayField);
+
+    	    firstnameList.add(nameField);
+    	    surnameList.add(surnameField);
+    	    birthdayList.add(birthdayField);
+
+    	    //Hvis vi ændrer i eksisterende passagerer, sæt tekstboksene til deres informationer
+    	    if(changingExistingPassengers) {
+    	    	Person p = existingPassengers.get(i);
+    	    	nameField.setText(p.getFirstname());
+    	    	surnameField.setText(p.getSurname());
+    	    	birthdayField.setText(p.getBirthday());
+    	    }
     	}
     }
 
@@ -322,7 +324,7 @@ public class Kundeoplysninger {
     }
 
     //Laver kunden
-    private void makeCustomer() {
+    private Customer makeCustomer() {
     	firstnameS = firstname.getText();
     	surnameS = surname.getText();
     	emailS = email.getText();
@@ -336,8 +338,10 @@ public class Kundeoplysninger {
     	if(firstnameS.equals("") || surnameS.equals("") || emailS.equals("") || phoneS.equals("")
     			|| addressS.equals("") || cityS.equals("") || postalCodeS.equals("") || countryS.equals("")) {
     		JOptionPane.showMessageDialog(frame, "Kan ikke oprette kunde - du mangler at indtaste information!");
+    		return null;
     	} else {
     		customer = new Customer(firstnameS, surnameS, emailS, phoneS, addressS, cityS, postalCodeS, countryS);
+    		return customer;
     	}
 
     }
@@ -391,26 +395,35 @@ public class Kundeoplysninger {
     private class Listener implements ActionListener {
         public void actionPerformed(ActionEvent event){
             if(event.getSource() == back) {
-                System.out.println("Going back");
+            	//Vi går 'tilbage' ved at lukke vinduet. Så er vi tilbage ved pladsbooking.
                 frame.dispose();
             } else if(event.getSource() == next) {
-            	
+            	//Når der trykkes next, skabes en Customer
             	if(importingCustomer) {
             		customer = importedCustomer;
             	} else {
-            		makeCustomer();
+            		customer = makeCustomer();
             	}
-            	
+
+            	//Passenger arraylisten fyldes med friske Persons
             	makePeople();
-            	
-            	if(turRetur) {
-            		Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, 
-            				customer, d1, d2, importingCustomer, getThis());
-            	} else {
-            		Gennemse gennemse = new Gennemse(reservations1, d1, passengers, customer,
-            				importingCustomer, getThis());
+
+            	//Opret en 'Gennemse' med den nyligt oprettede data
+            	if(customer != null) {
+            		if(passengers.size() == reservations1.size()) {
+            			if(turRetur) {
+            				Gennemse gennemse = new Gennemse(reservations1, reservations2, passengers, 
+            						customer, d1, d2, importingCustomer, getThis());
+            			} else {
+            				Gennemse gennemse = new Gennemse(reservations1, d1, passengers, customer,
+            						importingCustomer, getThis());
+            			}
+            		}
             	}
-            	
+
+
+
+
             } else if(event.getSource() == importerKunde) {
             	System.out.println("Hent info fra database om eksisterende kunder");
             	String[] options = {"Telefonnummer","Adresse","Email-adresse" };
@@ -419,22 +432,23 @@ public class Kundeoplysninger {
             			JOptionPane.NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, "");
             	String option = options[chosenOption];
             	String input = JOptionPane.showInputDialog("Indtast eksisterende kundes "+option);
-            	
+
             	//Laver string om til acceptabelt database input
             	if(option == "Telefonnummer") option = "Customer.phone_number";
             	if(option == "Adresse") option = "Customer.address";
             	if(option == "Email-adresse") option = "Customer.email";
-            	
+
             	Database db;
-				try {
-					db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-					importedCustomer = db.queryFindCustomer(option, input);
-	            	db.close();
-	            	importCustomer(importedCustomer);
-	            	
-	            	firstname.setEditable(false);
-	            	surname.setEditable(false);
-	            	email.setEditable(false);
+            	try {
+            		db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+            		importedCustomer = db.queryFindCustomer(option, input);
+            		db.close();
+            		importCustomer(importedCustomer);
+
+            		//Når vi har importeret kunden, ønsker vi ikke at brugeren ændrer i data
+            		firstname.setEditable(false);
+            		surname.setEditable(false);
+            		email.setEditable(false);
 	            	phoneNumber.setEditable(false);
 	            	address.setEditable(false);
 	            	city.setEditable(false);
@@ -450,6 +464,7 @@ public class Kundeoplysninger {
             } else if(event.getSource() == confirm) {
             	
             	if(changingExistingCustomer) {
+            		//Opdaterer eksisterende kunde
             		firstnameS = firstname.getText();
                 	surnameS = surname.getText();
                 	emailS = email.getText();
@@ -473,6 +488,7 @@ public class Kundeoplysninger {
                 		e.printStackTrace();
                 	}
             	} else if(changingExistingPassengers) {
+            		//Opdaterer listen af Passagerer
             		makePeople();
             		
             		try {

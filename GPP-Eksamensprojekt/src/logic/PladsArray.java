@@ -5,21 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
+/**
+ * Opretter et array, der holder styr på antallet af reserverede pladser når vi laver en PladsBooking
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
 public class PladsArray {
 	private Database db;
 	private int departureId;
 	private ArrayList<Plads> reservations = new ArrayList<>();
-//	private String rebookingString;
-//	private boolean rebooking;
-	//private int columns;
-	//private int rows;
-	//private Plads[] pladser;
-	//private ArrayList<Integer> premiumRows = new ArrayList<>();
-	//private ArrayList<Integer> aisles = new ArrayList<>();
-	//private int[][] overblikArray;
-	
-	
-	
 	
 	public PladsArray(int departureId) throws SQLException {
 		this.departureId = departureId;
@@ -37,9 +32,7 @@ public class PladsArray {
 		return reservations;
 	}
 	
-	
-	
-	//returnerer en ArayList med numrene på de sæder, der allerede er reserveret
+	//Returnerer en ArayList med numrene på de sæder, der allerede er reserveret
 	public ArrayList<Integer> findReservations() throws SQLException {
 		ArrayList<Integer> reservationList = new ArrayList<>();
 		
@@ -47,6 +40,7 @@ public class PladsArray {
 		
 		ResultSet rs = db.queryGetReservedSeats(departureId);
 		
+		//Deler 'seat' strengen fra databasen op i Integers, og placerer dem i en ArrayList
 		while (rs.next()) {
 			String s = rs.getString("seats");
 			String[] strArray = s.split(" ");
@@ -62,7 +56,7 @@ public class PladsArray {
 		return reservationList;
 		}
 	
-	
+	//Returnerer antallet af rækker i det specifikke fly
 	public int getRows() throws SQLException {
 		db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		ResultSet rs = db.queryGetRows(departureId);
@@ -70,6 +64,7 @@ public class PladsArray {
 		return rs.getInt("rows");
 	}
 	
+	//Returnerer antallet af kolonner i det specifikke fly
 	public int getCols() throws SQLException {
 		db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		ResultSet rs = db.queryGetCols(departureId);
@@ -77,9 +72,9 @@ public class PladsArray {
 		return rs.getInt("columns");
 	}
 	
-	
+	//Returnerer en ArrayList med antallet af tomme kolonner (mellemgange) i det specifikke fly
 	public ArrayList<Integer> getEmptyCols() throws SQLException {
-		ArrayList<Integer> emptyColumns = new ArrayList();
+		ArrayList<Integer> emptyColumns = new ArrayList<Integer>();
 		db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		ResultSet rs = db.queryGetEmptyCols(departureId);
 		
@@ -93,11 +88,4 @@ public class PladsArray {
 		Collections.sort(emptyColumns);
 		return emptyColumns;
 	}
-	
-	public void makeReservationList() {
-		
-	}
-	
-	
-
 }

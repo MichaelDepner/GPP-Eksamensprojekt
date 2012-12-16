@@ -1,16 +1,12 @@
 package logic;
 
-import gui.Afgangsliste;
-
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
- * 
+ * Søger på afgange mellem to lufthavne, enten på en bestemt dato eller i en periode
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
@@ -19,16 +15,13 @@ public class AfgangSøgning {
 
 	private ArrayList<Departure> departuresOnDate = new ArrayList<Departure>();
 	private ArrayList<Departure> departuresBeforeDate, departuresAfterDate;
-	private String departureAirport, arrivalAirport;
 	private int departureId, arrivalId;
 	private String formattedDate, formattedDate2;
 	private boolean period;
 	
+	//Constructor til søgning på en enkelt dato
 	public AfgangSøgning(java.util.Date date, String departureAirport, String arrivalAirport) throws SQLException {
 		period = false;
-		this.departureAirport = departureAirport;
-		this.arrivalAirport = arrivalAirport;
-		
 		formattedDate = formatDate(date);
 	    
 	    //Finder ID på lufthavnene
@@ -36,11 +29,10 @@ public class AfgangSøgning {
 	    departureId = getId(departureAirport);
 	}
 	
+	//Constructor til søgning i en periode
 	public AfgangSøgning(java.util.Date periodStartDate, java.util.Date periodEndDate, 
 					String departureAirport, String arrivalAirport) throws SQLException {
 		period = true;
-		this.departureAirport = departureAirport;
-		this.arrivalAirport = arrivalAirport;
 		formattedDate = formatDate(periodStartDate);
 		formattedDate2 = formatDate(periodEndDate);
 		
@@ -77,6 +69,7 @@ public class AfgangSøgning {
 	public ArrayList<Departure> getDepartures() throws SQLException {
 		//Hvis der ikke søges på en periode
 		if(!period) {
+			//Få et resultset med departures fra databasen, og læg dem i et array
 			Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 			ResultSet rs = db.queryGetDeparturesOnDate(formattedDate, departureId, arrivalId);
 			
@@ -94,25 +87,16 @@ public class AfgangSøgning {
 			db.close();
 			return departuresOnDate;
 		
-		//Hvis det er en peiodesøgning
+		//Hvis det er en periodesøgning
 		} else {
 			Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 			departuresOnDate = db.queryGetDeparturesInPeriod(formattedDate, formattedDate2, 
 														departureId, arrivalId);
+			db.close();
 			for(int i=0; i<departuresOnDate.size(); i++) {
 				System.out.println(departuresOnDate.get(i).getDepartureId());
 			}
 			return departuresOnDate;
 		}
-	}
-	
-	//Afgange før søgning
-	public ArrayList<Departure> getDeparturesBefore() {
-		return departuresBeforeDate;
-	}
-	
-	//Afgange efter søgning
-	public ArrayList<Departure> getDeparturesAfter() {
-		return departuresAfterDate;
 	}
 }

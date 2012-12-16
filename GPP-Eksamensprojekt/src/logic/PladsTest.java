@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * 
- * Tjekker, at en plads gemmes ordentligt, samt tester dens getters og setters
+ * Tester at Pladsen gemmer de informationer, der er blevet den givet, og at man kan hente dem igen
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
 public class PladsTest {

@@ -14,6 +14,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
@@ -28,8 +29,7 @@ import logic.Departure;
 import logic.PladsArray;
 
 /**
- * Søgelisten skal vise navn, bookingnummer, og en vis-knap
- * Laves som afgangsliste, med dynamisk table
+ * Viser en liste af bookinger foretaget af en bestemt kunde. 
  * 
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
@@ -42,7 +42,7 @@ public class Bookingliste extends JFrame {
 	private JTable bookingTable;
 	private JButton next;
 
-	//Constructor
+	//Constructor som finder kunden i databasen, og skaber en frame
 	public Bookingliste(String searchingFor, String arg) throws SQLException {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		c = db.queryFindCustomer(searchingFor, arg);
@@ -58,7 +58,6 @@ public class Bookingliste extends JFrame {
 	}
 	
 	private void makeWindow() {
-		
 		setTitle("Bookingliste");
 		
         getContentPane().setLayout(new BorderLayout());
@@ -96,8 +95,10 @@ public class Bookingliste extends JFrame {
     	panelCenter.add(jp1bookings);
 	}
 	
+	//Laver et JTable med informationer fra en arraylist af bookinger
 	private JTable bookingTable(ArrayList<Booking> bookings) {
     	final ArrayList<Booking> bk = bookings;
+    	//Bruger defaultTableModel med den ene ændring at celler ikke kan ændres
     	DefaultTableModel model = new DefaultTableModel() {
     		public boolean isCellEditable(int row, int column) {
     			return false;
@@ -154,36 +155,47 @@ public class Bookingliste extends JFrame {
 		column.setPreferredWidth(j);
     }
 	
-	 //Lytter til 'Næste'-knappen
-	 private class Listener implements ActionListener {
-	    	public void actionPerformed(ActionEvent event){
-	    		if(event.getSource() == next) {
-	    				int id1 = bookingTable.getSelectedRow();
-	    				if(id1<0) {
-	    					System.out.println("Rows not selected properly!");
-	    				} else {
-	    					try {
-	    						Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-	    						String id11 = (String)bookingTable.getValueAt(id1, 4);
-	    						int id2 = Integer.parseInt(id11);
-	    						
-	    						Booking b = bookings.get(id1); 
-	    						Pladsbooking pb = new Pladsbooking(id2, b, c);
-	    						PladsArray pa = pb.getPladsArray();
-	    						pb.dispose();						
-	    						
-	    						//Pladsbooking pb = new Pladsbooking(id2, bookings.get(id1).getSeats());
-	    						Departure d = db.queryGetDeparture(id2);
-	    						
-	    						Gennemse g = new Gennemse(pa.getReservations(), d, b, c);
-	    						db.close();
-	    						dispose();
-	    					} catch (SQLException e) {
-	    						System.out.println("SQL error when making Pladsbooking");
-	    						e.printStackTrace();
-	    					}
-	    				}
-	    			}
-	    	}
-	    }
+	private Bookingliste getThis() {
+		return this;
+	}
+	
+	//Lytter til 'Næste'-knappen
+	private class Listener implements ActionListener {
+		public void actionPerformed(ActionEvent event){
+			if(event.getSource() == next) {
+				int id1 = bookingTable.getSelectedRow();
+				//Hvis der ikke er valgt en row, giv en popup besked til brugeren
+				if(id1<0) {
+					JOptionPane.showMessageDialog(getThis(), "Booking ikke valgt ordentligt. Klik på en booking!");
+				} else {
+					try {
+						//skab forbindelse til databasen, og find bookingens id via den valgte row i bookingtable
+						Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
+						String id11 = (String)bookingTable.getValueAt(id1, 4);
+						int id2 = Integer.parseInt(id11);
+
+						//Vi skal bruge 4 informationer for at få fuld overblik
+						//1. Bookingen
+						Booking b = bookings.get(id1); 
+						//2. Et udfyldt pladsarray (det bliver udfyldt ved at lave en pladsbooking midlertidigt, som udfylder de reserverede Seats
+						Pladsbooking pb = new Pladsbooking(id2, b, c);
+						PladsArray pa = pb.getPladsArray();
+						pb.dispose();						
+
+						//3. En departure
+						Departure d = db.queryGetDeparture(id2);
+
+						//4. Den customer, vi allerede har defineret i constructoren. 
+						//Opretter overbliks-vindue over bookingen.
+						Gennemse g = new Gennemse(pa.getReservations(), d, b, c);
+						db.close();
+						dispose();
+					} catch (SQLException e) {
+						JOptionPane.showMessageDialog(getThis(), "SQL fejl. Er internettet nede?");
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 }

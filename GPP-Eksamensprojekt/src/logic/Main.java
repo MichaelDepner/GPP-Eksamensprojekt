@@ -1,54 +1,12 @@
 package logic;
 
-import gui.Kundeoplysninger;
-import gui.Pladsbooking;
-import gui.Afgangsliste;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
-
+/**
+ * Main-klassen gør intet andet end at sætte programmet i gang ved at oprette en forside.
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
 public class Main {
-
-	/**
-	 * @param args
-	 * @throws SQLException 
-	 */
-	public static void main(String[] args) throws SQLException {
-		
+	public static void main(String[] args) {
 		new gui.Forside2();
-//		new Bookinginfo();
-		//new gui.Betaling();
-		//new gui.Kundeoplysninger();
-		//new gui.Kvittering();
-		
-		//new gui.Bookinginfo();
-//<<<<<<< HEAD
-
-		
-//<<<<<<< HEAD
-		//new gui.Pladsbooking(1, 4);
-//=======
-//		new gui.Pladsbooking(4, 4);
-//>>>>>>> branch 'master' of https://github.com/Mibias/GPP-Eksamensprojekt.git
-//=======
-		
-		//new gui.Pladsbooking(1, 4);
-		//new gui.Pladsbooking(4, 4);
-//>>>>>>> branch 'master' of https://github.com/Mibias/GPP-Eksamensprojekt.git
-		
-		//new gui.Pladsbooking(1, true);
-		
-//		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-//		ArrayList<Departure> rs = db.queryGetDeparturesAfterDate("20121210", 1, 8);
-//		db.queryMakeCustomer("Dennis", "Hansen", "Pludrevej 17", "Hillerød", "1234", "Danmark", "Dennis@hansen.dk", "14253647");
-//		db.close();
-		
-		
-		
-		//Kundeoplysninger ko = new Kundeoplysninger();
-		
 		}
 	}

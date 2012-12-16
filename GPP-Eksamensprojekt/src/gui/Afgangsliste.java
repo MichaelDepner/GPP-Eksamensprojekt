@@ -17,7 +17,7 @@ import java.util.Date;
 import logic.*;
 
 /**
- * 
+ * Søger på afgange, og skaber en tabl med afgange. Herfra kan man vælge afgange og gå videre til pladsbooking.
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
@@ -33,8 +33,6 @@ public class Afgangsliste extends JFrame {
 	private JTable departureTable, arrivalTable;
 	private boolean turRetur;
 	private Departure d;
-	//Holder styr på popup vinduet
-	private int popupId;
 	
 	private AfgangSøgning as, as2;
 	ArrayList<Departure> departures, departures2;
@@ -85,25 +83,9 @@ public class Afgangsliste extends JFrame {
     	departures2 = as2.getDepartures();
     	makeWindow(true);
     }
-    
-    //Opretter en fane, og indsætter panel og table
-    public void addTab(JTabbedPane p, AfgangSøgning as) {
-    	try {
-			JPanel panel = new JPanel();
-			//Tilføjer en fane til den angivne JTabbedPane, sætter dato og indsætter panel
-	    	p.addTab(as.getFormattedDate(), panel);
-	    	JTable table = departureTable(as.getDepartures());
-	    	//Tilføjer table til panel
-	    	panel.add(table.getTableHeader());
-	    	panel.add(table);
-		} catch (SQLException e) {
-			JOptionPane.showMessageDialog(this, "Fejl i kommunikation med serveren. Er internettet nede?");
-			e.printStackTrace();
-		}
-    }
 
     //Opretter vinduet
-    public void makeWindow(boolean turRetur) {
+    private void makeWindow(boolean turRetur) {
     	//Laver vores fane-vinduer
     	jtp = new JTabbedPane();
     	if(turRetur) {
@@ -134,15 +116,17 @@ public class Afgangsliste extends JFrame {
     		jp1Hjemrejse = new JPanel();
     	}
 
+    	//Hvis der er fundet departures på datoen, sæt overskriften til "lufthavn A - lufthavn B". Ellers skriv "Ingen afgange fundet"
     	if(departures.size() != 0) {
     		labelUdrejse = new JLabel(departures.get(0).getDepartureAirportName() +
-    							" - " + departures.get(0).getArrivalAirportName());
+    				" - " + departures.get(0).getArrivalAirportName());
     	} else {
     		labelUdrejse = new JLabel("Ingen afgange fundet");
     	}
     	labelUdrejse.setFont(new Font("String", Font.BOLD, 18));
     	jp1Udrejse.add(labelUdrejse);
 
+    	//Skab et JTable med de fundne afgange
     	departureTable = table(jp1Udrejse, departures);
     	jp1Udrejse.add(departureTable);
     	
@@ -154,11 +138,11 @@ public class Afgangsliste extends JFrame {
     		jtp.addTab("Ingen afgange fundet", jp1Udrejse);
     	}
 
-    	//Tilføjer tabs til departures fundet efter den valgte dato
+    	//Hvis der er fundet departures på datoen, sæt overskriften til "lufthavn A - lufthavn B". Ellers skriv "Ingen afgange fundet"
     	if(turRetur) {
     		if(departures2.size() != 0) {
     			labelHjemrejse = new JLabel(departures2.get(0).getDepartureAirportName()+
-    									" - "+departures2.get(0).getArrivalAirportName());
+    					" - "+departures2.get(0).getArrivalAirportName());
     		} else {
     			labelHjemrejse = new JLabel("Ingen afgange fundet");
     		}
@@ -171,8 +155,8 @@ public class Afgangsliste extends JFrame {
     		//Tilføjer panel jp1Hjemrejse til jtp
     		if(departures2.size() > 0) {
     			jtp2.addTab(departures2.get(0).getDepartureDate()+" - "+
-    								departures2.get(departures2.size()-1).
-    								getDepartureDate(), jp1Hjemrejse);
+    					departures2.get(departures2.size()-1).
+    					getDepartureDate(), jp1Hjemrejse);
     		} else {
     			jtp2.addTab("Ingen afgange fundet", jp1Hjemrejse);
     		}
@@ -188,7 +172,8 @@ public class Afgangsliste extends JFrame {
     	pack();
     	setVisible(true);
     }
-    
+
+    //Lukker vinduet samt preview-pladsbookingen, hvis den er åben.
     public void dispose() {
     	if(pb != null) {
     		pb.dispose();
@@ -208,6 +193,8 @@ public class Afgangsliste extends JFrame {
     //Laver table for afgange
     private JTable departureTable(ArrayList<Departure> departures) {
     	final ArrayList<Departure> dp = departures;
+    	
+    	//Bruger defaulttablemodel med den ene ændring, at celler ikke er editable
     	DefaultTableModel model = new DefaultTableModel() {
     		public boolean isCellEditable(int row, int column) {
     			return false;
@@ -253,16 +240,17 @@ public class Afgangsliste extends JFrame {
     	//Tiføjer mouselistener
     	table.addMouseListener(new MouseAdapter() {
     		
+    		//Hvis der klikkes på en afgang, lav popupvindue med en pladsbooking i 'preview-mode'.
     		public void mouseClicked(MouseEvent e) {
     			int row = table.rowAtPoint(e.getPoint());
     			int id = dp.get(row).getDepartureId()+1;
     			try {
-    				//Hvis pb eksisterer, så skift den til andet afgangsid. 
+    				//Hvis en pladsbooking allerede eksisterer, så skift den til andet afgangsid. 
     				//Ellers, opret nyt preview
     				if(pb != null) {
     					pb.changePreview(id);
     				} else {
-    					pb = new Pladsbooking(id, false);
+    					pb = new Pladsbooking(id-1, false);
         				pb.setLocation(700, 1);
     				}
     			} catch (SQLException e1) {
@@ -272,7 +260,6 @@ public class Afgangsliste extends JFrame {
     			}
     		}
     	});
-
     	return table;
     }
     
@@ -289,10 +276,12 @@ public class Afgangsliste extends JFrame {
     	return this;
     }
 
-    //ActionListener
+    //ActionListener, der lytter efter tryk på 'next' knappen
     private class Listener implements ActionListener {
     	public void actionPerformed(ActionEvent event){
     		if(event.getSource() == next) {
+    			
+    			//Hvis vi er ved at booke 2 rejser, find begge markerede rejser, og lav en pladsbooking med de to departureId's
     			if(turRetur) {
     				int id1 = departureTable.getSelectedRow();
     				int id2 = arrivalTable.getSelectedRow();
@@ -316,6 +305,8 @@ public class Afgangsliste extends JFrame {
     						e.printStackTrace();
     					}
     				}
+    				
+    			//Hvis vi er ved at booke en enkelt rejse - find den markerede departure, og lav en pladsbooking med de to departureId's
     			} else if(!turRetur) {
     				int id1 = departureTable.getSelectedRow();
     				if(id1<0) {

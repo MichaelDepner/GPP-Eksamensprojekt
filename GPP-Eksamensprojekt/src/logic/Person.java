@@ -1,5 +1,10 @@
 package logic;
 
+/**
+ * Denne class indeholder alle relevante informationer om en Person (passager)
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
 public class Person {
 
 	int id;
@@ -11,6 +16,7 @@ public class Person {
 		this.birthday = birthday;
 	}
 	
+	//setId kaldes når vi henter en person ned fra databasen, og den derfor har et id
 	public void setId(int id) {
 		this.id = id;
 	}

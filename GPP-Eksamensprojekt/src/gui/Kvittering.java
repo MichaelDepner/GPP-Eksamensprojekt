@@ -13,9 +13,8 @@ import logic.Person;
 import logic.Plads;
 
 /**
- * Alle bookingoplysninger
- * 
- * Logo
+ * Kvitteringen skal udprintes / sendes med email til kunden.
+ * Den giver et overblik over den booking der lige er foretaget, og trækker tilmed bookingens ID fra databasen.
  * 
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
@@ -30,7 +29,6 @@ public class Kvittering extends JFrame {
 	private JLabel airport, afgang, ankomst, rejsetid;
 	private JLabel pladser, labelSeat, labelPassengers, passenger, birthday, header;
 	private JLabel labelPris, total, prisTekst, logoLabel;
-	private JButton udskriv, luk;
 	private Betaling b;
 	
 	//Ting, der skal sendes til databasen
@@ -149,6 +147,7 @@ public class Kvittering extends JFrame {
 			panelHjemrejse = new JPanel();
 			panelRejse.add(panelHjemrejse);
 
+			//Udvider vinduet, i tilfælde af tur/retur bestilling
 			if(turRetur) {
 				panelHjemrejse.setLayout(new GridLayout(5,1));
 				panelHjemrejse.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));

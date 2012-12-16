@@ -5,16 +5,25 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Denne class bruges til at teste, om Customer returnerer det data, den bliver oprettet med
+ * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
+ *
+ */
+
 public class CustomerTest {
 
 	Customer c;
 	
 	@Before
+	//Henter en eksisterende kunde ned fra databasen
 	public void setUp() throws Exception {
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		c = db.queryFindCustomer("Phone_Number", "22627702");
 	}
 
+	//I følgende metoder testes, at Customer c's felter matcher dem, der er oprettet i databasen
+	
 	@Test
 	public void testGetId() {
 		int id = c.getId();

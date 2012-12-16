@@ -16,8 +16,9 @@ import logic.Person;
 import logic.Plads;
 
 /**
- * Navn på kort, udløbsmåned, udløbsår, kortnr, kontrolcifre, korttype
- * tilbage- og til-gennemse
+ * Dette vindue er mest af alt et proof-of-concept. Vi har ikke kapacitet til at lave et rigtigt
+ * betalingssystem, så vi laver bare nogle inputfelter for at symbolisere, hvor betalingen
+ * vil foregå i systemet.
  * 
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
@@ -68,7 +69,7 @@ public class Betaling {
 	}
 	
 	//Laver vinduet
-	public void makeFrame() {
+	private void makeFrame() {
 		frame = new JFrame();
 		frame.setTitle("Betaling");
 		
@@ -213,6 +214,7 @@ public class Betaling {
     				Kvittering kv = new Kvittering
     						(reserved1, d1, passengers, customer, getThis(), b1);
     			}
+    			//Start 'kædereaktionen', der får alle tidligere led i rækken til at dispose sig selv
     			g.removeMe();
     			frame.dispose();
 					

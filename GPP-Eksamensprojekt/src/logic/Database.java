@@ -4,7 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * 
+ * Denne class bruges når vi skal sende queries til databasen. 
+ * Den indeholder alle de relevante metoder for at oprette og hente data fra databasen
  * @author Michael Frikke Madsen, Tajanna Bye Kjærsgaard og Nicoline Warming Larsen.
  *
  */
@@ -47,38 +48,6 @@ public class Database {
 	//Lukker forbindelsen til databasen
 	public void close() throws SQLException {
 		connection.close();
-		System.out.println("Database connection closed");
-	}
-	
-	//finder alle airports, hvor der er tilknyttet en departure og returnerer dem i alfabetisk rækkefølge
-//	public ResultSet queryGetAirports() throws SQLException {
-//		String query;
-//		query = "SELECT " +
-//				"Airports.id, Airports.name " +
-//				"FROM " +
-//				"Airports, Departures " +
-//				"WHERE " +
-//				"Departures.departure_airport_id = Airports.id OR Departures.arrival_airport_id = Airports.id " +
-//				"ORDER BY " +
-//				"Airports.name ASC";
-//		ResultSet rs = this.execute(query);
-////		System.out.println(query);
-//		return rs;
-//	}
-	//Finder alle airports, hvor der er tilknyttet en departure og returnerer
-	//dem i alfabetisk rækkefølge
-	public ResultSet queryGetAirports() throws SQLException {
-		String query;
-		query = "SELECT " +
-				"Airports.id, Airports.name " +
-				"FROM " +
-				"Airports, Departures " +
-				"WHERE " +
-				"Departures.departure_airport_id = Airports.id OR Departures.arrival_airport_id = Airports.id " +
-				"ORDER BY " +
-				"Airports.name ASC";
-		ResultSet rs = this.execute(query);
-		return rs;
 	}
 	
 	//Henter reserverede sæder på den angivne afgang
@@ -94,7 +63,7 @@ public class Database {
 		return rs;	
 	}
 	
-	//Finder det flyet for en bestemt afgang
+	//Finder id'et på det fly, der er tilknyttet en bestemt departure
 	public ResultSet queryGetAirplane(int departureId) throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -171,7 +140,7 @@ public class Database {
 		return rs;
 	}
 	
-	//Henter lufthavnens ID
+	//Henter lufthavnens ID ud fra dens navn
 	public ResultSet queryGetAirportId(String airport) throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -201,7 +170,7 @@ public class Database {
 		return rs;
 	}
 	
-	//
+	//Henter afgange i den angivne periode, dvs mellem 2 datoer.
 	public ArrayList<Departure> queryGetDeparturesInPeriod(String afterDate, String beforeDate, int departureAirport, int arrivalAirport) throws SQLException {
 		ArrayList<Departure> departures = new ArrayList<>();
 		String query;
@@ -221,6 +190,7 @@ public class Database {
 				"Departures.Departure_date ASC";
 		ResultSet rs = this.execute(query);
 		
+		//Løber resultsettet igennem og tilføjer alle fundne departures til en ArrayList
 		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
 		while(rs.next()) {
 			int id = rs.getInt("id");
@@ -230,61 +200,8 @@ public class Database {
 		return departures;
 	}
 	
-//	public ArrayList<Departure> queryGetDeparturesBeforeDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
-//		ArrayList<Departure> departures = new ArrayList<>();
-//		String query;
-//		query = "SELECT " +
-//				"* " +
-//				"FROM " +
-//				"Departures " +
-//				"WHERE " +
-//				"Departures.Departure_date < " + date + " " +
-//				"AND " +
-//				"Departures.departure_airport_id = " + departureAirport + " " +
-//				"AND " +
-//				"Departures.arrival_airport_id = " + arrivalAirport + " " +
-//				"ORDER BY " +
-//				"Departures.Departure_time DESC";
-//		ResultSet rs = this.execute(query);
-//		
-//		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-//		while(rs.next()) {
-//			int id = rs.getInt("id");
-//			departures.add(db.queryGetDeparture(id));
-//		}
-//		db.close();
-//		return departures;	
-//	}
-	
-	//returner en arraylist af departures før en dato
-//	public ArrayList<Departure> queryGetDeparturesAfterDate(String date, int departureAirport, int arrivalAirport) throws SQLException {
-//		ArrayList<Departure> departures = new ArrayList<>();
-//		String query;
-//		query = "SELECT " +
-//				"* " +
-//				"FROM " +
-//				"Departures " +
-//				"WHERE " +
-//				"Departures.Departure_date > " + date + " " +
-//				"AND " +
-//				"Departures.departure_airport_id = " + departureAirport + " " +
-//				"AND " +
-//				"Departures.arrival_airport_id = " + arrivalAirport + " " +
-//				"ORDER BY " +
-//				"Departures.Departure_time ASC";
-//		ResultSet rs = this.execute(query);
-//		
-//		Database db = new Database("mysql.itu.dk", "Swan_Airlines", "swan", "mintai");
-//		while(rs.next()) {
-//			int id = rs.getInt("id");
-//			departures.add(db.queryGetDeparture(id));
-//		}
-//		db.close();
-//		return departures;		
-//	}
-	
+	//Finder en bestemt departure ud fra et id
 	public Departure queryGetDeparture(int departureId) throws SQLException {
-		//finder departure i sql serveren
 		String query;
 		query = "SELECT " +
 				"* " +
@@ -367,9 +284,8 @@ public class Database {
 		return b;
 	}
 	
-	
+	//Skaber en customer i databasen, og returner dens givne ID
 	public int queryMakeCustomer(Customer c) throws SQLException {
-		//indsæt customer i databasen
 		String query = "INSERT INTO Customer (Firstname, Surname, Address, City, Postal_Code, Country, Email, Phone_Number) " +
 				"VALUES ('" + c.GetFirstname() + "', '" + c.GetSurname() + "', '" + c.GetAdress() + "', '" + c.GetCity() + "', '" + c.GetPostalCode() + "', '" + c.GetCountry() + "', '" + c.GetEmail() + "', '" + c.GetPhone() + "'); ";
 		System.out.println(query);
@@ -391,6 +307,7 @@ public class Database {
 		return rs.getInt("id");
 	}
 	
+	//Skaber en passager i databasen, og returnerer dens givne id
 	public int queryMakePassenger(Person p) throws SQLException {
 		//indsæt passageren i databasen
 		String query = "INSERT INTO Person (Firstname, Surname, Birthday) " +
@@ -413,6 +330,8 @@ public class Database {
 		return rs.getInt("id");
 	}
 	
+	//Finder en customer ved at søge på en af hans felter (telefonnummer, addresse eller email, har vi valgt at bruge).
+	//Constructoren tager imod det, der søges efter (f.eks. "Customer.email"), og søgestrengen ("email@gmail.com")
 	public Customer queryFindCustomer(String searchingFor, String arg) throws SQLException {
 		String query;
 		query = "SELECT " +
@@ -438,6 +357,7 @@ public class Database {
 		return c;
 	}
 
+	//Finder alle bookinger foretaget af en bestemt Customer, lægger dem i en ArrayList, og returner dem
 	public ArrayList<Booking> queryFindBookingsMadeBy(int customerId) throws SQLException {
 		ArrayList<Booking> bookings = new ArrayList<Booking>();
 		String query;
@@ -462,6 +382,7 @@ public class Database {
 		return bookings;
 	}
 	
+	//Sletter en booking fra databasen
 	public void queryDeleteBooking(int id) throws SQLException {
 		String query;
 		query = "DELETE " +
@@ -472,6 +393,7 @@ public class Database {
 		this.execute(query);
 	}
 	
+	//Opdaterer en Customers oplysninger i databasen
 	public void queryUpdateCustomer(int id, String firstname, String surname, String address, String city, String postalCode, 
 			String country, String email, String phoneNumber) throws SQLException {
 		String query;
@@ -491,6 +413,7 @@ public class Database {
 		this.execute(query);
 	}
 	
+	//Opdaterer en Persons oplysninger id atabasen
 	public void queryUpdatePassenger(int id, String firstname, String surname, String birthday) throws SQLException {
 		String query;
 		query = "UPDATE " +
@@ -504,6 +427,7 @@ public class Database {
 		this.execute(query);
 	}
 	
+	//Opdaterer valgte sæder i en booking
 	public void queryUpdateBookingSeats(int id, String seats) throws SQLException {
 		String query;
 		query = "UPDATE " +
