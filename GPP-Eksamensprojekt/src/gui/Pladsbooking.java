@@ -150,18 +150,17 @@ public class Pladsbooking extends JFrame {
 			}
 		}
 	}
-
 	//Laver preview vindue (det der bruges i Afgangslisten for at danne overblik)
 	private void makePreviewWindow(PladsArray pa) throws SQLException {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		
+
 		int rows = pa.getRows();
 		int cols = pa.getCols();
-		
+
 		Container contentPane = this.getContentPane();
 		contentPane.removeAll();
 		contentPane.setLayout(new GridLayout(rows, cols, 2, 2));
-		
+
 		//Fylder arrayet med ureserverede pladser
 		int counting=0;
 		for(int i = 0; i<rows; i++) {
@@ -172,13 +171,13 @@ public class Pladsbooking extends JFrame {
 				panelList1.add(p);
 			}
 		}
-		
+
 		this.setPreferredSize(new Dimension(cols*30, rows*30));
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
 	}
-	
+
 	//Laver booking vindue, med 1 eller 2 afgange
 	private void makeBookingWindow(final boolean turRetur) throws SQLException {
 		JPanel leftPanel, middlePanel, centerPanel, rightPanel;
@@ -187,7 +186,6 @@ public class Pladsbooking extends JFrame {
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		Container contentPane = this.getContentPane();
 
-		//Opretter disse panels tidligt, da de skal bruges når vi definerer pladser
 		rightMiddleTopPanel = new JPanel();
 		rightMiddleMiddlePanel = new JPanel();
 

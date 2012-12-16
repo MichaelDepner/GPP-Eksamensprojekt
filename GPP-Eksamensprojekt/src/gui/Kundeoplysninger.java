@@ -27,7 +27,7 @@ public class Kundeoplysninger {
 	//GUI
 	private JFrame frame;
     private JTextField firstname, surname, email, phoneNumber, address, city;
-    private JTextField postal, country;
+    private JTextField postal, country, birthday;
     private JLabel labelFirstname, labelSurname, labelEmail, labelPhone, labelAddress;
 	private JLabel labelCity, labelPostal, labelCountry, labelBirthday;
     private JButton back, next, importerKunde, confirm;
@@ -244,6 +244,7 @@ public class Kundeoplysninger {
         city = new JTextField (30);
         postal = new JTextField (10);
         country = new JTextField ();
+        birthday = new JTextField();
     }
     
     //Labels til kontaktoplysninger
@@ -309,6 +310,7 @@ public class Kundeoplysninger {
     	    	surnameField.setText(p.getSurname());
     	    	birthdayField.setText(p.getBirthday());
     	    }
+            holder.add(textFieldPanel);
     	}
     }
 
